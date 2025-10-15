@@ -4,10 +4,15 @@ function Markers({ type, rotate }) {
   const markers = []
   
   for (let i = 0; i < 12; i++) {
+    // Calculate angle for each hour position
+    // Start at 12 (top) which should be at negative Z
+    // i=0 -> 12 o'clock (top, -Z), i=3 -> 3 o'clock (right, +X), etc.
     const angle = (i * Math.PI) / 6
     const radius = 1.7
+    // For 12 at top: when i=0, we want x=0, z=-radius
+    // sin(0) = 0, cos(0) = 1, so we need to negate z and swap
     const x = Math.sin(angle) * radius
-    const z = Math.cos(angle) * radius
+    const z = -Math.cos(angle) * radius
     const number = i === 0 ? 12 : i
     
     markers.push(

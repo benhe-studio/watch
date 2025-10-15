@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import './ControlPanel.css'
 
-function ControlPanel({ config, updateConfig }) {
-  const [expandedSections, setExpandedSections] = useState({
-    face: true,
-    markers: true,
-    hands: true
-  })
+function ControlPanel({ config, updateConfig, schema }) {
+  const [expandedSections, setExpandedSections] = useState(
+    Object.keys(schema).reduce((acc, key) => {
+      acc[key] = schema[key].expanded || false
+      return acc
+    }, {})
+  )
 
   const toggleSection = (section) => {
     setExpandedSections(prev => ({
@@ -15,133 +16,102 @@ function ControlPanel({ config, updateConfig }) {
     }))
   }
 
+  const renderControl = (section, controlKey, controlConfig) => {
+    // Check if control should be shown based on condition
+    if (controlConfig.condition && !controlConfig.condition(config)) {
+      return null
+    }
+
+    const value = config[section][controlKey]
+
+    switch (controlConfig.type) {
+      case 'color':
+        return (
+          <div key={controlKey} className="control-group">
+            <label>{controlConfig.label}</label>
+            <input
+              type="color"
+              value={value}
+              onChange={(e) => updateConfig(section, controlKey, e.target.value)}
+            />
+          </div>
+        )
+
+      case 'range':
+        return (
+          <div key={controlKey} className="control-group">
+            <label>{controlConfig.label}: {value.toFixed(2)}</label>
+            <input
+              type="range"
+              min={controlConfig.min}
+              max={controlConfig.max}
+              step={controlConfig.step}
+              value={value}
+              onChange={(e) => updateConfig(section, controlKey, parseFloat(e.target.value))}
+            />
+          </div>
+        )
+
+      case 'buttons':
+        return (
+          <div key={controlKey} className="control-group">
+            <label>{controlConfig.label}</label>
+            <div className="button-group">
+              {controlConfig.options.map(option => (
+                <button
+                  key={option.value}
+                  className={value === option.value ? 'active' : ''}
+                  onClick={() => updateConfig(section, controlKey, option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )
+
+      case 'checkbox':
+        return (
+          <div key={controlKey} className="control-group">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={value}
+                onChange={(e) => updateConfig(section, controlKey, e.target.checked)}
+              />
+              <span>{controlConfig.label}</span>
+            </label>
+          </div>
+        )
+
+      default:
+        return null
+    }
+  }
+
   return (
     <div className="control-panel">
       <h2>Watch Face Designer</h2>
 
-      {/* Face Section */}
-      <div className="section">
-        <div className="section-header" onClick={() => toggleSection('face')}>
-          <h3>Face</h3>
-          <span className="toggle-icon">{expandedSections.face ? '▼' : '▶'}</span>
-        </div>
-        {expandedSections.face && (
-          <div className="section-content">
-            <div className="control-group">
-              <label>Color</label>
-              <input
-                type="color"
-                value={config.face.color}
-                onChange={(e) => updateConfig('face', 'color', e.target.value)}
-              />
+      {Object.keys(schema).map(sectionKey => {
+        const section = schema[sectionKey]
+        
+        return (
+          <div key={sectionKey} className="section">
+            <div className="section-header" onClick={() => toggleSection(sectionKey)}>
+              <h3>{section.label}</h3>
+              <span className="toggle-icon">{expandedSections[sectionKey] ? '▼' : '▶'}</span>
             </div>
-            <div className="control-group">
-              <label>Smoothness: {config.face.smoothness.toFixed(2)}</label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={config.face.smoothness}
-                onChange={(e) => updateConfig('face', 'smoothness', parseFloat(e.target.value))}
-              />
-            </div>
-            <div className="control-group">
-              <label>Metallic: {config.face.metallic.toFixed(2)}</label>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={config.face.metallic}
-                onChange={(e) => updateConfig('face', 'metallic', parseFloat(e.target.value))}
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Markers Section */}
-      <div className="section">
-        <div className="section-header" onClick={() => toggleSection('markers')}>
-          <h3>Markers</h3>
-          <span className="toggle-icon">{expandedSections.markers ? '▼' : '▶'}</span>
-        </div>
-        {expandedSections.markers && (
-          <div className="section-content">
-            <div className="control-group">
-              <label>Type</label>
-              <div className="button-group">
-                <button
-                  className={config.markers.type === 'arabic' ? 'active' : ''}
-                  onClick={() => updateConfig('markers', 'type', 'arabic')}
-                >
-                  Arabic
-                </button>
-                <button
-                  className={config.markers.type === 'roman' ? 'active' : ''}
-                  onClick={() => updateConfig('markers', 'type', 'roman')}
-                >
-                  Roman
-                </button>
-                <button
-                  className={config.markers.type === 'blocks' ? 'active' : ''}
-                  onClick={() => updateConfig('markers', 'type', 'blocks')}
-                >
-                  Blocks
-                </button>
-              </div>
-            </div>
-            {config.markers.type === 'arabic' && (
-              <div className="control-group">
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={config.markers.rotate}
-                    onChange={(e) => updateConfig('markers', 'rotate', e.target.checked)}
-                  />
-                  <span>Rotate</span>
-                </label>
+            {expandedSections[sectionKey] && (
+              <div className="section-content">
+                {Object.keys(section.controls).map(controlKey => 
+                  renderControl(sectionKey, controlKey, section.controls[controlKey])
+                )}
               </div>
             )}
           </div>
-        )}
-      </div>
-
-      {/* Hands Section */}
-      <div className="section">
-        <div className="section-header" onClick={() => toggleSection('hands')}>
-          <h3>Hands</h3>
-          <span className="toggle-icon">{expandedSections.hands ? '▼' : '▶'}</span>
-        </div>
-        {expandedSections.hands && (
-          <div className="section-content">
-            <div className="control-group">
-              <label>Profile</label>
-              <div className="button-group">
-                <button
-                  className={config.hands.profile === 'classic' ? 'active' : ''}
-                  onClick={() => updateConfig('hands', 'profile', 'classic')}
-                >
-                  Classic
-                </button>
-                <button
-                  className={config.hands.profile === 'modern' ? 'active' : ''}
-                  onClick={() => updateConfig('hands', 'profile', 'modern')}
-                >
-                  Modern
-                </button>
-                <button
-                  className={config.hands.profile === 'minimal' ? 'active' : ''}
-                  onClick={() => updateConfig('hands', 'profile', 'minimal')}
-                >
-                  Minimal
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+        )
+      })}
     </div>
   )
 }

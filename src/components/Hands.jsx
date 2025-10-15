@@ -9,15 +9,32 @@ function Hands({ profile }) {
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime()
     
-    // Animate hands (rotate around Y axis since watch face is horizontal)
+    // Start at 10:09:00
+    const startHour = 10
+    const startMinute = 9
+    const startSecond = 0
+    
+    // Calculate total seconds from start time
+    const startTimeInSeconds = startHour * 3600 + startMinute * 60 + startSecond
+    const currentTimeInSeconds = startTimeInSeconds + time
+    
+    // Calculate angles for each hand
+    // Since 12 is at negative Z (top), we start from 0 and rotate clockwise
+    // Each position is: (position / total_positions) * 2π
+    const secondAngle = (currentTimeInSeconds % 60) * (Math.PI * 2) / 60
+    const minuteAngle = ((currentTimeInSeconds / 60) % 60) * (Math.PI * 2) / 60
+    const hourAngle = ((currentTimeInSeconds / 3600) % 12) * (Math.PI * 2) / 12
+    
+    // Apply rotations
+    // Positive rotation because we're rotating around Y axis and looking down
     if (secondRef.current) {
-      secondRef.current.rotation.y = -time
+      secondRef.current.rotation.y = secondAngle
     }
     if (minuteRef.current) {
-      minuteRef.current.rotation.y = -time / 60
+      minuteRef.current.rotation.y = minuteAngle
     }
     if (hourRef.current) {
-      hourRef.current.rotation.y = -time / 3600
+      hourRef.current.rotation.y = hourAngle
     }
   })
 

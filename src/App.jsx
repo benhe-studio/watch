@@ -3,23 +3,11 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import WatchFace from './components/WatchFace'
 import ControlPanel from './components/ControlPanel'
+import { watchConfig, generateInitialState } from './config/watchConfig'
 import './App.css'
 
 function App() {
-  const [config, setConfig] = useState({
-    face: {
-      color: '#ffffff',
-      smoothness: 0.5,
-      metallic: 0.1
-    },
-    markers: {
-      type: 'arabic', // 'arabic', 'roman', 'blocks'
-      rotate: false
-    },
-    hands: {
-      profile: 'classic' // 'classic', 'modern', 'minimal'
-    }
-  })
+  const [config, setConfig] = useState(generateInitialState(watchConfig))
 
   const updateConfig = (section, key, value) => {
     setConfig(prev => ({
@@ -56,7 +44,11 @@ function App() {
           <OrbitControls enablePan={false} />
         </Canvas>
       </div>
-      <ControlPanel config={config} updateConfig={updateConfig} />
+      <ControlPanel 
+        config={config} 
+        updateConfig={updateConfig}
+        schema={watchConfig}
+      />
     </div>
   )
 }
