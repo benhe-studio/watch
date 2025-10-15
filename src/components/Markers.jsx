@@ -43,26 +43,12 @@ function Markers({ markers }) {
                 const height = markerConfig.height || 0.3
                 const depth = markerConfig.depth || 0.05
                 const material = getMaterial(markerConfig.material || 'polishedSilver')
+                const bevelEnabled = markerConfig.bevelEnabled !== undefined ? markerConfig.bevelEnabled : true
+                const bevelThickness = markerConfig.bevelThickness || 0.01
+                const bevelSize = markerConfig.bevelSize || 0.01
+                const bevelSegments = markerConfig.bevelSegments || 3
                 
-                // If top and bottom widths are the same, use a simple box
-                if (topWidth === bottomWidth) {
-                  return (
-                    <mesh>
-                      <boxGeometry args={[topWidth, height, depth]} />
-                      <meshPhysicalMaterial
-                        color={material.color}
-                        roughness={material.roughness}
-                        metalness={material.metalness}
-                        clearcoat={material.clearcoat}
-                        clearcoatRoughness={material.clearcoatRoughness}
-                        reflectivity={material.reflectivity}
-                        ior={material.ior}
-                      />
-                    </mesh>
-                  )
-                }
-                
-                // Otherwise, create a tapered shape using a custom geometry
+                // Create shape (trapezoid for tapered, rectangle for uniform)
                 const shape = new THREE.Shape()
                 const halfTopWidth = topWidth / 2
                 const halfBottomWidth = bottomWidth / 2
@@ -77,7 +63,10 @@ function Markers({ markers }) {
                 
                 const extrudeSettings = {
                   depth: depth,
-                  bevelEnabled: false
+                  bevelEnabled: bevelEnabled,
+                  bevelThickness: bevelEnabled ? bevelThickness : 0,
+                  bevelSize: bevelEnabled ? bevelSize : 0,
+                  bevelSegments: bevelEnabled ? Math.round(bevelSegments) : 1
                 }
                 
                 return (

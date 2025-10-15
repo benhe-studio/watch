@@ -47,8 +47,8 @@ function App() {
           <OrbitControls enablePan={false} />
         </Canvas>
       </div>
-      <ControlPanel 
-        config={config} 
+      <ControlPanel
+        config={config}
         updateConfig={updateConfig}
         schema={watchConfig}
       />

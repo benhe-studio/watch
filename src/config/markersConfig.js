@@ -88,6 +88,39 @@ export const markersConfig = {
       step: 0.01,
       condition: (item) => item.type === 'blocks'
     },
+    bevelEnabled: {
+      type: 'checkbox',
+      label: 'Enable Bevel',
+      default: true,
+      condition: (item) => item.type === 'blocks'
+    },
+    bevelThickness: {
+      type: 'range',
+      label: 'Bevel Thickness',
+      default: 0.01,
+      min: 0.005,
+      max: 0.03,
+      step: 0.005,
+      condition: (item) => item.type === 'blocks' && item.bevelEnabled
+    },
+    bevelSize: {
+      type: 'range',
+      label: 'Bevel Size',
+      default: 0.01,
+      min: 0.005,
+      max: 0.03,
+      step: 0.005,
+      condition: (item) => item.type === 'blocks' && item.bevelEnabled
+    },
+    bevelSegments: {
+      type: 'range',
+      label: 'Bevel Segments',
+      default: 3,
+      min: 1,
+      max: 8,
+      step: 1,
+      condition: (item) => item.type === 'blocks' && item.bevelEnabled
+    },
     romanWidth: {
       type: 'range',
       label: 'Width',
