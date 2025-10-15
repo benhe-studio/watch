@@ -1,31 +1,18 @@
 // Configuration schema for the watch face designer
 // This defines both the state structure and UI controls in one place
 
+import { getMaterialOptions } from './materials'
+
 export const watchConfig = {
   face: {
     label: 'Face',
     expanded: true,
     controls: {
-      color: {
-        type: 'color',
-        label: 'Color',
-        default: '#ffffff'
-      },
-      smoothness: {
-        type: 'range',
-        label: 'Smoothness',
-        default: 0.5,
-        min: 0,
-        max: 1,
-        step: 0.01
-      },
-      metallic: {
-        type: 'range',
-        label: 'Metallic',
-        default: 0.1,
-        min: 0,
-        max: 1,
-        step: 0.01
+      material: {
+        type: 'select',
+        label: 'Material',
+        default: 'polishedSilver',
+        options: getMaterialOptions()
       }
     }
   },

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
+import { OrbitControls, Environment } from '@react-three/drei'
 import WatchFace from './components/WatchFace'
 import ControlPanel from './components/ControlPanel'
 import { watchConfig, generateInitialState } from './config/watchConfig'
@@ -25,20 +25,12 @@ function App() {
         <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
           <color attach="background" args={['#e8e8e8']} />
           
-          <ambientLight intensity={0.3} />
-          <spotLight
-            position={[5, 8, 5]}
-            angle={0.3}
-            penumbra={0.5}
-            intensity={1.5}
-            castShadow
-          />
-          <spotLight
-            position={[-3, 5, 3]}
-            angle={0.4}
-            penumbra={0.7}
-            intensity={0.8}
-          />
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[5, 5, 5]} intensity={1} />
+          <directionalLight position={[-5, 3, -5]} intensity={0.5} />
+          
+          {/* Environment for realistic metallic reflections */}
+          <Environment preset="studio" />
           
           <WatchFace config={config} />
           <OrbitControls enablePan={false} />

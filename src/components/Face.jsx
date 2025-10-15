@@ -1,13 +1,21 @@
+import { getMaterial } from '../config/materials'
+
 function Face({ config }) {
+  const material = getMaterial(config.material)
+  
   return (
     <group>
       {/* Watch face base */}
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[2, 128]} />
-        <meshStandardMaterial
-          color={config.color}
-          roughness={1 - config.smoothness}
-          metalness={config.metallic}
+        <meshPhysicalMaterial
+          color={material.color}
+          roughness={material.roughness}
+          metalness={material.metalness}
+          clearcoat={material.clearcoat || 0}
+          clearcoatRoughness={material.clearcoatRoughness || 0}
+          reflectivity={material.reflectivity || 0.5}
+          ior={material.ior || 1.5}
         />
       </mesh>
       

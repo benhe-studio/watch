@@ -84,6 +84,23 @@ function ControlPanel({ config, updateConfig, schema }) {
           </div>
         )
 
+      case 'select':
+        return (
+          <div key={controlKey} className="control-group">
+            <label>{controlConfig.label}</label>
+            <select
+              value={value}
+              onChange={(e) => updateConfig(section, controlKey, e.target.value)}
+            >
+              {controlConfig.options.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )
+
       default:
         return null
     }
