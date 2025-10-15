@@ -9,6 +9,8 @@ function ControlPanel({ config, updateConfig, schema }) {
     }, {})
   )
 
+  const [expandedItems, setExpandedItems] = useState({})
+
   const toggleSection = (section) => {
     setExpandedSections(prev => ({
       ...prev,
@@ -16,13 +18,53 @@ function ControlPanel({ config, updateConfig, schema }) {
     }))
   }
 
-  const renderControl = (section, controlKey, controlConfig) => {
-    // Check if control should be shown based on condition
-    if (controlConfig.condition && !controlConfig.condition(config)) {
+  const toggleItem = (section, index) => {
+    const key = `${section}-${index}`
+    setExpandedItems(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }))
+  }
+
+  const addItem = (section) => {
+    const sectionConfig = schema[section]
+    const defaultItem = {}
+    
+    Object.keys(sectionConfig.controls).forEach(control => {
+      defaultItem[control] = sectionConfig.controls[control].default
+    })
+    
+    const newArray = [...config[section], defaultItem]
+    updateConfig(section, null, newArray)
+  }
+
+  const removeItem = (section, index) => {
+    const newArray = config[section].filter((_, i) => i !== index)
+    updateConfig(section, null, newArray)
+  }
+
+  const updateArrayItem = (section, index, controlKey, value) => {
+    const newArray = [...config[section]]
+    newArray[index] = {
+      ...newArray[index],
+      [controlKey]: value
+    }
+    updateConfig(section, null, newArray)
+  }
+
+  const renderControl = (section, controlKey, controlConfig, itemData = null, itemIndex = null) => {
+    // For array items, check condition against the item data
+    // For regular sections, check condition against the full config
+    const conditionData = itemData || config
+    
+    if (controlConfig.condition && !controlConfig.condition(conditionData)) {
       return null
     }
 
-    const value = config[section][controlKey]
+    const value = itemData ? itemData[controlKey] : config[section][controlKey]
+    const onChange = itemData 
+      ? (newValue) => updateArrayItem(section, itemIndex, controlKey, newValue)
+      : (newValue) => updateConfig(section, controlKey, newValue)
 
     switch (controlConfig.type) {
       case 'color':
@@ -32,7 +74,7 @@ function ControlPanel({ config, updateConfig, schema }) {
             <input
               type="color"
               value={value}
-              onChange={(e) => updateConfig(section, controlKey, e.target.value)}
+              onChange={(e) => onChange(e.target.value)}
             />
           </div>
         )
@@ -47,7 +89,7 @@ function ControlPanel({ config, updateConfig, schema }) {
               max={controlConfig.max}
               step={controlConfig.step}
               value={value}
-              onChange={(e) => updateConfig(section, controlKey, parseFloat(e.target.value))}
+              onChange={(e) => onChange(parseFloat(e.target.value))}
             />
           </div>
         )
@@ -61,7 +103,7 @@ function ControlPanel({ config, updateConfig, schema }) {
                 <button
                   key={option.value}
                   className={value === option.value ? 'active' : ''}
-                  onClick={() => updateConfig(section, controlKey, option.value)}
+                  onClick={() => onChange(option.value)}
                 >
                   {option.label}
                 </button>
@@ -77,7 +119,7 @@ function ControlPanel({ config, updateConfig, schema }) {
               <input
                 type="checkbox"
                 checked={value}
-                onChange={(e) => updateConfig(section, controlKey, e.target.checked)}
+                onChange={(e) => onChange(e.target.checked)}
               />
               <span>{controlConfig.label}</span>
             </label>
@@ -90,7 +132,7 @@ function ControlPanel({ config, updateConfig, schema }) {
             <label>{controlConfig.label}</label>
             <select
               value={value}
-              onChange={(e) => updateConfig(section, controlKey, e.target.value)}
+              onChange={(e) => onChange(e.target.value)}
             >
               {controlConfig.options.map(option => (
                 <option key={option.value} value={option.value}>
@@ -101,9 +143,111 @@ function ControlPanel({ config, updateConfig, schema }) {
           </div>
         )
 
+      case 'hourSelector':
+        const hours = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        return (
+          <div key={controlKey} className="control-group">
+            <label>{controlConfig.label}</label>
+            <div className="hour-selector">
+              {hours.map(hour => (
+                <button
+                  key={hour}
+                  className={value.includes(hour) ? 'active' : ''}
+                  onClick={() => {
+                    const newValue = value.includes(hour)
+                      ? value.filter(h => h !== hour)
+                      : [...value, hour].sort((a, b) => {
+                          // Sort with 12 first, then 1-11
+                          if (a === 12) return -1
+                          if (b === 12) return 1
+                          return a - b
+                        })
+                    onChange(newValue)
+                  }}
+                >
+                  {hour}
+                </button>
+              ))}
+            </div>
+          </div>
+        )
+
       default:
         return null
     }
+  }
+
+  const renderArraySection = (sectionKey, section) => {
+    const items = config[sectionKey] || []
+    
+    return (
+      <div key={sectionKey} className="section">
+        <div className="section-header" onClick={() => toggleSection(sectionKey)}>
+          <h3>{section.label}</h3>
+          <span className="toggle-icon">{expandedSections[sectionKey] ? '▼' : '▶'}</span>
+        </div>
+        {expandedSections[sectionKey] && (
+          <div className="section-content">
+            <button 
+              className="add-item-button"
+              onClick={() => addItem(sectionKey)}
+            >
+              + Add {section.itemLabel || 'Item'}
+            </button>
+            
+            {items.map((item, index) => {
+              const itemKey = `${sectionKey}-${index}`
+              const isExpanded = expandedItems[itemKey]
+              
+              return (
+                <div key={index} className="array-item">
+                  <div className="array-item-header" onClick={() => toggleItem(sectionKey, index)}>
+                    <span>{section.itemLabel || 'Item'} {index + 1} ({item.type})</span>
+                    <div className="array-item-actions">
+                      <button
+                        className="remove-item-button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          removeItem(sectionKey, index)
+                        }}
+                      >
+                        ✕
+                      </button>
+                      <span className="toggle-icon">{isExpanded ? '▼' : '▶'}</span>
+                    </div>
+                  </div>
+                  {isExpanded && (
+                    <div className="array-item-content">
+                      {Object.keys(section.controls).map(controlKey => 
+                        renderControl(sectionKey, controlKey, section.controls[controlKey], item, index)
+                      )}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  const renderRegularSection = (sectionKey, section) => {
+    return (
+      <div key={sectionKey} className="section">
+        <div className="section-header" onClick={() => toggleSection(sectionKey)}>
+          <h3>{section.label}</h3>
+          <span className="toggle-icon">{expandedSections[sectionKey] ? '▼' : '▶'}</span>
+        </div>
+        {expandedSections[sectionKey] && (
+          <div className="section-content">
+            {Object.keys(section.controls).map(controlKey => 
+              renderControl(sectionKey, controlKey, section.controls[controlKey])
+            )}
+          </div>
+        )}
+      </div>
+    )
   }
 
   return (
@@ -113,21 +257,11 @@ function ControlPanel({ config, updateConfig, schema }) {
       {Object.keys(schema).map(sectionKey => {
         const section = schema[sectionKey]
         
-        return (
-          <div key={sectionKey} className="section">
-            <div className="section-header" onClick={() => toggleSection(sectionKey)}>
-              <h3>{section.label}</h3>
-              <span className="toggle-icon">{expandedSections[sectionKey] ? '▼' : '▶'}</span>
-            </div>
-            {expandedSections[sectionKey] && (
-              <div className="section-content">
-                {Object.keys(section.controls).map(controlKey => 
-                  renderControl(sectionKey, controlKey, section.controls[controlKey])
-                )}
-              </div>
-            )}
-          </div>
-        )
+        if (section.isArray) {
+          return renderArraySection(sectionKey, section)
+        } else {
+          return renderRegularSection(sectionKey, section)
+        }
       })}
     </div>
   )

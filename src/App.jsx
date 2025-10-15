@@ -10,13 +10,24 @@ function App() {
   const [config, setConfig] = useState(generateInitialState(watchConfig))
 
   const updateConfig = (section, key, value) => {
-    setConfig(prev => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        [key]: value
+    setConfig(prev => {
+      // If key is null, we're updating the entire section (for arrays)
+      if (key === null) {
+        return {
+          ...prev,
+          [section]: value
+        }
       }
-    }))
+      
+      // Otherwise, update a specific key in the section object
+      return {
+        ...prev,
+        [section]: {
+          ...prev[section],
+          [key]: value
+        }
+      }
+    })
   }
 
   return (

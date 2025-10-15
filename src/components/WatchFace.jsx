@@ -9,7 +9,7 @@ function WatchFace({ config }) {
       <Face config={config.face} />
 
       {/* Markers */}
-      <Markers type={config.markers.type} rotate={config.markers.rotate} />
+      <Markers markers={config.markers} />
 
       {/* Watch hands */}
       <Hands profile={config.hands.profile} />
