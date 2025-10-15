@@ -3,11 +3,13 @@
 
 import { faceConfig } from './faceConfig'
 import { markersConfig } from './markersConfig'
+import { minuteMarkersConfig } from './minuteMarkersConfig'
 import { handsConfig } from './handsConfig'
 
 export const watchConfig = {
   face: faceConfig,
   markers: markersConfig,
+  minuteMarkers: minuteMarkersConfig,
   hands: handsConfig
 }
 

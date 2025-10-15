@@ -1,5 +1,6 @@
 import Face from './Face'
 import Markers from './Markers'
+import MinuteMarkers from './MinuteMarkers'
 import Hands from './Hands'
 
 function WatchFace({ config }) {
@@ -10,6 +11,9 @@ function WatchFace({ config }) {
 
       {/* Markers */}
       <Markers markers={config.markers} />
+
+      {/* Minute Markers */}
+      <MinuteMarkers minuteMarkers={config.minuteMarkers} />
 
       {/* Watch hands */}
       <Hands profile={config.hands.profile} />
