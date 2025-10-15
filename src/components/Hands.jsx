@@ -19,14 +19,14 @@ function Hands({ profile }) {
     const currentTimeInSeconds = startTimeInSeconds + time
     
     // Calculate angles for each hand
-    // Since 12 is at negative Z (top), we start from 0 and rotate clockwise
-    // Each position is: (position / total_positions) * 2π
-    const secondAngle = (currentTimeInSeconds % 60) * (Math.PI * 2) / 60
-    const minuteAngle = ((currentTimeInSeconds / 60) % 60) * (Math.PI * 2) / 60
-    const hourAngle = ((currentTimeInSeconds / 3600) % 12) * (Math.PI * 2) / 12
+    // Since 12 is at negative Z (top), we start from 0 and rotate clockwise (negative rotation)
+    // Each position is: (position / total_positions) * 2π, negated for clockwise
+    const secondAngle = -((currentTimeInSeconds % 60) * (Math.PI * 2) / 60)
+    const minuteAngle = -(((currentTimeInSeconds / 60) % 60) * (Math.PI * 2) / 60)
+    const hourAngle = -(((currentTimeInSeconds / 3600) % 12) * (Math.PI * 2) / 12)
     
     // Apply rotations
-    // Positive rotation because we're rotating around Y axis and looking down
+    // Negative rotation for clockwise movement when looking down at the watch
     if (secondRef.current) {
       secondRef.current.rotation.y = secondAngle
     }
@@ -62,7 +62,7 @@ function Hands({ profile }) {
     <group>
       {/* Hour hand */}
       <group ref={hourRef} rotation={[0, 0, 0]}>
-        <mesh position={[0, 0.02, currentProfile.hour.length / 2]}>
+        <mesh position={[0, 0.02, -currentProfile.hour.length / 2]}>
           <boxGeometry args={[currentProfile.hour.width, 0.05, currentProfile.hour.length]} />
           <meshStandardMaterial color={currentProfile.hour.color} />
         </mesh>
@@ -70,7 +70,7 @@ function Hands({ profile }) {
 
       {/* Minute hand */}
       <group ref={minuteRef} rotation={[0, 0, 0]}>
-        <mesh position={[0, 0.03, currentProfile.minute.length / 2]}>
+        <mesh position={[0, 0.03, -currentProfile.minute.length / 2]}>
           <boxGeometry args={[currentProfile.minute.width, 0.05, currentProfile.minute.length]} />
           <meshStandardMaterial color={currentProfile.minute.color} />
         </mesh>
@@ -78,7 +78,7 @@ function Hands({ profile }) {
 
       {/* Second hand */}
       <group ref={secondRef} rotation={[0, 0, 0]}>
-        <mesh position={[0, 0.04, currentProfile.second.length / 2]}>
+        <mesh position={[0, 0.04, -currentProfile.second.length / 2]}>
           <boxGeometry args={[currentProfile.second.width, 0.05, currentProfile.second.length]} />
           <meshStandardMaterial color={currentProfile.second.color} />
         </mesh>
