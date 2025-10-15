@@ -28,7 +28,7 @@ export const markersConfig = {
       default: 0.25,
       min: 0.1,
       max: 0.5,
-      step: 0.05,
+      step: 0.01,
       condition: (item) => item.type === 'arabic'
     },
     color: {
@@ -50,7 +50,7 @@ export const markersConfig = {
       default: 1.7,
       min: 1.0,
       max: 2.5,
-      step: 0.1
+      step: 0.01
     },
     topWidth: {
       type: 'range',
@@ -58,16 +58,16 @@ export const markersConfig = {
       default: 0.1,
       min: 0.05,
       max: 0.3,
-      step: 0.05,
+      step: 0.01,
       condition: (item) => item.type === 'blocks'
     },
     bottomWidth: {
       type: 'range',
       label: 'Bottom Width',
       default: 0.1,
-      min: 0.05,
+      min: 0,
       max: 0.3,
-      step: 0.05,
+      step: 0.01,
       condition: (item) => item.type === 'blocks'
     },
     height: {
@@ -76,7 +76,7 @@ export const markersConfig = {
       default: 0.3,
       min: 0.1,
       max: 0.6,
-      step: 0.05,
+      step: 0.01,
       condition: (item) => item.type === 'blocks'
     },
     depth: {
@@ -127,7 +127,7 @@ export const markersConfig = {
       default: 0.08,
       min: 0.04,
       max: 0.2,
-      step: 0.02,
+      step: 0.01,
       condition: (item) => item.type === 'roman'
     },
     romanHeight: {
@@ -136,7 +136,7 @@ export const markersConfig = {
       default: 0.25,
       min: 0.1,
       max: 0.5,
-      step: 0.05,
+      step: 0.01,
       condition: (item) => item.type === 'roman'
     },
     romanDepth: {

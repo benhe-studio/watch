@@ -38,7 +38,7 @@ export const minuteMarkersConfig = {
       default: 1.7,
       min: 1.0,
       max: 2.5,
-      step: 0.1
+      step: 0.01
     },
     width: {
       type: 'range',
@@ -55,7 +55,7 @@ export const minuteMarkersConfig = {
       default: 0.1,
       min: 0.05,
       max: 0.3,
-      step: 0.05,
+      step: 0.01,
       condition: (item) => item.type === 'line'
     },
     depth: {
@@ -82,7 +82,7 @@ export const minuteMarkersConfig = {
       default: 0.15,
       min: 0.05,
       max: 0.4,
-      step: 0.05,
+      step: 0.01,
       condition: (item) => item.type === 'numeral'
     },
     color: {
