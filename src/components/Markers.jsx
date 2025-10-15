@@ -1,4 +1,6 @@
 import { Text } from '@react-three/drei'
+import * as THREE from 'three'
+import { getMaterial } from '../config/materials'
 
 function Markers({ markers }) {
   if (!markers || markers.length === 0) {
@@ -35,16 +37,64 @@ function Markers({ markers }) {
               position={[x, 0.01, z]} 
               rotation={[-Math.PI / 2, 0, markerConfig.rotate ? -angle : 0]}
             >
-              {markerConfig.type === 'blocks' && (
-                <mesh>
-                  <boxGeometry args={[
-                    markerConfig.width || 0.1,
-                    markerConfig.height || 0.3,
-                    markerConfig.depth || 0.05
-                  ]} />
-                  <meshStandardMaterial color={markerConfig.color || '#000000'} />
-                </mesh>
-              )}
+              {markerConfig.type === 'blocks' && (() => {
+                const topWidth = markerConfig.topWidth || 0.1
+                const bottomWidth = markerConfig.bottomWidth || 0.1
+                const height = markerConfig.height || 0.3
+                const depth = markerConfig.depth || 0.05
+                const material = getMaterial(markerConfig.material || 'polishedSilver')
+                
+                // If top and bottom widths are the same, use a simple box
+                if (topWidth === bottomWidth) {
+                  return (
+                    <mesh>
+                      <boxGeometry args={[topWidth, height, depth]} />
+                      <meshPhysicalMaterial
+                        color={material.color}
+                        roughness={material.roughness}
+                        metalness={material.metalness}
+                        clearcoat={material.clearcoat}
+                        clearcoatRoughness={material.clearcoatRoughness}
+                        reflectivity={material.reflectivity}
+                        ior={material.ior}
+                      />
+                    </mesh>
+                  )
+                }
+                
+                // Otherwise, create a tapered shape using a custom geometry
+                const shape = new THREE.Shape()
+                const halfTopWidth = topWidth / 2
+                const halfBottomWidth = bottomWidth / 2
+                const halfHeight = height / 2
+                
+                // Create trapezoid shape (viewed from the side)
+                shape.moveTo(-halfBottomWidth, -halfHeight)
+                shape.lineTo(halfBottomWidth, -halfHeight)
+                shape.lineTo(halfTopWidth, halfHeight)
+                shape.lineTo(-halfTopWidth, halfHeight)
+                shape.lineTo(-halfBottomWidth, -halfHeight)
+                
+                const extrudeSettings = {
+                  depth: depth,
+                  bevelEnabled: false
+                }
+                
+                return (
+                  <mesh>
+                    <extrudeGeometry args={[shape, extrudeSettings]} />
+                    <meshPhysicalMaterial
+                      color={material.color}
+                      roughness={material.roughness}
+                      metalness={material.metalness}
+                      clearcoat={material.clearcoat}
+                      clearcoatRoughness={material.clearcoatRoughness}
+                      reflectivity={material.reflectivity}
+                      ior={material.ior}
+                    />
+                  </mesh>
+                )
+              })()}
               {markerConfig.type === 'arabic' && (
                 <Text
                   position={[0, 0, 0]}

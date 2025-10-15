@@ -1,3 +1,5 @@
+import { getMaterialOptions } from './materials'
+
 export const markersConfig = {
   label: 'Markers',
   expanded: true,
@@ -18,7 +20,7 @@ export const markersConfig = {
       type: 'checkbox',
       label: 'Rotate',
       default: false,
-      condition: (item) => item.type === 'arabic'
+      getDefault: (item) => item.type === 'blocks' ? true : false
     },
     fontSize: {
       type: 'range',
@@ -32,7 +34,15 @@ export const markersConfig = {
     color: {
       type: 'color',
       label: 'Color',
-      default: '#000000'
+      default: '#000000',
+      condition: (item) => item.type !== 'blocks'
+    },
+    material: {
+      type: 'select',
+      label: 'Material',
+      default: 'polishedSilver',
+      options: getMaterialOptions(),
+      condition: (item) => item.type === 'blocks'
     },
     radius: {
       type: 'range',
@@ -42,9 +52,18 @@ export const markersConfig = {
       max: 2.5,
       step: 0.1
     },
-    width: {
+    topWidth: {
       type: 'range',
-      label: 'Width',
+      label: 'Top Width',
+      default: 0.1,
+      min: 0.05,
+      max: 0.3,
+      step: 0.05,
+      condition: (item) => item.type === 'blocks'
+    },
+    bottomWidth: {
+      type: 'range',
+      label: 'Bottom Width',
       default: 0.1,
       min: 0.05,
       max: 0.3,

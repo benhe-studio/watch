@@ -31,7 +31,13 @@ function ControlPanel({ config, updateConfig, schema }) {
     const defaultItem = {}
     
     Object.keys(sectionConfig.controls).forEach(control => {
-      defaultItem[control] = sectionConfig.controls[control].default
+      const controlConfig = sectionConfig.controls[control]
+      // Use getDefault function if available, otherwise use default value
+      if (controlConfig.getDefault) {
+        defaultItem[control] = controlConfig.getDefault(defaultItem)
+      } else {
+        defaultItem[control] = controlConfig.default
+      }
     })
     
     const newArray = [...config[section], defaultItem]
