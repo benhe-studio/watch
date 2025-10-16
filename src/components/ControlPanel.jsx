@@ -86,15 +86,16 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad }) {
         )
 
       case 'range':
+        const displayValue = value ?? controlConfig.default ?? 0
         return (
           <div key={controlKey} className="control-group">
-            <label>{controlConfig.label}: {value.toFixed(2)}</label>
+            <label>{controlConfig.label}: {displayValue.toFixed(2)}</label>
             <input
               type="range"
               min={controlConfig.min}
               max={controlConfig.max}
               step={controlConfig.step}
-              value={value}
+              value={displayValue}
               onChange={(e) => onChange(parseFloat(e.target.value))}
             />
           </div>

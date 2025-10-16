@@ -70,7 +70,7 @@ const geometryGenerators = {
 const handTypeConfig = {
   hours: {
     defaultLength: 10,
-    yOffset: 0.2,
+    yOffset: 0.15,
     angleCalculation: (time) => {
       const startHour = 10
       const startMinute = 9
@@ -82,7 +82,7 @@ const handTypeConfig = {
   },
   minutes: {
     defaultLength: 14,
-    yOffset: 0.3,
+    yOffset: 0.2,
     angleCalculation: (time) => {
       const startHour = 10
       const startMinute = 9
@@ -94,7 +94,7 @@ const handTypeConfig = {
   },
   seconds: {
     defaultLength: 16,
-    yOffset: 0.4,
+    yOffset: 0.25,
     angleCalculation: (time) => {
       const startHour = 10
       const startMinute = 9
@@ -107,10 +107,16 @@ const handTypeConfig = {
 }
 
 // Single hand component
-function Hand({ type, profile, width, color, length: customLength }) {
+function Hand({ type, profile, width, color, length: customLength, offset }) {
   const handRef = useRef()
   const typeConfig = handTypeConfig[type]
   const length = customLength || typeConfig.defaultLength
+  
+  // Calculate the pivot offset position
+  // offset of 0 means pivot at the end (default behavior)
+  // offset of 1 means pivot at the start (opposite end)
+  // Default to 0 if offset is undefined or null
+  const pivotOffset = length * (offset ?? 0)
   
   const geometry = useMemo(() => {
     const generator = geometryGenerators[profile] || geometryGenerators.classic
@@ -134,7 +140,7 @@ function Hand({ type, profile, width, color, length: customLength }) {
     
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
-        <group position={[0, typeConfig.yOffset * 10, -length / 2]} rotation={[-Math.PI / 2, 0, 0]}>
+        <group position={[0, typeConfig.yOffset * 10, -length / 2 + pivotOffset]} rotation={[-Math.PI / 2, 0, 0]}>
           {/* Tapered cylinder body */}
           <mesh geometry={geometry} castShadow receiveShadow>
             <meshStandardMaterial color={color} />
@@ -152,6 +158,12 @@ function Hand({ type, profile, width, color, length: customLength }) {
             <meshStandardMaterial color={color} />
           </mesh>
         </group>
+        
+        {/* Pivot point cylinder */}
+        <mesh position={[0, typeConfig.yOffset * 10, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
+          <meshStandardMaterial color={color} />
+        </mesh>
       </group>
     )
   }
@@ -159,14 +171,20 @@ function Hand({ type, profile, width, color, length: customLength }) {
   if (isDauphine) {
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
-        <mesh 
-          position={[0, typeConfig.yOffset * 10, -length / 2]} 
-          rotation={[-Math.PI / 2, 0, 0]} 
-          geometry={geometry} 
-          castShadow 
+        <mesh
+          position={[0, typeConfig.yOffset * 10, -length / 2 + pivotOffset]}
+          rotation={[-Math.PI / 2, 0, 0]}
+          geometry={geometry}
+          castShadow
           receiveShadow
         >
           <meshStandardMaterial color={color} side={THREE.DoubleSide} />
+        </mesh>
+        
+        {/* Pivot point cylinder */}
+        <mesh position={[0, typeConfig.yOffset * 10, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
+          <meshStandardMaterial color={color} />
         </mesh>
       </group>
     )
@@ -175,12 +193,18 @@ function Hand({ type, profile, width, color, length: customLength }) {
   // Classic and other profiles
   return (
     <group ref={handRef} rotation={[0, 0, 0]}>
-      <mesh 
-        position={[0, typeConfig.yOffset * 10, -length / 2]} 
-        geometry={geometry} 
-        castShadow 
+      <mesh
+        position={[0, typeConfig.yOffset * 10, -length / 2 + pivotOffset]}
+        geometry={geometry}
+        castShadow
         receiveShadow
       >
+        <meshStandardMaterial color={color} />
+      </mesh>
+      
+      {/* Pivot point cylinder */}
+      <mesh position={[0, typeConfig.yOffset * 10, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
         <meshStandardMaterial color={color} />
       </mesh>
     </group>
@@ -199,6 +223,7 @@ function Hands({ hands = [] }) {
           width={handConfig.width}
           color={handConfig.color}
           length={handConfig.length}
+          offset={handConfig.offset}
         />
       ))}
       

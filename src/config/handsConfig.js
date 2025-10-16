@@ -46,6 +46,14 @@ export const handsConfig = {
       max: 20,
       step: 0.5
     },
+    offset: {
+      type: 'range',
+      label: 'Offset',
+      default: 0,
+      min: 0,
+      max: 1,
+      step: 0.05
+    },
     color: {
       type: 'color',
       label: 'Color',
