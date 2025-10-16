@@ -35,54 +35,54 @@ export const minuteMarkersConfig = {
     distance: {
       type: 'range',
       label: 'Distance',
-      default: 1.7,
-      min: 1.0,
-      max: 2.5,
-      step: 0.01
+      default: 17,
+      min: 10,
+      max: 25,
+      step: 0.1
     },
     width: {
       type: 'range',
       label: 'Width',
-      default: 0.02,
-      min: 0.01,
-      max: 0.1,
-      step: 0.01,
+      default: 0.2,
+      min: 0.1,
+      max: 1,
+      step: 0.1,
       condition: (item) => item.type === 'line'
     },
     height: {
       type: 'range',
       label: 'Height',
-      default: 0.1,
-      min: 0.05,
-      max: 0.3,
-      step: 0.01,
+      default: 1,
+      min: 0.5,
+      max: 3,
+      step: 0.1,
       condition: (item) => item.type === 'line'
     },
     depth: {
       type: 'range',
       label: 'Depth',
-      default: 0.02,
-      min: 0.01,
-      max: 0.1,
-      step: 0.01,
+      default: 0.2,
+      min: 0.1,
+      max: 1,
+      step: 0.1,
       condition: (item) => item.type === 'line'
     },
     radius: {
       type: 'range',
       label: 'Radius',
-      default: 0.03,
-      min: 0.01,
-      max: 0.1,
-      step: 0.01,
+      default: 0.3,
+      min: 0.1,
+      max: 1,
+      step: 0.1,
       condition: (item) => item.type === 'dot'
     },
     fontSize: {
       type: 'range',
       label: 'Font Size',
-      default: 0.15,
-      min: 0.05,
-      max: 0.4,
-      step: 0.01,
+      default: 1.5,
+      min: 0.5,
+      max: 4,
+      step: 0.1,
       condition: (item) => item.type === 'numeral'
     },
     color: {

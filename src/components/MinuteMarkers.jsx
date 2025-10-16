@@ -34,14 +34,14 @@ function MinuteMarkers({ minuteMarkers }) {
           // Start at 12 (top) which should be at negative Z
           // i=0 -> 12 o'clock (top, -Z), i=15 -> 3 o'clock (right, +X), etc.
           const angle = (i * Math.PI) / 30 // 60 minutes = 2π radians, so each minute is π/30
-          const distance = markerConfig.distance || 1.7
+          const distance = markerConfig.distance || 17
           const x = Math.sin(angle) * distance
           const z = -Math.cos(angle) * distance
           
           markerElements.push(
             <group 
-              key={`${markerIndex}-${i}`} 
-              position={[x, 0.01, z]} 
+              key={`${markerIndex}-${i}`}
+              position={[x, 0.1, z]}
               rotation={[-Math.PI / 2, 0, markerConfig.rotate ? -angle : 0]}
             >
               {markerConfig.type === 'line' && (() => {

@@ -25,10 +25,10 @@ export const markersConfig = {
     fontSize: {
       type: 'range',
       label: 'Font Size',
-      default: 0.25,
-      min: 0.1,
-      max: 0.5,
-      step: 0.01,
+      default: 2.5,
+      min: 1,
+      max: 5,
+      step: 0.1,
       condition: (item) => item.type === 'arabic'
     },
     color: {
@@ -47,45 +47,45 @@ export const markersConfig = {
     radius: {
       type: 'range',
       label: 'Radius',
-      default: 1.7,
-      min: 1.0,
-      max: 2.5,
-      step: 0.01
+      default: 17,
+      min: 10,
+      max: 25,
+      step: 0.1
     },
     topWidth: {
       type: 'range',
       label: 'Top Width',
-      default: 0.1,
-      min: 0.05,
-      max: 0.3,
-      step: 0.01,
+      default: 1,
+      min: 0.5,
+      max: 3,
+      step: 0.1,
       condition: (item) => item.type === 'blocks'
     },
     bottomWidth: {
       type: 'range',
       label: 'Bottom Width',
-      default: 0.1,
+      default: 1,
       min: 0,
-      max: 0.3,
-      step: 0.01,
+      max: 3,
+      step: 0.1,
       condition: (item) => item.type === 'blocks'
     },
     height: {
       type: 'range',
       label: 'Height',
-      default: 0.3,
-      min: 0.1,
-      max: 0.6,
-      step: 0.01,
+      default: 3,
+      min: 1,
+      max: 6,
+      step: 0.1,
       condition: (item) => item.type === 'blocks'
     },
     depth: {
       type: 'range',
       label: 'Depth',
-      default: 0.05,
-      min: 0.02,
-      max: 0.1,
-      step: 0.01,
+      default: 0.5,
+      min: 0.2,
+      max: 1,
+      step: 0.1,
       condition: (item) => item.type === 'blocks'
     },
     bevelEnabled: {
@@ -97,19 +97,19 @@ export const markersConfig = {
     bevelThickness: {
       type: 'range',
       label: 'Bevel Thickness',
-      default: 0.01,
-      min: 0.005,
-      max: 0.03,
-      step: 0.005,
+      default: 0.1,
+      min: 0.05,
+      max: 0.3,
+      step: 0.05,
       condition: (item) => item.type === 'blocks' && item.bevelEnabled
     },
     bevelSize: {
       type: 'range',
       label: 'Bevel Size',
-      default: 0.01,
-      min: 0.005,
-      max: 0.03,
-      step: 0.005,
+      default: 0.1,
+      min: 0.05,
+      max: 0.3,
+      step: 0.05,
       condition: (item) => item.type === 'blocks' && item.bevelEnabled
     },
     bevelSegments: {
@@ -124,28 +124,28 @@ export const markersConfig = {
     romanWidth: {
       type: 'range',
       label: 'Width',
-      default: 0.08,
-      min: 0.04,
-      max: 0.2,
-      step: 0.01,
+      default: 0.8,
+      min: 0.4,
+      max: 2,
+      step: 0.1,
       condition: (item) => item.type === 'roman'
     },
     romanHeight: {
       type: 'range',
       label: 'Height',
-      default: 0.25,
-      min: 0.1,
-      max: 0.5,
-      step: 0.01,
+      default: 2.5,
+      min: 1,
+      max: 5,
+      step: 0.1,
       condition: (item) => item.type === 'roman'
     },
     romanDepth: {
       type: 'range',
       label: 'Depth',
-      default: 0.02,
-      min: 0.01,
-      max: 0.05,
-      step: 0.01,
+      default: 0.2,
+      min: 0.1,
+      max: 0.5,
+      step: 0.1,
       condition: (item) => item.type === 'roman'
     },
     visibleHours: {

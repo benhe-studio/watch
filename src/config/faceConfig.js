@@ -7,7 +7,7 @@ export const faceConfig = {
     material: {
       type: 'select',
       label: 'Material',
-      default: 'polishedSilver',
+      default: 'brushedSteel',
       options: getMaterialOptions()
     }
   }

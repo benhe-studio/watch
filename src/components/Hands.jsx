@@ -61,7 +61,7 @@ function DauphineHand({ length, width, color, yOffset }) {
   }, [length, width])
   
   return (
-    <mesh position={[0, yOffset, -length / 2]} rotation={[-Math.PI / 2, 0, 0]} geometry={geometry}>
+    <mesh position={[0, yOffset * 10, -length / 2]} rotation={[-Math.PI / 2, 0, 0]} geometry={geometry}>
       <meshStandardMaterial color={color} side={THREE.DoubleSide} />
     </mesh>
   )
@@ -70,8 +70,8 @@ function DauphineHand({ length, width, color, yOffset }) {
 // Classic box hand geometry
 function ClassicHand({ length, width, color, yOffset }) {
   return (
-    <mesh position={[0, yOffset, -length / 2]}>
-      <boxGeometry args={[width, 0.05, length]} />
+    <mesh position={[0, yOffset * 10, -length / 2]}>
+      <boxGeometry args={[width, 0.5, length]} />
       <meshStandardMaterial color={color} />
     </mesh>
   )
@@ -117,27 +117,27 @@ function Hands({ profile }) {
   const profiles = {
     classic: {
       type: 'classic',
-      hour: { length: 1.0, width: 0.08, color: '#000000' },
-      minute: { length: 1.4, width: 0.06, color: '#000000' },
-      second: { length: 1.6, width: 0.02, color: '#ff0000' }
+      hour: { length: 10, width: 0.8, color: '#000000' },
+      minute: { length: 14, width: 0.6, color: '#000000' },
+      second: { length: 16, width: 0.2, color: '#ff0000' }
     },
     modern: {
       type: 'classic',
-      hour: { length: 0.9, width: 0.1, color: '#333333' },
-      minute: { length: 1.3, width: 0.08, color: '#333333' },
-      second: { length: 1.5, width: 0.03, color: '#0066ff' }
+      hour: { length: 9, width: 1, color: '#333333' },
+      minute: { length: 13, width: 0.8, color: '#333333' },
+      second: { length: 15, width: 0.3, color: '#0066ff' }
     },
     minimal: {
       type: 'classic',
-      hour: { length: 0.8, width: 0.05, color: '#000000' },
-      minute: { length: 1.2, width: 0.04, color: '#000000' },
-      second: { length: 1.4, width: 0.015, color: '#666666' }
+      hour: { length: 8, width: 0.5, color: '#000000' },
+      minute: { length: 12, width: 0.4, color: '#000000' },
+      second: { length: 14, width: 0.15, color: '#666666' }
     },
     dauphine: {
       type: 'dauphine',
-      hour: { length: 1.0, width: 0.12, color: '#1a1a1a' },
-      minute: { length: 1.5, width: 0.10, color: '#1a1a1a' },
-      second: { length: 1.6, width: 0.02, color: '#ff0000' }
+      hour: { length: 10, width: 1.2, color: '#1a1a1a' },
+      minute: { length: 15, width: 1.0, color: '#1a1a1a' },
+      second: { length: 16, width: 0.2, color: '#ff0000' }
     }
   }
 
@@ -154,7 +154,7 @@ function Hands({ profile }) {
           length={currentProfile.hour.length}
           width={currentProfile.hour.width}
           color={currentProfile.hour.color}
-          yOffset={0.02}
+          yOffset={0.2}
         />
       </group>
 
@@ -164,7 +164,7 @@ function Hands({ profile }) {
           length={currentProfile.minute.length}
           width={currentProfile.minute.width}
           color={currentProfile.minute.color}
-          yOffset={0.03}
+          yOffset={0.3}
         />
       </group>
 
@@ -174,13 +174,13 @@ function Hands({ profile }) {
           length={currentProfile.second.length}
           width={currentProfile.second.width}
           color={currentProfile.second.color}
-          yOffset={0.04}
+          yOffset={0.4}
         />
       </group>
 
       {/* Center cap */}
-      <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[0.1, 32]} />
+      <mesh position={[0, 0.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[1, 32]} />
         <meshStandardMaterial color="#000000" />
       </mesh>
     </group>
