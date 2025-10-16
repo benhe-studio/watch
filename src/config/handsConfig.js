@@ -21,7 +21,8 @@ export const handsConfig = {
       options: [
         { value: 'classic', label: 'Classic' },
         { value: 'dauphine', label: 'Dauphine' },
-        { value: 'taperedCylinder', label: 'Tapered' }
+        { value: 'taperedCylinder', label: 'Tapered' },
+        { value: 'parametric', label: 'Parametric' }
       ]
     },
     width: {
@@ -30,7 +31,8 @@ export const handsConfig = {
       default: 0.5,
       min: 0.1,
       max: 2,
-      step: 0.1
+      step: 0.1,
+      condition: (item) => item.profile !== 'parametric'
     },
     length: {
       type: 'range',
@@ -44,7 +46,8 @@ export const handsConfig = {
       },
       min: 5,
       max: 20,
-      step: 0.5
+      step: 0.5,
+      condition: (item) => item.profile !== 'parametric'
     },
     offset: {
       type: 'range',
@@ -58,6 +61,21 @@ export const handsConfig = {
       type: 'color',
       label: 'Color',
       default: '#000000'
+    },
+    points: {
+      type: 'pointArray',
+      label: 'Shape Points',
+      default: [[0, 0], [0.5, 0], [0.3, 14], [0, 18]],
+      condition: (item) => item.profile === 'parametric',
+      xLabel: 'X (Width)',
+      yLabel: 'Y (Length)',
+      xMin: 0,
+      xMax: 2,
+      xStep: 0.1,
+      yMin: 0,
+      yMax: 20,
+      yStep: 0.5,
+      description: 'Define half of the hand shape from center (0,0) to tip'
     }
   }
 }

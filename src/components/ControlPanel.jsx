@@ -179,10 +179,83 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad }) {
           </div>
         )
 
-      default:
-        return null
-    }
+    case 'pointArray':
+      const points = value || controlConfig.default || []
+      
+      const addPoint = () => {
+        const newPoints = [...points, [0, 0]]
+        onChange(newPoints)
+      }
+      
+      const removePoint = (pointIndex) => {
+        const newPoints = points.filter((_, i) => i !== pointIndex)
+        onChange(newPoints)
+      }
+      
+      const updatePoint = (pointIndex, coordIndex, newValue) => {
+        const newPoints = [...points]
+        newPoints[pointIndex] = [...newPoints[pointIndex]]
+        newPoints[pointIndex][coordIndex] = newValue
+        onChange(newPoints)
+      }
+      
+      return (
+        <div key={controlKey} className="control-group point-array-control">
+          <label>{controlConfig.label}</label>
+          {controlConfig.description && (
+            <p className="control-description">{controlConfig.description}</p>
+          )}
+          <div className="points-list">
+            {points.map((point, pointIndex) => (
+              <div key={pointIndex} className="point-item">
+                <div className="point-header">
+                  <span>Point {pointIndex + 1}</span>
+                  <button
+                    className="remove-point-button"
+                    onClick={() => removePoint(pointIndex)}
+                    disabled={points.length <= 2}
+                    title={points.length <= 2 ? "Need at least 2 points" : "Remove point"}
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="point-controls">
+                  <div className="point-control">
+                    <label>{controlConfig.xLabel || 'X'}: {point[0].toFixed(2)}</label>
+                    <input
+                      type="range"
+                      min={controlConfig.xMin ?? 0}
+                      max={controlConfig.xMax ?? 10}
+                      step={controlConfig.xStep ?? 0.1}
+                      value={point[0]}
+                      onChange={(e) => updatePoint(pointIndex, 0, parseFloat(e.target.value))}
+                    />
+                  </div>
+                  <div className="point-control">
+                    <label>{controlConfig.yLabel || 'Y'}: {point[1].toFixed(2)}</label>
+                    <input
+                      type="range"
+                      min={controlConfig.yMin ?? 0}
+                      max={controlConfig.yMax ?? 10}
+                      step={controlConfig.yStep ?? 0.1}
+                      value={point[1]}
+                      onChange={(e) => updatePoint(pointIndex, 1, parseFloat(e.target.value))}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button className="add-point-button" onClick={addPoint}>
+            + Add Point
+          </button>
+        </div>
+      )
+
+    default:
+      return null
   }
+}
 
   const renderArraySection = (sectionKey, section) => {
     const items = config[sectionKey] || []
