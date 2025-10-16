@@ -1,0 +1,47 @@
+{
+  "face": {
+    "material": "brushedSteel"
+  },
+  "markers": [
+    {
+      "type": "blocks",
+      "rotate": true,
+      "material": "polishedSilver",
+      "radius": 17,
+      "topWidth": 1,
+      "bottomWidth": 1,
+      "height": 3,
+      "depth": 0.5,
+      "bevelEnabled": true,
+      "bevelThickness": 0.1,
+      "bevelSize": 0.1,
+      "bevelSegments": 3,
+      "visibleHours": [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    }
+  ],
+  "minuteMarkers": [],
+  "complications": [],
+  "hands": [
+    {
+      "type": "hours",
+      "profile": "classic",
+      "width": 0.8,
+      "length": 10,
+      "color": "#000000"
+    },
+    {
+      "type": "minutes",
+      "profile": "classic",
+      "width": 0.6,
+      "length": 14,
+      "color": "#000000"
+    },
+    {
+      "type": "seconds",
+      "profile": "taperedCylinder",
+      "width": 0.2,
+      "length": 16,
+      "color": "#ff0000"
+    }
+  ]
+}

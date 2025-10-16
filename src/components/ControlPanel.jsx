@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './ControlPanel.css'
 
-function ControlPanel({ config, updateConfig, schema }) {
+function ControlPanel({ config, updateConfig, schema, onSave, onLoad }) {
   const [expandedSections, setExpandedSections] = useState(
     Object.keys(schema).reduce((acc, key) => {
       acc[key] = schema[key].expanded || false
@@ -258,7 +258,17 @@ function ControlPanel({ config, updateConfig, schema }) {
 
   return (
     <div className="control-panel">
-      <h2>Watch Face Designer</h2>
+      <div className="control-panel-header">
+        <h2>Watch Face Designer</h2>
+        <div className="config-actions">
+          <button onClick={onSave} className="config-button">
+            💾 Save Config
+          </button>
+          <button onClick={onLoad} className="config-button">
+            📂 Load Config
+          </button>
+        </div>
+      </div>
 
       {Object.keys(schema).map(sectionKey => {
         const section = schema[sectionKey]

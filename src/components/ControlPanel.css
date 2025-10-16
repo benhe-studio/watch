@@ -8,6 +8,37 @@
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
 }
 
+.control-panel-header {
+  margin-bottom: 30px;
+}
+
+.config-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.config-button {
+  flex: 1;
+  padding: 10px 15px;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.config-button:hover {
+  background: #357abd;
+}
+
+.config-button:active {
+  transform: translateY(1px);
+}
+
 .control-panel h2 {
   margin: 0 0 30px 0;
   font-size: 24px;

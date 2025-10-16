@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Environment } from '@react-three/drei'
 import WatchFace from './components/WatchFace'
@@ -8,6 +8,26 @@ import './App.css'
 
 function App() {
   const [config, setConfig] = useState(generateInitialState(watchConfig))
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Load default config on mount
+  useEffect(() => {
+    const loadDefaultConfig = async () => {
+      try {
+        const response = await fetch('/default-config.json')
+        if (response.ok) {
+          const defaultConfig = await response.json()
+          setConfig(defaultConfig)
+        }
+      } catch (error) {
+        console.log('No default config found, using generated initial state')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    
+    loadDefaultConfig()
+  }, [])
 
   const updateConfig = (section, key, value) => {
     setConfig(prev => {
@@ -28,6 +48,43 @@ function App() {
         }
       }
     })
+  }
+
+  const saveConfig = () => {
+    const dataStr = JSON.stringify(config, null, 2)
+    const dataBlob = new Blob([dataStr], { type: 'application/json' })
+    const url = URL.createObjectURL(dataBlob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'watch-config.json'
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const loadConfig = () => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = '.json'
+    input.onchange = (e) => {
+      const file = e.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          try {
+            const loadedConfig = JSON.parse(event.target.result)
+            setConfig(loadedConfig)
+          } catch (error) {
+            alert('Error loading config: ' + error.message)
+          }
+        }
+        reader.readAsText(file)
+      }
+    }
+    input.click()
+  }
+
+  if (isLoading) {
+    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100vw', height: '100vh' }}>Loading...</div>
   }
 
   return (
@@ -61,6 +118,8 @@ function App() {
         config={config}
         updateConfig={updateConfig}
         schema={watchConfig}
+        onSave={saveConfig}
+        onLoad={loadConfig}
       />
     </div>
   )
