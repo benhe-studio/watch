@@ -20,7 +20,7 @@ function WatchFace({ config }) {
       <Complications complications={config.complications} />
 
       {/* Watch hands */}
-      <Hands profile={config.hands.profile} />
+      <Hands hands={config.hands} />
     </group>
   )
 }
