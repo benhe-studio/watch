@@ -1,4 +1,5 @@
 import { Text } from '@react-three/drei'
+import { FACE_THICKNESS } from '../config/constants'
 import * as THREE from 'three'
 
 function Complications({ complications }) {
@@ -10,7 +11,7 @@ function Complications({ complications }) {
     <>
       {complications.map((complicationConfig, index) => {
         // Calculate position based on position choice (12, 3, 6, 9) and distance
-        const { position, distance, type, dateValue } = complicationConfig
+        const { position, distance, type, dateValue, windowShape, windowRadius, windowWidth, windowHeight } = complicationConfig
         
         const angle = {
           12: 0,
@@ -22,19 +23,21 @@ function Complications({ complications }) {
         // Calculate x, z coordinates (y is height above face)
         const x = Math.sin(angle) * distance
         const z = -Math.cos(angle) * distance
-        const datePosition = [x, 0.2, z]
-        
-        // Calculate rotation to face outward from center
-        const dateRotation = [-Math.PI / 2, 0, angle]
+        // Position complication at the bottom of the face thickness
+        const datePosition = [x, -FACE_THICKNESS / 2, z]
 
         return (
           <group key={index}>
             {/* Date complication */}
             {type === 'date' && (
-              <group position={datePosition} rotation={dateRotation}>
-                {/* Background plane for date */}
+              <group position={datePosition} rotation={[-Math.PI / 2, 0, 0]}>
+                {/* Background plane for date - matches window shape */}
                 <mesh>
-                  <planeGeometry args={[4, 3]} />
+                  {windowShape === 'circle' ? (
+                    <circleGeometry args={[windowRadius || 2.2, 32]} />
+                  ) : (
+                    <planeGeometry args={[windowWidth || 4, windowHeight || 3]} />
+                  )}
                   <meshStandardMaterial
                     color="#ffffff"
                     side={THREE.DoubleSide}

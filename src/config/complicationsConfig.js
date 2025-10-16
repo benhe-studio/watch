@@ -31,6 +31,42 @@ export const complicationsConfig = {
       max: 18,
       step: 0.5
     },
+    windowShape: {
+      type: 'buttons',
+      label: 'Window Shape',
+      default: 'circle',
+      options: [
+        { value: 'circle', label: 'Circle' },
+        { value: 'rectangle', label: 'Rectangle' }
+      ]
+    },
+    windowRadius: {
+      type: 'range',
+      label: 'Window Radius',
+      default: 2.2,
+      min: 1.5,
+      max: 4,
+      step: 0.1,
+      condition: (item) => item.windowShape === 'circle'
+    },
+    windowWidth: {
+      type: 'range',
+      label: 'Window Width',
+      default: 4,
+      min: 2,
+      max: 6,
+      step: 0.1,
+      condition: (item) => item.windowShape === 'rectangle'
+    },
+    windowHeight: {
+      type: 'range',
+      label: 'Window Height',
+      default: 3,
+      min: 2,
+      max: 5,
+      step: 0.1,
+      condition: (item) => item.windowShape === 'rectangle'
+    },
     dateValue: {
       type: 'range',
       label: 'Date Value',

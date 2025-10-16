@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { getMaterial } from '../config/materials'
+import { FACE_THICKNESS } from '../config/constants'
 import * as THREE from 'three'
 
 function Face({ config, complications }) {
@@ -7,7 +8,7 @@ function Face({ config, complications }) {
   
   // Calculate window positions for all complications
   const faceGeometry = useMemo(() => {
-    const faceThickness = 1
+    const faceThickness = FACE_THICKNESS
     
     if (!complications || complications.length === 0) {
       // No complications - return simple cylinder
@@ -20,7 +21,7 @@ function Face({ config, complications }) {
 
     // Create holes for each complication
     complications.forEach((complication) => {
-      const { position, distance } = complication
+      const { position, distance, windowShape, windowRadius, windowWidth, windowHeight } = complication
       const angle = {
         12: 0,
         3: Math.PI / 2,
@@ -32,23 +33,43 @@ function Face({ config, complications }) {
       const x = Math.sin(angle) * distance
       const z = -Math.cos(angle) * distance
 
-      // Create a hole for the date window
+      // Create a hole for the complication window
       const windowHole = new THREE.Path()
-      windowHole.absarc(x, z, 2.2, 0, Math.PI * 2, true)
+      
+      if (windowShape === 'circle') {
+        // Circular window
+        const radius = windowRadius || 2.2
+        windowHole.absarc(x, z, radius, 0, Math.PI * 2, true)
+      } else {
+        // Rectangular window
+        const width = windowWidth || 4
+        const height = windowHeight || 3
+        const halfWidth = width / 2
+        const halfHeight = height / 2
+        
+        windowHole.moveTo(x - halfWidth, z - halfHeight)
+        windowHole.lineTo(x + halfWidth, z - halfHeight)
+        windowHole.lineTo(x + halfWidth, z + halfHeight)
+        windowHole.lineTo(x - halfWidth, z + halfHeight)
+        windowHole.lineTo(x - halfWidth, z - halfHeight)
+      }
+      
       circleShape.holes.push(windowHole)
     })
 
     // Extrude the shape to create thickness
     const extrudeSettings = {
       depth: faceThickness,
-      bevelEnabled: false
+      bevelEnabled: false,
+      curveSegments: 128
     }
     
     const geometry = new THREE.ExtrudeGeometry(circleShape, extrudeSettings)
     
     // Rotate geometry to align properly (extrude goes along Z, we want it along Y)
     geometry.rotateX(Math.PI / 2)
-    geometry.translate(0, 0, -faceThickness / 2)
+    // After rotation, translate along Y to center the thickness
+    geometry.translate(0, faceThickness / 2, 0)
     
     return geometry
   }, [complications])
