@@ -88,6 +88,21 @@ export const markersConfig = {
       step: 0.1,
       condition: (item) => item.type === 'blocks'
     },
+    doubleBlock: {
+      type: 'checkbox',
+      label: 'Double Block',
+      default: false,
+      condition: (item) => item.type === 'blocks'
+    },
+    separation: {
+      type: 'range',
+      label: 'Separation',
+      default: 1.5,
+      min: 0.5,
+      max: 4,
+      step: 0.1,
+      condition: (item) => item.type === 'blocks' && item.doubleBlock
+    },
     bevelEnabled: {
       type: 'checkbox',
       label: 'Enable Bevel',

@@ -47,6 +47,8 @@ function Markers({ markers }) {
                 const bevelThickness = markerConfig.bevelThickness || 0.01
                 const bevelSize = markerConfig.bevelSize || 0.01
                 const bevelSegments = markerConfig.bevelSegments || 3
+                const doubleBlock = markerConfig.doubleBlock || false
+                const separation = markerConfig.separation || 1.5
                 
                 // Create shape (trapezoid for tapered, rectangle for uniform)
                 const shape = new THREE.Shape()
@@ -69,7 +71,7 @@ function Markers({ markers }) {
                   bevelSegments: bevelEnabled ? Math.round(bevelSegments) : 1
                 }
                 
-                return (
+                const blockMesh = (
                   <mesh castShadow receiveShadow>
                     <extrudeGeometry args={[shape, extrudeSettings]} />
                     <meshPhysicalMaterial
@@ -83,6 +85,22 @@ function Markers({ markers }) {
                     />
                   </mesh>
                 )
+                
+                if (doubleBlock) {
+                  const offset = separation / 2
+                  return (
+                    <>
+                      <group position={[offset, 0, 0]}>
+                        {blockMesh}
+                      </group>
+                      <group position={[-offset, 0, 0]}>
+                        {blockMesh}
+                      </group>
+                    </>
+                  )
+                }
+                
+                return blockMesh
               })()}
               {markerConfig.type === 'arabic' && (
                 <Text
