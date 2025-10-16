@@ -10,6 +10,48 @@ function MinuteMarkers({ minuteMarkers }) {
   return (
     <>
       {minuteMarkers.map((markerConfig, markerIndex) => {
+        // Handle border type separately - it's a single ring, not 60 markers
+        if (markerConfig.type === 'border') {
+          const distance = markerConfig.distance || 17
+          const thickness = markerConfig.thickness || 1
+          const depth = markerConfig.borderDepth || 0.5
+          const material = getMaterial(markerConfig.material || 'polishedSilver')
+          
+          // Create a ring shape (doughnut) for extrusion
+          const outerRadius = distance + thickness / 2
+          const innerRadius = distance - thickness / 2
+          
+          // Create the ring shape with more segments for smoothness
+          const shape = new THREE.Shape()
+          shape.absarc(0, 0, outerRadius, 0, Math.PI * 2, false, 512)
+          
+          // Create the hole
+          const hole = new THREE.Path()
+          hole.absarc(0, 0, innerRadius, 0, Math.PI * 2, true, 512)
+          shape.holes.push(hole)
+          
+          const extrudeSettings = {
+            depth: depth,
+            bevelEnabled: false,
+            curveSegments: 512
+          }
+          
+          return (
+            <mesh key={`border-${markerIndex}`} position={[0, 0.1, 0]} rotation={[-Math.PI / 2, 0, 0]} castShadow receiveShadow>
+              <extrudeGeometry args={[shape, extrudeSettings]} />
+              <meshPhysicalMaterial
+                color={material.color}
+                roughness={material.roughness}
+                metalness={material.metalness}
+                clearcoat={material.clearcoat}
+                clearcoatRoughness={material.clearcoatRoughness}
+                reflectivity={material.reflectivity}
+                ior={material.ior}
+              />
+            </mesh>
+          )
+        }
+        
         const markerElements = []
         const visibleMinutes = markerConfig.visibleMinutes || Array.from({ length: 60 }, (_, i) => i)
         
@@ -90,7 +132,8 @@ function MinuteMarkers({ minuteMarkers }) {
                 
                 // Rotate bottom half numbers (20, 25, 30, 35, 40) by 180 degrees
                 // These correspond to i values of 20, 25, 30, 35, 40
-                const needsFlip = i >= 20 && i <= 40
+                // Only apply flip if rotation is enabled
+                const needsFlip = markerConfig.rotate && i >= 20 && i <= 40
                 const additionalRotation = needsFlip ? Math.PI : 0
                 
                 return (

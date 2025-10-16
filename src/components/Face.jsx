@@ -24,6 +24,7 @@ function Face({ config }) {
         <sphereGeometry args={[0.8, 16, 16]} />
         <meshStandardMaterial color="#ff0000" />
       </mesh>
+      
     </group>
   )
 }
