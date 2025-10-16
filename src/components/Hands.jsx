@@ -61,7 +61,7 @@ function DauphineHand({ length, width, color, yOffset }) {
   }, [length, width])
   
   return (
-    <mesh position={[0, yOffset * 10, -length / 2]} rotation={[-Math.PI / 2, 0, 0]} geometry={geometry}>
+    <mesh position={[0, yOffset * 10, -length / 2]} rotation={[-Math.PI / 2, 0, 0]} geometry={geometry} castShadow receiveShadow>
       <meshStandardMaterial color={color} side={THREE.DoubleSide} />
     </mesh>
   )
@@ -70,7 +70,7 @@ function DauphineHand({ length, width, color, yOffset }) {
 // Classic box hand geometry
 function ClassicHand({ length, width, color, yOffset }) {
   return (
-    <mesh position={[0, yOffset * 10, -length / 2]}>
+    <mesh position={[0, yOffset * 10, -length / 2]} castShadow receiveShadow>
       <boxGeometry args={[width, 0.5, length]} />
       <meshStandardMaterial color={color} />
     </mesh>
@@ -179,7 +179,7 @@ function Hands({ profile }) {
       </group>
 
       {/* Center cap */}
-      <mesh position={[0, 0.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh position={[0, 0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} castShadow receiveShadow>
         <circleGeometry args={[1, 32]} />
         <meshStandardMaterial color="#000000" />
       </mesh>

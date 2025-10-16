@@ -51,7 +51,7 @@ function MinuteMarkers({ minuteMarkers }) {
                 const material = getMaterial(markerConfig.material || 'polishedSilver')
                 
                 return (
-                  <mesh>
+                  <mesh castShadow receiveShadow>
                     <boxGeometry args={[width, height, depth]} />
                     <meshPhysicalMaterial
                       color={material.color}
@@ -70,7 +70,7 @@ function MinuteMarkers({ minuteMarkers }) {
                 const material = getMaterial(markerConfig.material || 'polishedSilver')
                 
                 return (
-                  <mesh>
+                  <mesh castShadow receiveShadow>
                     <sphereGeometry args={[radius, 16, 16]} />
                     <meshPhysicalMaterial
                       color={material.color}

@@ -33,12 +33,22 @@ function App() {
   return (
     <div style={{ display: 'flex', width: '100vw', height: '100vh' }}>
       <div style={{ flex: 1, background: '#e8e8e8' }}>
-        <Canvas camera={{ position: [0, 35, 35], fov: 50 }}>
+        <Canvas shadows camera={{ position: [0, 35, 35], fov: 50 }}>
           <color attach="background" args={['#e8e8e8']} />
           
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[50, 50, 50]} intensity={1} />
-          <directionalLight position={[-50, 30, -50]} intensity={0.5} />
+          <ambientLight intensity={0.3} />
+          <directionalLight
+            position={[10, 50, -10]}
+            intensity={1.2}
+            castShadow
+            shadow-mapSize={[2048, 2048]}
+            shadow-camera-left={-30}
+            shadow-camera-right={30}
+            shadow-camera-top={30}
+            shadow-camera-bottom={-30}
+            shadow-camera-near={0.1}
+            shadow-camera-far={100}
+          />
           
           {/* Environment for realistic metallic reflections */}
           <Environment preset="studio" />

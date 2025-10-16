@@ -6,7 +6,7 @@ function Face({ config }) {
   return (
     <group>
       {/* Watch face base */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} castShadow receiveShadow>
         <circleGeometry args={[20, 128]} />
         <meshPhysicalMaterial
           color={material.color}
@@ -20,7 +20,7 @@ function Face({ config }) {
       </mesh>
       
       {/* North indicator - small sphere at 12 o'clock position */}
-      <mesh position={[0, 1, -23]}>
+      <mesh position={[0, 1, -23]} castShadow receiveShadow>
         <sphereGeometry args={[0.8, 16, 16]} />
         <meshStandardMaterial color="#ff0000" />
       </mesh>

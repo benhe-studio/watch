@@ -70,7 +70,7 @@ function Markers({ markers }) {
                 }
                 
                 return (
-                  <mesh>
+                  <mesh castShadow receiveShadow>
                     <extrudeGeometry args={[shape, extrudeSettings]} />
                     <meshPhysicalMaterial
                       color={material.color}
@@ -97,7 +97,7 @@ function Markers({ markers }) {
                 </Text>
               )}
               {markerConfig.type === 'roman' && (
-                <mesh>
+                <mesh castShadow receiveShadow>
                   <boxGeometry args={[
                     markerConfig.romanWidth || 0.08,
                     markerConfig.romanHeight || 0.25,
