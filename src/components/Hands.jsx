@@ -70,41 +70,45 @@ const geometryGenerators = {
     const defaultPoints = [
       [0, 0],      // Start at center/tail
       [0.5, 0],    // Widen at base
-      [0.3, length * 0.7],  // Taper towards tip
-      [0, length]  // End at tip
+      [0.3, 14],   // Taper towards tip
+      [0, 18]      // End at tip
     ]
     
     const shapePoints = points || defaultPoints
     
+    // Calculate the actual length from the points
+    const actualLength = shapePoints[shapePoints.length - 1][1]
+    
     // Create the shape by mirroring points across the center line
+    // Convert to negative Y to match Three.js coordinate system (like dauphine)
     const shape = new THREE.Shape()
     
-    // Start at the first point
-    shape.moveTo(shapePoints[0][0], shapePoints[0][1])
+    // Start at the first point (negate Y)
+    shape.moveTo(shapePoints[0][0], -shapePoints[0][1])
     
-    // Draw the right side (positive x)
+    // Draw the right side (positive x, negative y)
     for (let i = 1; i < shapePoints.length; i++) {
-      shape.lineTo(shapePoints[i][0], shapePoints[i][1])
+      shape.lineTo(shapePoints[i][0], -shapePoints[i][1])
     }
     
     // Mirror back down the left side (negative x), including the last point
     for (let i = shapePoints.length - 1; i >= 0; i--) {
-      shape.lineTo(-shapePoints[i][0], shapePoints[i][1])
+      shape.lineTo(-shapePoints[i][0], -shapePoints[i][1])
     }
     
     // Extrude settings for depth
     const extrudeSettings = {
-      depth: width,
+      depth: width || 0.5,
       bevelEnabled: true,
-      bevelThickness: width * 0.1,
-      bevelSize: width * 0.1,
+      bevelThickness: (width || 0.5) * 0.1,
+      bevelSize: (width || 0.5) * 0.1,
       bevelSegments: 3
     }
     
     const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings)
     
     // Center the geometry on the z-axis (depth axis)
-    geometry.translate(0, 0, -width / 2)
+    geometry.translate(0, 0, -(width || 0.5) / 2)
     
     return geometry
   }
@@ -236,10 +240,15 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
   }
   
   if (isParametric) {
+    // For parametric hands, calculate actual length from points
+    const actualLength = points && points.length > 0
+      ? points[points.length - 1][1]
+      : length
+    
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
         <mesh
-          position={[0, typeConfig.yOffset * 10, -length / 2 + pivotOffset]}
+          position={[0, typeConfig.yOffset * 10, -actualLength * offset]}
           rotation={[-Math.PI / 2, 0, 0]}
           geometry={geometry}
           castShadow
@@ -250,7 +259,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
         
         {/* Pivot point cylinder */}
         <mesh position={[0, typeConfig.yOffset * 10, 0]} castShadow receiveShadow>
-          <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
+          <cylinderGeometry args={[0.75, 0.75, 0.5, 32]} />
           <meshStandardMaterial color={color} />
         </mesh>
       </group>
