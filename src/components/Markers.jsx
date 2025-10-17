@@ -22,20 +22,20 @@ function Markers({ markers }) {
           }
           
           // Calculate angle for each hour position
-          // Start at 12 (top) which should be at negative Z
-          // i=0 -> 12 o'clock (top, -Z), i=3 -> 3 o'clock (right, +X), etc.
+          // Start at 12 (top) which should be at positive Y
+          // i=0 -> 12 o'clock (top, +Y), i=3 -> 3 o'clock (right, +X), etc.
           const angle = (i * Math.PI) / 6
           const radius = markerConfig.radius || 17
-          // For 12 at top: when i=0, we want x=0, z=-radius
-          // sin(0) = 0, cos(0) = 1, so we need to negate z and swap
+          // For 12 at top: when i=0, we want x=0, y=+radius
+          // sin(0) = 0, cos(0) = 1
           const x = Math.sin(angle) * radius
-          const z = -Math.cos(angle) * radius
+          const y = Math.cos(angle) * radius
           
           markerElements.push(
-            <group 
+            <group
               key={`${markerIndex}-${i}`}
-              position={[x, 0.1, z]}
-              rotation={[-Math.PI / 2, 0, markerConfig.rotate ? -angle : 0]}
+              position={[x, y, 0]}
+              rotation={[0, 0, markerConfig.rotate ? -angle : 0]}
             >
               {markerConfig.type === 'blocks' && (() => {
                 const topWidth = markerConfig.topWidth || 0.1
@@ -104,7 +104,7 @@ function Markers({ markers }) {
               })()}
               {markerConfig.type === 'arabic' && (
                 <Text
-                  position={[0, 0, 0]}
+                  position={[0, 0, 0.1]}
                   rotation={[0, 0, 0]}
                   fontSize={markerConfig.fontSize || 0.25}
                   color={markerConfig.color || '#000000'}

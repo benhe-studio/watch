@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Environment } from '@react-three/drei'
+import * as THREE from 'three'
 import WatchFace from './components/WatchFace'
 import ControlPanel from './components/ControlPanel'
 import { watchConfig, generateInitialState } from './config/watchConfig'
@@ -109,6 +110,9 @@ function App() {
           
           {/* Environment for realistic metallic reflections */}
           <Environment preset="studio" />
+          
+          {/* Axis helper to show X (red), Y (green), Z (blue) */}
+          <primitive object={new THREE.AxesHelper(30)} />
           
           <WatchFace config={config} />
           <OrbitControls enablePan={false} />

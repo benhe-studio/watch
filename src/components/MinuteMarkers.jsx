@@ -37,7 +37,7 @@ function MinuteMarkers({ minuteMarkers }) {
           }
           
           return (
-            <mesh key={`border-${markerIndex}`} position={[0, 0.1, 0]} rotation={[-Math.PI / 2, 0, 0]} castShadow receiveShadow>
+            <mesh key={`border-${markerIndex}`} position={[0, 0, 0]} rotation={[0, 0, 0]} castShadow receiveShadow>
               <extrudeGeometry args={[shape, extrudeSettings]} />
               <meshPhysicalMaterial
                 color={material.color}
@@ -73,18 +73,18 @@ function MinuteMarkers({ minuteMarkers }) {
           }
           
           // Calculate angle for each minute position
-          // Start at 12 (top) which should be at negative Z
-          // i=0 -> 12 o'clock (top, -Z), i=15 -> 3 o'clock (right, +X), etc.
+          // Start at 12 (top) which should be at positive Y
+          // i=0 -> 12 o'clock (top, +Y), i=15 -> 3 o'clock (right, +X), etc.
           const angle = (i * Math.PI) / 30 // 60 minutes = 2π radians, so each minute is π/30
           const distance = markerConfig.distance || 17
           const x = Math.sin(angle) * distance
-          const z = -Math.cos(angle) * distance
+          const y = Math.cos(angle) * distance
           
           markerElements.push(
-            <group 
+            <group
               key={`${markerIndex}-${i}`}
-              position={[x, 0.1, z]}
-              rotation={[-Math.PI / 2, 0, markerConfig.rotate ? -angle : 0]}
+              position={[x, y, 0]}
+              rotation={[0, 0, markerConfig.rotate ? -angle : 0]}
             >
               {markerConfig.type === 'line' && (() => {
                 const width = markerConfig.width || 0.02
@@ -138,7 +138,7 @@ function MinuteMarkers({ minuteMarkers }) {
                 
                 return (
                   <Text
-                    position={[0, 0, 0]}
+                    position={[0, 0, 0.1]}
                     rotation={[0, 0, additionalRotation]}
                     fontSize={markerConfig.fontSize || 0.15}
                     color={markerConfig.color || '#000000'}

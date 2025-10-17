@@ -5,17 +5,17 @@ import * as THREE from 'three'
 // Geometry generator functions - return THREE.BufferGeometry
 const geometryGenerators = {
   classic: ({ length, width }) => {
-    return new THREE.BoxGeometry(width, 0.5, length)
+    return new THREE.BoxGeometry(width, length, 0.5)
   },
   
   dauphine: ({ length, width }) => {
     const shape = new THREE.Shape()
     const halfLength = length / 2
     
-    // First triangle (from center to tip)
+    // First triangle (from center to tip) - pointing up in Y
     shape.moveTo(0, 0)
     shape.lineTo(-width / 2, 0)
-    shape.lineTo(0, -halfLength)
+    shape.lineTo(0, halfLength)
     shape.lineTo(0, 0)
     
     const topGeometry = new THREE.ShapeGeometry(shape)
@@ -24,7 +24,7 @@ const geometryGenerators = {
     const shape2 = new THREE.Shape()
     shape2.moveTo(0, 0)
     shape2.lineTo(width / 2, 0)
-    shape2.lineTo(0, -halfLength)
+    shape2.lineTo(0, halfLength)
     shape2.lineTo(0, 0)
     
     const bottomGeometry = new THREE.ShapeGeometry(shape2)
@@ -62,7 +62,10 @@ const geometryGenerators = {
   taperedCylinder: ({ length, width }) => {
     const radiusTop = width * 0.3
     const radiusBottom = width
-    return new THREE.CylinderGeometry(radiusTop, radiusBottom, length, 16, 1)
+    const geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, length, 16, 1)
+    // Rotate to align with Y-axis (cylinder is along Y by default, which is what we want)
+    geometry.rotateZ(Math.PI / 2)
+    return geometry
   },
   
   parametric: ({ length, width, points }) => {
@@ -80,20 +83,20 @@ const geometryGenerators = {
     const actualLength = shapePoints[shapePoints.length - 1][1]
     
     // Create the shape by mirroring points across the center line
-    // Convert to negative Y to match Three.js coordinate system (like dauphine)
+    // Create shape pointing up in positive Y
     const shape = new THREE.Shape()
     
-    // Start at the first point (negate Y)
-    shape.moveTo(shapePoints[0][0], -shapePoints[0][1])
+    // Start at the first point
+    shape.moveTo(shapePoints[0][0], shapePoints[0][1])
     
-    // Draw the right side (positive x, negative y)
+    // Draw the right side (positive x, positive y)
     for (let i = 1; i < shapePoints.length; i++) {
-      shape.lineTo(shapePoints[i][0], -shapePoints[i][1])
+      shape.lineTo(shapePoints[i][0], shapePoints[i][1])
     }
     
     // Mirror back down the left side (negative x), including the last point
     for (let i = shapePoints.length - 1; i >= 0; i--) {
-      shape.lineTo(-shapePoints[i][0], -shapePoints[i][1])
+      shape.lineTo(-shapePoints[i][0], shapePoints[i][1])
     }
     
     // Extrude settings for depth
@@ -174,7 +177,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
   useFrame(({ clock }) => {
     if (handRef.current) {
       const time = clock.getElapsedTime()
-      handRef.current.rotation.y = typeConfig.angleCalculation(time)
+      handRef.current.rotation.z = -typeConfig.angleCalculation(time)
     }
   })
   
@@ -189,27 +192,27 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
     
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
-        <group position={[0, typeConfig.yOffset * 10, -length / 2 + pivotOffset]} rotation={[-Math.PI / 2, 0, 0]}>
+        <group position={[0, length / 2 - pivotOffset, typeConfig.yOffset * 10]} rotation={[0, 0, 0]}>
           {/* Tapered cylinder body */}
           <mesh geometry={geometry} castShadow receiveShadow>
             <meshStandardMaterial color={color} />
           </mesh>
           
           {/* Sphere cap at the large end (base) */}
-          <mesh position={[0, -length / 2, 0]} castShadow receiveShadow>
+          <mesh position={[0, length / 2, 0]} castShadow receiveShadow>
             <sphereGeometry args={[radiusBottom, 16, 16]} />
             <meshStandardMaterial color={color} />
           </mesh>
           
           {/* Sphere cap at the narrow end (tip) */}
-          <mesh position={[0, length / 2, 0]} castShadow receiveShadow>
+          <mesh position={[0, -length / 2, 0]} castShadow receiveShadow>
             <sphereGeometry args={[radiusTop, 16, 16]} />
             <meshStandardMaterial color={color} />
           </mesh>
         </group>
         
         {/* Pivot point cylinder */}
-        <mesh position={[0, typeConfig.yOffset * 10, 0]} castShadow receiveShadow>
+        <mesh position={[0, 0, typeConfig.yOffset * 10]} rotation={[0, 0, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
           <meshStandardMaterial color={color} />
         </mesh>
@@ -221,8 +224,8 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
         <mesh
-          position={[0, typeConfig.yOffset * 10, -length / 2 + pivotOffset]}
-          rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, length / 2 - pivotOffset, typeConfig.yOffset * 10]}
+          rotation={[0, 0, 0]}
           geometry={geometry}
           castShadow
           receiveShadow
@@ -231,7 +234,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
         </mesh>
         
         {/* Pivot point cylinder */}
-        <mesh position={[0, typeConfig.yOffset * 10, 0]} castShadow receiveShadow>
+        <mesh position={[0, 0, typeConfig.yOffset * 10]} rotation={[0, 0, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
           <meshStandardMaterial color={color} />
         </mesh>
@@ -248,8 +251,8 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
         <mesh
-          position={[0, typeConfig.yOffset * 10, -actualLength * offset]}
-          rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, actualLength * (1 - offset), typeConfig.yOffset * 10]}
+          rotation={[0, 0, 0]}
           geometry={geometry}
           castShadow
           receiveShadow
@@ -258,7 +261,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
         </mesh>
         
         {/* Pivot point cylinder */}
-        <mesh position={[0, typeConfig.yOffset * 10, 0]} castShadow receiveShadow>
+        <mesh position={[0, 0, typeConfig.yOffset * 10]} rotation={[0, 0, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[0.75, 0.75, 0.5, 32]} />
           <meshStandardMaterial color={color} />
         </mesh>
@@ -270,7 +273,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
   return (
     <group ref={handRef} rotation={[0, 0, 0]}>
       <mesh
-        position={[0, typeConfig.yOffset * 10, -length / 2 + pivotOffset]}
+        position={[0, length / 2 - pivotOffset, typeConfig.yOffset * 10]}
         geometry={geometry}
         castShadow
         receiveShadow
@@ -279,7 +282,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
       </mesh>
       
       {/* Pivot point cylinder */}
-      <mesh position={[0, typeConfig.yOffset * 10, 0]} castShadow receiveShadow>
+      <mesh position={[0, 0, typeConfig.yOffset * 10]} rotation={[0, 0, 0]} castShadow receiveShadow>
         <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
         <meshStandardMaterial color={color} />
       </mesh>
@@ -305,7 +308,7 @@ function Hands({ hands = [] }) {
       ))}
       
       {/* Center cap */}
-      <mesh position={[0, 0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} castShadow receiveShadow>
+      <mesh position={[0, 0, 0.5]} castShadow receiveShadow>
         <circleGeometry args={[1, 32]} />
         <meshStandardMaterial color="#000000" />
       </mesh>

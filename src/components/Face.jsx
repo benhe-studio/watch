@@ -12,7 +12,12 @@ function Face({ config, complications }) {
     
     if (!complications || complications.length === 0) {
       // No complications - return simple cylinder
-      return new THREE.CylinderGeometry(20, 20, faceThickness, 128)
+      const geometry = new THREE.CylinderGeometry(20, 20, faceThickness, 128)
+      // Rotate to align with XY plane (cylinder is along Y by default, we want it along Z)
+      geometry.rotateX(Math.PI / 2)
+      // Translate so top is at z=0
+      geometry.translate(0, 0, -faceThickness / 2)
+      return geometry
     }
     
     // Create a shape for the main circle
@@ -57,7 +62,7 @@ function Face({ config, complications }) {
       circleShape.holes.push(windowHole)
     })
 
-    // Extrude the shape to create thickness
+    // Extrude the shape to create thickness (extrudes along Z-axis)
     const extrudeSettings = {
       depth: faceThickness,
       bevelEnabled: false,
@@ -66,37 +71,25 @@ function Face({ config, complications }) {
     
     const geometry = new THREE.ExtrudeGeometry(circleShape, extrudeSettings)
     
-    // Rotate geometry to align properly (extrude goes along Z, we want it along Y)
-    geometry.rotateX(Math.PI / 2)
-    // After rotation, translate along Y to center the thickness
-    geometry.translate(0, faceThickness / 2, 0)
+    // Translate so top of face is at z=0, extends down to z=-faceThickness
+    geometry.translate(0, 0, -faceThickness)
     
     return geometry
   }, [complications])
 
   return (
-    <group>
-      {/* Watch face base with optional window cutout */}
-      <mesh castShadow receiveShadow>
-        <primitive object={faceGeometry} attach="geometry" />
-        <meshPhysicalMaterial
-          color={material.color}
-          roughness={material.roughness}
-          metalness={material.metalness}
-          clearcoat={material.clearcoat || 0}
-          clearcoatRoughness={material.clearcoatRoughness || 0}
-          reflectivity={material.reflectivity || 0.5}
-          ior={material.ior || 1.5}
-        />
-      </mesh>
-      
-      {/* North indicator - small sphere at 12 o'clock position */}
-      <mesh position={[0, 1, -23]} castShadow receiveShadow>
-        <sphereGeometry args={[0.8, 16, 16]} />
-        <meshStandardMaterial color="#ff0000" />
-      </mesh>
-      
-    </group>
+    <mesh castShadow receiveShadow>
+      <primitive object={faceGeometry} attach="geometry" />
+      <meshPhysicalMaterial
+        color={material.color}
+        roughness={material.roughness}
+        metalness={material.metalness}
+        clearcoat={material.clearcoat || 0}
+        clearcoatRoughness={material.clearcoatRoughness || 0}
+        reflectivity={material.reflectivity || 0.5}
+        ior={material.ior || 1.5}
+      />
+    </mesh>
   )
 }
 
