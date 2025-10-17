@@ -5,14 +5,16 @@ import * as THREE from 'three'
 // Geometry generator functions - return THREE.BufferGeometry
 const geometryGenerators = {
   classic: ({ length, width }) => {
-    return new THREE.BoxGeometry(width, length, 0.5)
+    // Create box extending along Y-axis, then rotate to lie flat in XY plane
+    const geometry = new THREE.BoxGeometry(width, length, 0.5)
+    return geometry
   },
   
   dauphine: ({ length, width }) => {
     const shape = new THREE.Shape()
     const halfLength = length / 2
     
-    // First triangle (from center to tip) - pointing up in Y
+    // First triangle (from center to tip) - pointing up in Y (will be rotated to Z)
     shape.moveTo(0, 0)
     shape.lineTo(-width / 2, 0)
     shape.lineTo(0, halfLength)
@@ -63,8 +65,7 @@ const geometryGenerators = {
     const radiusTop = width * 0.3
     const radiusBottom = width
     const geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, length, 16, 1)
-    // Rotate to align with Y-axis (cylinder is along Y by default, which is what we want)
-    geometry.rotateZ(Math.PI / 2)
+    // Cylinder is already along Y-axis by default, no rotation needed
     return geometry
   },
   
@@ -83,7 +84,7 @@ const geometryGenerators = {
     const actualLength = shapePoints[shapePoints.length - 1][1]
     
     // Create the shape by mirroring points across the center line
-    // Create shape pointing up in positive Y
+    // Create shape pointing up in positive Y (will be rotated to Z)
     const shape = new THREE.Shape()
     
     // Start at the first point
@@ -121,37 +122,43 @@ const geometryGenerators = {
 const handTypeConfig = {
   hours: {
     defaultLength: 10,
-    yOffset: 0.15,
+    zOffset: 0.15,
     angleCalculation: (time) => {
       const startHour = 10
       const startMinute = 9
       const startSecond = 0
       const startTimeInSeconds = startHour * 3600 + startMinute * 60 + startSecond
       const currentTimeInSeconds = startTimeInSeconds + time
+      // Negative rotation for clockwise (when looking down at face from +Z)
+      // Hand starts at 12 o'clock (positive Y), rotates clockwise
       return -(((currentTimeInSeconds / 3600) % 12) * (Math.PI * 2) / 12)
     }
   },
   minutes: {
     defaultLength: 14,
-    yOffset: 0.2,
+    zOffset: 0.2,
     angleCalculation: (time) => {
       const startHour = 10
       const startMinute = 9
       const startSecond = 0
       const startTimeInSeconds = startHour * 3600 + startMinute * 60 + startSecond
       const currentTimeInSeconds = startTimeInSeconds + time
+      // Negative rotation for clockwise (when looking down at face from +Z)
+      // Hand starts at 12 o'clock (positive Y), rotates clockwise
       return -(((currentTimeInSeconds / 60) % 60) * (Math.PI * 2) / 60)
     }
   },
   seconds: {
     defaultLength: 16,
-    yOffset: 0.25,
+    zOffset: 0.25,
     angleCalculation: (time) => {
       const startHour = 10
       const startMinute = 9
       const startSecond = 0
       const startTimeInSeconds = startHour * 3600 + startMinute * 60 + startSecond
       const currentTimeInSeconds = startTimeInSeconds + time
+      // Negative rotation for clockwise (when looking down at face from +Z)
+      // Hand starts at 12 o'clock (positive Y), rotates clockwise
       return -((currentTimeInSeconds % 60) * (Math.PI * 2) / 60)
     }
   }
@@ -177,7 +184,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
   useFrame(({ clock }) => {
     if (handRef.current) {
       const time = clock.getElapsedTime()
-      handRef.current.rotation.z = -typeConfig.angleCalculation(time)
+      handRef.current.rotation.z = typeConfig.angleCalculation(time)
     }
   })
   
@@ -192,7 +199,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
     
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
-        <group position={[0, length / 2 - pivotOffset, typeConfig.yOffset * 10]} rotation={[0, 0, 0]}>
+        <group position={[0, length / 2 - pivotOffset, typeConfig.zOffset]} rotation={[0, 0, 0]}>
           {/* Tapered cylinder body */}
           <mesh geometry={geometry} castShadow receiveShadow>
             <meshStandardMaterial color={color} />
@@ -212,7 +219,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
         </group>
         
         {/* Pivot point cylinder */}
-        <mesh position={[0, 0, typeConfig.yOffset * 10]} rotation={[0, 0, 0]} castShadow receiveShadow>
+        <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
           <meshStandardMaterial color={color} />
         </mesh>
@@ -224,7 +231,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
         <mesh
-          position={[0, length / 2 - pivotOffset, typeConfig.yOffset * 10]}
+          position={[0, length / 2 - pivotOffset, typeConfig.zOffset]}
           rotation={[0, 0, 0]}
           geometry={geometry}
           castShadow
@@ -234,7 +241,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
         </mesh>
         
         {/* Pivot point cylinder */}
-        <mesh position={[0, 0, typeConfig.yOffset * 10]} rotation={[0, 0, 0]} castShadow receiveShadow>
+        <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
           <meshStandardMaterial color={color} />
         </mesh>
@@ -251,7 +258,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
         <mesh
-          position={[0, actualLength * (1 - offset), typeConfig.yOffset * 10]}
+          position={[0, actualLength * (1 - offset), typeConfig.zOffset]}
           rotation={[0, 0, 0]}
           geometry={geometry}
           castShadow
@@ -261,7 +268,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
         </mesh>
         
         {/* Pivot point cylinder */}
-        <mesh position={[0, 0, typeConfig.yOffset * 10]} rotation={[0, 0, 0]} castShadow receiveShadow>
+        <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[0.75, 0.75, 0.5, 32]} />
           <meshStandardMaterial color={color} />
         </mesh>
@@ -273,7 +280,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
   return (
     <group ref={handRef} rotation={[0, 0, 0]}>
       <mesh
-        position={[0, length / 2 - pivotOffset, typeConfig.yOffset * 10]}
+        position={[0, length / 2 - pivotOffset, typeConfig.zOffset]}
         geometry={geometry}
         castShadow
         receiveShadow
@@ -282,7 +289,7 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
       </mesh>
       
       {/* Pivot point cylinder */}
-      <mesh position={[0, 0, typeConfig.yOffset * 10]} rotation={[0, 0, 0]} castShadow receiveShadow>
+      <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
         <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
         <meshStandardMaterial color={color} />
       </mesh>
@@ -308,7 +315,7 @@ function Hands({ hands = [] }) {
       ))}
       
       {/* Center cap */}
-      <mesh position={[0, 0, 0.5]} castShadow receiveShadow>
+      <mesh position={[0, 0, 0.5]} rotation={[0, 0, 0]} castShadow receiveShadow>
         <circleGeometry args={[1, 32]} />
         <meshStandardMaterial color="#000000" />
       </mesh>

@@ -91,7 +91,7 @@ function App() {
   return (
     <div style={{ display: 'flex', width: '100vw', height: '100vh' }}>
       <div style={{ flex: 1, background: '#e8e8e8' }}>
-        <Canvas shadows camera={{ position: [0, 60, 30], fov: 50 }}>
+        <Canvas shadows camera={{ position: [0, -30, 60], fov: 50 }}>
           <color attach="background" args={['#e8e8e8']} />
           
           <ambientLight intensity={0.3} />
