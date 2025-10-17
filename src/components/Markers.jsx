@@ -42,6 +42,7 @@ function Markers({ markers }) {
                 const bottomWidth = markerConfig.bottomWidth !== undefined ? markerConfig.bottomWidth : 0.1
                 const height = markerConfig.height || 0.3
                 const depth = markerConfig.depth || 0.05
+                const cutout = markerConfig.blocksCutout !== undefined ? markerConfig.blocksCutout : 0
                 const material = getMaterial(markerConfig.material || 'polishedSilver')
                 const bevelEnabled = markerConfig.bevelEnabled !== undefined ? markerConfig.bevelEnabled : true
                 const bevelThickness = markerConfig.bevelThickness || 0.01
@@ -69,6 +70,30 @@ function Markers({ markers }) {
                   shape.lineTo(halfTopWidth, halfHeight)
                   shape.lineTo(-halfTopWidth, halfHeight)
                   shape.lineTo(-halfBottomWidth, -halfHeight)
+                }
+                
+                // Add cutout hole if cutout > 0
+                if (cutout > 0) {
+                  const hole = new THREE.Path()
+                  const innerHalfTopWidth = halfTopWidth * cutout
+                  const innerHalfBottomWidth = halfBottomWidth * cutout
+                  const innerHalfHeight = halfHeight * cutout
+                  
+                  if (bottomWidth === 0) {
+                    // Create smaller triangle hole
+                    hole.moveTo(0, -innerHalfHeight)
+                    hole.lineTo(innerHalfTopWidth, innerHalfHeight)
+                    hole.lineTo(-innerHalfTopWidth, innerHalfHeight)
+                    hole.lineTo(0, -innerHalfHeight)
+                  } else {
+                    // Create smaller trapezoid hole
+                    hole.moveTo(-innerHalfBottomWidth, -innerHalfHeight)
+                    hole.lineTo(innerHalfBottomWidth, -innerHalfHeight)
+                    hole.lineTo(innerHalfTopWidth, innerHalfHeight)
+                    hole.lineTo(-innerHalfTopWidth, innerHalfHeight)
+                    hole.lineTo(-innerHalfBottomWidth, -innerHalfHeight)
+                  }
+                  shape.holes.push(hole)
                 }
                 
                 const extrudeSettings = {

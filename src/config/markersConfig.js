@@ -89,6 +89,15 @@ export const markersConfig = {
       step: 0.1,
       condition: (item) => item.type === 'blocks'
     },
+    blocksCutout: {
+      type: 'range',
+      label: 'Cutout',
+      default: 0,
+      min: 0,
+      max: 0.95,
+      step: 0.05,
+      condition: (item) => item.type === 'blocks'
+    },
     doubleBlock: {
       type: 'checkbox',
       label: 'Double Block',

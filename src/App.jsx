@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Environment } from '@react-three/drei'
+import { OrbitControls, Environment, Stats } from '@react-three/drei'
 import * as THREE from 'three'
 import WatchFace from './components/WatchFace'
 import ControlPanel from './components/ControlPanel'
@@ -115,6 +115,7 @@ function App() {
           
           <WatchFace config={config} />
           <OrbitControls enablePan={false} />
+          <Stats />
         </Canvas>
       </div>
       <ControlPanel
