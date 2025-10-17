@@ -38,8 +38,8 @@ function Markers({ markers }) {
               rotation={[0, 0, markerConfig.rotate ? -angle : 0]}
             >
               {markerConfig.type === 'blocks' && (() => {
-                const topWidth = markerConfig.topWidth || 0.1
-                const bottomWidth = markerConfig.bottomWidth || 0.1
+                const topWidth = markerConfig.topWidth !== undefined ? markerConfig.topWidth : 0.1
+                const bottomWidth = markerConfig.bottomWidth !== undefined ? markerConfig.bottomWidth : 0.1
                 const height = markerConfig.height || 0.3
                 const depth = markerConfig.depth || 0.05
                 const material = getMaterial(markerConfig.material || 'polishedSilver')
@@ -50,18 +50,26 @@ function Markers({ markers }) {
                 const doubleBlock = markerConfig.doubleBlock || false
                 const separation = markerConfig.separation || 1.5
                 
-                // Create shape (trapezoid for tapered, rectangle for uniform)
+                // Create shape (triangle if bottomWidth is 0, otherwise trapezoid)
                 const shape = new THREE.Shape()
                 const halfTopWidth = topWidth / 2
                 const halfBottomWidth = bottomWidth / 2
                 const halfHeight = height / 2
                 
-                // Create trapezoid shape (viewed from the side)
-                shape.moveTo(-halfBottomWidth, -halfHeight)
-                shape.lineTo(halfBottomWidth, -halfHeight)
-                shape.lineTo(halfTopWidth, halfHeight)
-                shape.lineTo(-halfTopWidth, halfHeight)
-                shape.lineTo(-halfBottomWidth, -halfHeight)
+                if (bottomWidth === 0) {
+                  // Create triangle shape (point at bottom)
+                  shape.moveTo(0, -halfHeight)
+                  shape.lineTo(halfTopWidth, halfHeight)
+                  shape.lineTo(-halfTopWidth, halfHeight)
+                  shape.lineTo(0, -halfHeight)
+                } else {
+                  // Create trapezoid shape (viewed from the side)
+                  shape.moveTo(-halfBottomWidth, -halfHeight)
+                  shape.lineTo(halfBottomWidth, -halfHeight)
+                  shape.lineTo(halfTopWidth, halfHeight)
+                  shape.lineTo(-halfTopWidth, halfHeight)
+                  shape.lineTo(-halfBottomWidth, -halfHeight)
+                }
                 
                 const extrudeSettings = {
                   depth: depth,
