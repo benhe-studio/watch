@@ -13,7 +13,8 @@ export const markersConfig = {
       options: [
         { value: 'arabic', label: 'Arabic' },
         { value: 'roman', label: 'Roman' },
-        { value: 'blocks', label: 'Blocks' }
+        { value: 'blocks', label: 'Blocks' },
+        { value: 'circle', label: 'Circle' }
       ]
     },
     rotate: {
@@ -35,14 +36,14 @@ export const markersConfig = {
       type: 'color',
       label: 'Color',
       default: '#000000',
-      condition: (item) => item.type !== 'blocks'
+      condition: (item) => item.type !== 'blocks' && item.type !== 'circle'
     },
     material: {
       type: 'select',
       label: 'Material',
       default: 'polishedSilver',
       options: getMaterialOptions(),
-      condition: (item) => item.type === 'blocks'
+      condition: (item) => item.type === 'blocks' || item.type === 'circle'
     },
     radius: {
       type: 'range',
@@ -107,7 +108,7 @@ export const markersConfig = {
       type: 'checkbox',
       label: 'Enable Bevel',
       default: true,
-      condition: (item) => item.type === 'blocks'
+      condition: (item) => item.type === 'blocks' || item.type === 'circle'
     },
     bevelThickness: {
       type: 'range',
@@ -116,7 +117,7 @@ export const markersConfig = {
       min: 0.05,
       max: 0.3,
       step: 0.05,
-      condition: (item) => item.type === 'blocks' && item.bevelEnabled
+      condition: (item) => (item.type === 'blocks' || item.type === 'circle') && item.bevelEnabled
     },
     bevelSize: {
       type: 'range',
@@ -125,7 +126,7 @@ export const markersConfig = {
       min: 0.05,
       max: 0.3,
       step: 0.05,
-      condition: (item) => item.type === 'blocks' && item.bevelEnabled
+      condition: (item) => (item.type === 'blocks' || item.type === 'circle') && item.bevelEnabled
     },
     bevelSegments: {
       type: 'range',
@@ -134,7 +135,7 @@ export const markersConfig = {
       min: 1,
       max: 8,
       step: 1,
-      condition: (item) => item.type === 'blocks' && item.bevelEnabled
+      condition: (item) => (item.type === 'blocks' || item.type === 'circle') && item.bevelEnabled
     },
     romanWidth: {
       type: 'range',
@@ -162,6 +163,33 @@ export const markersConfig = {
       max: 0.5,
       step: 0.1,
       condition: (item) => item.type === 'roman'
+    },
+    circleRadius: {
+      type: 'range',
+      label: 'Radius',
+      default: 1.5,
+      min: 0.5,
+      max: 3,
+      step: 0.1,
+      condition: (item) => item.type === 'circle'
+    },
+    circleDepth: {
+      type: 'range',
+      label: 'Depth',
+      default: 0.5,
+      min: 0.2,
+      max: 1,
+      step: 0.1,
+      condition: (item) => item.type === 'circle'
+    },
+    circleCutout: {
+      type: 'range',
+      label: 'Cutout',
+      default: 0,
+      min: 0,
+      max: 0.95,
+      step: 0.05,
+      condition: (item) => item.type === 'circle'
     },
     visibleHours: {
       type: 'hourSelector',

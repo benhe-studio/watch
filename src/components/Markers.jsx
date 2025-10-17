@@ -132,6 +132,74 @@ function Markers({ markers }) {
                   <meshStandardMaterial color={markerConfig.color || '#000000'} />
                 </mesh>
               )}
+              {markerConfig.type === 'circle' && (() => {
+                const radius = markerConfig.circleRadius || 0.15
+                const depth = markerConfig.circleDepth || 0.05
+                const cutout = markerConfig.circleCutout !== undefined ? markerConfig.circleCutout : 0
+                const material = getMaterial(markerConfig.material || 'polishedSilver')
+                const bevelEnabled = markerConfig.bevelEnabled !== undefined ? markerConfig.bevelEnabled : true
+                const bevelThickness = markerConfig.bevelThickness || 0.01
+                const bevelSize = markerConfig.bevelSize || 0.01
+                const bevelSegments = markerConfig.bevelSegments || 3
+                
+                // Create circular shape with high fidelity
+                const shape = new THREE.Shape()
+                const segments = 128 // High segment count for smooth circle
+                
+                // Outer circle
+                for (let i = 0; i <= segments; i++) {
+                  const angle = (i / segments) * Math.PI * 2
+                  const x = Math.cos(angle) * radius
+                  const y = Math.sin(angle) * radius
+                  if (i === 0) {
+                    shape.moveTo(x, y)
+                  } else {
+                    shape.lineTo(x, y)
+                  }
+                }
+                
+                // Inner circle (hole) if cutout > 0
+                if (cutout > 0) {
+                  const innerRadius = radius * cutout
+                  const hole = new THREE.Path()
+                  for (let i = 0; i <= segments; i++) {
+                    const angle = (i / segments) * Math.PI * 2
+                    const x = Math.cos(angle) * innerRadius
+                    const y = Math.sin(angle) * innerRadius
+                    if (i === 0) {
+                      hole.moveTo(x, y)
+                    } else {
+                      hole.lineTo(x, y)
+                    }
+                  }
+                  shape.holes.push(hole)
+                }
+                
+                const extrudeSettings = {
+                  depth: depth,
+                  bevelEnabled: bevelEnabled,
+                  bevelThickness: bevelEnabled ? bevelThickness : 0,
+                  bevelSize: bevelEnabled ? bevelSize : 0,
+                  bevelSegments: bevelEnabled ? Math.round(bevelSegments) : 1,
+                  steps: 1,
+                  curveSegments: 64 // Smooth extrusion curves
+                }
+                
+                return (
+                  <mesh castShadow receiveShadow>
+                    <extrudeGeometry args={[shape, extrudeSettings]} />
+                    <meshPhysicalMaterial
+                      color={material.color}
+                      roughness={material.roughness}
+                      metalness={material.metalness}
+                      clearcoat={material.clearcoat}
+                      clearcoatRoughness={material.clearcoatRoughness}
+                      reflectivity={material.reflectivity}
+                      ior={material.ior}
+                    />
+                  </mesh>
+                )
+              })()}
             </group>
           )
         }
