@@ -94,10 +94,9 @@ function App() {
         <Canvas shadows camera={{ position: [0, -30, 60], fov: 50 }}>
           <color attach="background" args={['#e8e8e8']} />
           
-          <ambientLight intensity={0.3} />
           <directionalLight
-            position={[10, 50, -10]}
-            intensity={1.2}
+            position={[50, 50, 50]}
+            intensity={2}
             castShadow
             shadow-mapSize={[2048, 2048]}
             shadow-camera-left={-30}

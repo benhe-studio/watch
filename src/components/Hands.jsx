@@ -122,7 +122,7 @@ const geometryGenerators = {
 const handTypeConfig = {
   hours: {
     defaultLength: 10,
-    zOffset: 0.15,
+    zOffset: 0.5,
     angleCalculation: (time) => {
       const startHour = 10
       const startMinute = 9
@@ -136,7 +136,7 @@ const handTypeConfig = {
   },
   minutes: {
     defaultLength: 14,
-    zOffset: 0.2,
+    zOffset: 1.0,
     angleCalculation: (time) => {
       const startHour = 10
       const startMinute = 9
@@ -150,7 +150,7 @@ const handTypeConfig = {
   },
   seconds: {
     defaultLength: 16,
-    zOffset: 0.25,
+    zOffset: 1.5,
     angleCalculation: (time) => {
       const startHour = 10
       const startMinute = 9
@@ -255,10 +255,14 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
       ? points[points.length - 1][1]
       : length
     
+    // Calculate pivot offset position
+    // Parametric geometry starts at origin [0,0], so no need to divide by 2
+    const pivotOffset = actualLength * (offset ?? 0)
+    
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
         <mesh
-          position={[0, actualLength * (1 - offset), typeConfig.zOffset]}
+          position={[0, -pivotOffset, typeConfig.zOffset]}
           rotation={[0, 0, 0]}
           geometry={geometry}
           castShadow
