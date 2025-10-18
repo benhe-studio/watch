@@ -81,7 +81,7 @@ export const primitivesConfig = {
     points: {
       type: 'pointArray',
       label: 'Hand Shape Points',
-      default: [[0.3, -2], [0.5, 0], [0.3, 14], [0, 18]],
+      default: [[0.1, 0], [0.1, 3.5], [0, 3.8]],
       xLabel: 'Width',
       yLabel: 'Length',
       xMin: 0,
