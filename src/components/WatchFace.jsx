@@ -5,6 +5,7 @@ import Decorations from './Decorations'
 import Hands from './Hands'
 import ComplicationWindows from './ComplicationWindows'
 import Complications from './Complications'
+import Primitives from './Primitives'
 
 function WatchFace({ config }) {
   return (
@@ -26,6 +27,9 @@ function WatchFace({ config }) {
 
       {/* Complications (content rendered on top of windows) */}
       {config.complications && <Complications complications={config.complications} />}
+
+      {/* Primitives */}
+      {config.primitives && <Primitives primitives={config.primitives} />}
 
       {/* Watch hands */}
       {config.hands && <Hands hands={config.hands} />}

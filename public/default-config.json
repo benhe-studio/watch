@@ -23,6 +23,7 @@
   "decorations": [],
   "complicationWindows": [],
   "complications": [],
+  "primitives": [],
   "hands": [
     {
       "type": "hours",
