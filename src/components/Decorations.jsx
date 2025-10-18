@@ -63,6 +63,53 @@ function Decorations({ decorations }) {
           )
         }
         
+        if (decorationConfig.type === 'line') {
+          const length = decorationConfig.length || 5
+          const rotation = decorationConfig.rotation || 0
+          const material = getMaterial(decorationConfig.material || 'polishedSilver')
+          
+          // Calculate position based on vector (0-12 like clock hours) and offset
+          const vector = decorationConfig.vector !== undefined ? decorationConfig.vector : 0
+          const offset = decorationConfig.offset !== undefined ? decorationConfig.offset : 0
+          
+          // Convert vector (0-12) to angle
+          // vector=0 or 12 -> 0 rad (top), vector=3 -> π/2 rad (right), etc.
+          const hourValue = (vector === 12 || vector === 0) ? 0 : vector
+          const angle = hourValue * Math.PI / 6
+          
+          // Calculate x, y coordinates for position offset
+          const x = Math.sin(angle) * offset
+          const y = Math.cos(angle) * offset
+          
+          // Convert rotation from degrees to radians
+          const rotationRad = (rotation * Math.PI) / 180
+          
+          // Create a thin box geometry for the line
+          const lineWidth = 0.2 // Fixed width for the line
+          const lineDepth = 0.3 // Fixed depth for the line
+          
+          return (
+            <mesh
+              key={`line-${decorationIndex}`}
+              position={[x, y, 0]}
+              rotation={[0, 0, rotationRad]}
+              castShadow
+              receiveShadow
+            >
+              <boxGeometry args={[lineWidth, length, lineDepth]} />
+              <meshPhysicalMaterial
+                color={material.color}
+                roughness={material.roughness}
+                metalness={material.metalness}
+                clearcoat={material.clearcoat}
+                clearcoatRoughness={material.clearcoatRoughness}
+                reflectivity={material.reflectivity}
+                ior={material.ior}
+              />
+            </mesh>
+          )
+        }
+        
         return null
       })}
     </>

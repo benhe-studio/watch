@@ -11,7 +11,8 @@ export const decorationsConfig = {
       label: 'Type',
       default: 'ring',
       options: [
-        { value: 'ring', label: 'Ring' }
+        { value: 'ring', label: 'Ring' },
+        { value: 'line', label: 'Line' }
       ]
     },
     vector: {
@@ -42,7 +43,8 @@ export const decorationsConfig = {
       default: 17,
       min: 10,
       max: 25,
-      step: 0.1
+      step: 0.1,
+      condition: (item) => item.type === 'ring'
     },
     thickness: {
       type: 'range',
@@ -61,6 +63,24 @@ export const decorationsConfig = {
       max: 2,
       step: 0.1,
       condition: (item) => item.type === 'ring'
+    },
+    length: {
+      type: 'range',
+      label: 'Length',
+      default: 5,
+      min: 0.5,
+      max: 20,
+      step: 0.1,
+      condition: (item) => item.type === 'line'
+    },
+    rotation: {
+      type: 'range',
+      label: 'Rotation (degrees)',
+      default: 0,
+      min: 0,
+      max: 180,
+      step: 1,
+      condition: (item) => item.type === 'line'
     }
   }
 }
