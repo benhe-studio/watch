@@ -1,6 +1,6 @@
 import { Text } from '@react-three/drei'
 import * as THREE from 'three'
-import { getMaterial } from '../config/materials'
+import { getMaterialInstance } from '../config/materials'
 
 function MinuteMarkers({ minuteMarkers }) {
   if (!minuteMarkers || minuteMarkers.length === 0) {
@@ -48,45 +48,21 @@ function MinuteMarkers({ minuteMarkers }) {
                 const width = markerConfig.width || 0.02
                 const height = markerConfig.height || 0.1
                 const depth = markerConfig.depth || 0.02
-                const material = getMaterial(markerConfig.material || 'polishedSilver')
+                const material = getMaterialInstance(markerConfig.material || 'polishedSilver')
                 
                 return (
-                  <mesh castShadow receiveShadow>
+                  <mesh material={material} castShadow receiveShadow>
                     <boxGeometry args={[width, height, depth]} />
-                    <meshPhysicalMaterial
-                      color={material.color}
-                      roughness={material.roughness}
-                      metalness={material.metalness}
-                      clearcoat={material.clearcoat}
-                      clearcoatRoughness={material.clearcoatRoughness}
-                      reflectivity={material.reflectivity}
-                      ior={material.ior}
-                      emissive={material.emissive || '#000000'}
-                      emissiveIntensity={material.emissiveIntensity || 0}
-                      toneMapped={false}
-                    />
                   </mesh>
                 )
               })()}
               {markerConfig.type === 'dot' && (() => {
                 const radius = markerConfig.radius || 0.03
-                const material = getMaterial(markerConfig.material || 'polishedSilver')
+                const material = getMaterialInstance(markerConfig.material || 'polishedSilver')
                 
                 return (
-                  <mesh castShadow receiveShadow>
+                  <mesh material={material} castShadow receiveShadow>
                     <sphereGeometry args={[radius, 16, 16]} />
-                    <meshPhysicalMaterial
-                      color={material.color}
-                      roughness={material.roughness}
-                      metalness={material.metalness}
-                      clearcoat={material.clearcoat}
-                      clearcoatRoughness={material.clearcoatRoughness}
-                      reflectivity={material.reflectivity}
-                      ior={material.ior}
-                      emissive={material.emissive || '#000000'}
-                      emissiveIntensity={material.emissiveIntensity || 0}
-                      toneMapped={false}
-                    />
                   </mesh>
                 )
               })()}

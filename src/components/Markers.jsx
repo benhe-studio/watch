@@ -1,6 +1,6 @@
 import { Text } from '@react-three/drei'
 import * as THREE from 'three'
-import { getMaterial } from '../config/materials'
+import { getMaterialInstance } from '../config/materials'
 
 function Markers({ markers }) {
   if (!markers || markers.length === 0) {
@@ -43,7 +43,7 @@ function Markers({ markers }) {
                 const length = markerConfig.length || 0.3
                 const depth = markerConfig.depth || 0.05
                 const cutout = markerConfig.blocksCutout !== undefined ? markerConfig.blocksCutout : 0
-                const material = getMaterial(markerConfig.material || 'polishedSilver')
+                const material = getMaterialInstance(markerConfig.material || 'polishedSilver')
                 const bevelEnabled = markerConfig.bevelEnabled !== undefined ? markerConfig.bevelEnabled : true
                 const bevelThickness = markerConfig.bevelThickness || 0.01
                 const bevelSize = markerConfig.bevelSize || 0.01
@@ -105,20 +105,8 @@ function Markers({ markers }) {
                 }
                 
                 const blockMesh = (
-                  <mesh castShadow receiveShadow>
+                  <mesh material={material} castShadow receiveShadow>
                     <extrudeGeometry args={[shape, extrudeSettings]} />
-                    <meshPhysicalMaterial
-                      color={material.color}
-                      roughness={material.roughness}
-                      metalness={material.metalness}
-                      clearcoat={material.clearcoat}
-                      clearcoatRoughness={material.clearcoatRoughness}
-                      reflectivity={material.reflectivity}
-                      ior={material.ior}
-                      emissive={material.emissive || '#000000'}
-                      emissiveIntensity={material.emissiveIntensity || 0}
-                      toneMapped={false}
-                    />
                   </mesh>
                 )
                 
@@ -164,7 +152,7 @@ function Markers({ markers }) {
                 const radius = markerConfig.circleRadius || 0.15
                 const depth = markerConfig.circleDepth || 0.05
                 const cutout = markerConfig.circleCutout !== undefined ? markerConfig.circleCutout : 0
-                const material = getMaterial(markerConfig.material || 'polishedSilver')
+                const material = getMaterialInstance(markerConfig.material || 'polishedSilver')
                 const bevelEnabled = markerConfig.bevelEnabled !== undefined ? markerConfig.bevelEnabled : true
                 const bevelThickness = markerConfig.bevelThickness || 0.01
                 const bevelSize = markerConfig.bevelSize || 0.01
@@ -214,20 +202,8 @@ function Markers({ markers }) {
                 }
                 
                 return (
-                  <mesh castShadow receiveShadow>
+                  <mesh material={material} castShadow receiveShadow>
                     <extrudeGeometry args={[shape, extrudeSettings]} />
-                    <meshPhysicalMaterial
-                      color={material.color}
-                      roughness={material.roughness}
-                      metalness={material.metalness}
-                      clearcoat={material.clearcoat}
-                      clearcoatRoughness={material.clearcoatRoughness}
-                      reflectivity={material.reflectivity}
-                      ior={material.ior}
-                      emissive={material.emissive || '#000000'}
-                      emissiveIntensity={material.emissiveIntensity || 0}
-                      toneMapped={false}
-                    />
                   </mesh>
                 )
               })()}

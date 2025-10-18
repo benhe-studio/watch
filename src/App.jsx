@@ -5,6 +5,7 @@ import * as THREE from 'three'
 import WatchFace from './components/WatchFace'
 import ControlPanel from './components/ControlPanel'
 import { watchConfig, generateInitialState } from './config/watchConfig'
+import { updateMaterialProperties } from './config/materials'
 import './App.css'
 
 function App() {
@@ -30,6 +31,23 @@ function App() {
     
     loadDefaultConfig()
   }, [])
+
+  // Update lume material emissive color based on environmentLight
+  useEffect(() => {
+    if (environmentLight) {
+      // Revert to original teal color when light is on
+      updateMaterialProperties('lume', {
+        emissive: '#7ddfb9',
+        emissiveIntensity: 20.0
+      })
+    } else {
+      // Change to brighter teal when light is off
+      updateMaterialProperties('lume', {
+        emissive: '#00ffff',
+        emissiveIntensity: 30.0
+      })
+    }
+  }, [environmentLight])
 
   const updateConfig = (section, key, value) => {
     setConfig(prev => {
@@ -119,7 +137,7 @@ function App() {
           {/* Axis helper to show X (red), Y (green), Z (blue) */}
           <primitive object={new THREE.AxesHelper(30)} />
           
-          <WatchFace config={config} />
+          <WatchFace config={config} environmentLight={environmentLight} />
           <OrbitControls enablePan={false} />
           <Stats />
         </Canvas>

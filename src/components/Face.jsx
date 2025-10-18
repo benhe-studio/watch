@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
-import { getMaterial } from '../config/materials'
+import { getMaterialInstance } from '../config/materials'
 import { FACE_THICKNESS } from '../config/constants'
 import * as THREE from 'three'
 
 function Face({ config, complications }) {
-  const material = getMaterial(config.material)
+  const material = useMemo(() => getMaterialInstance(config.material), [config.material])
   
   // Calculate window positions for all complications
   const faceGeometry = useMemo(() => {
@@ -78,20 +78,8 @@ function Face({ config, complications }) {
   }, [complications])
 
   return (
-    <mesh castShadow receiveShadow>
+    <mesh castShadow receiveShadow material={material}>
       <primitive object={faceGeometry} attach="geometry" />
-      <meshPhysicalMaterial
-        color={material.color}
-        roughness={material.roughness}
-        metalness={material.metalness}
-        clearcoat={material.clearcoat || 0}
-        clearcoatRoughness={material.clearcoatRoughness || 0}
-        reflectivity={material.reflectivity || 0.5}
-        ior={material.ior || 1.5}
-        emissive={material.emissive || '#000000'}
-        emissiveIntensity={material.emissiveIntensity || 0}
-        toneMapped={false}
-      />
     </mesh>
   )
 }

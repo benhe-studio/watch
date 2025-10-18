@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { getMaterial } from '../config/materials'
+import { getMaterialInstance } from '../config/materials'
 
 function Decorations({ decorations }) {
   if (!decorations || decorations.length === 0) {
@@ -13,7 +13,7 @@ function Decorations({ decorations }) {
           const spread = decorationConfig.spread || 17
           const thickness = decorationConfig.thickness || 1
           const depth = decorationConfig.depth || 0.5
-          const material = getMaterial(decorationConfig.material || 'polishedSilver')
+          const material = getMaterialInstance(decorationConfig.material || 'polishedSilver')
           
           // Calculate position based on vector (0-12 like clock hours) and offset
           const vector = decorationConfig.vector !== undefined ? decorationConfig.vector : 0
@@ -48,20 +48,8 @@ function Decorations({ decorations }) {
           }
           
           return (
-            <mesh key={`ring-${decorationIndex}`} position={[x, y, 0]} rotation={[0, 0, 0]} castShadow receiveShadow>
+            <mesh key={`ring-${decorationIndex}`} position={[x, y, 0]} rotation={[0, 0, 0]} material={material} castShadow receiveShadow>
               <extrudeGeometry args={[shape, extrudeSettings]} />
-              <meshPhysicalMaterial
-                color={material.color}
-                roughness={material.roughness}
-                metalness={material.metalness}
-                clearcoat={material.clearcoat}
-                clearcoatRoughness={material.clearcoatRoughness}
-                reflectivity={material.reflectivity}
-                ior={material.ior}
-                emissive={material.emissive || '#000000'}
-                emissiveIntensity={material.emissiveIntensity || 0}
-                toneMapped={false}
-              />
             </mesh>
           )
         }
@@ -69,7 +57,7 @@ function Decorations({ decorations }) {
         if (decorationConfig.type === 'line') {
           const length = decorationConfig.length || 5
           const rotation = decorationConfig.rotation || 0
-          const material = getMaterial(decorationConfig.material || 'polishedSilver')
+          const material = getMaterialInstance(decorationConfig.material || 'polishedSilver')
           
           // Calculate position based on vector (0-12 like clock hours) and offset
           const vector = decorationConfig.vector !== undefined ? decorationConfig.vector : 0
@@ -96,22 +84,11 @@ function Decorations({ decorations }) {
               key={`line-${decorationIndex}`}
               position={[x, y, 0]}
               rotation={[0, 0, rotationRad]}
+              material={material}
               castShadow
               receiveShadow
             >
               <boxGeometry args={[lineWidth, length, lineDepth]} />
-              <meshPhysicalMaterial
-                color={material.color}
-                roughness={material.roughness}
-                metalness={material.metalness}
-                clearcoat={material.clearcoat}
-                clearcoatRoughness={material.clearcoatRoughness}
-                reflectivity={material.reflectivity}
-                ior={material.ior}
-                emissive={material.emissive || '#000000'}
-                emissiveIntensity={material.emissiveIntensity || 0}
-                toneMapped={false}
-              />
             </mesh>
           )
         }
