@@ -68,7 +68,7 @@ export const handsConfig = {
     points: {
       type: 'pointArray',
       label: 'Shape Points',
-      default: [[0.3, -2], [0.5, 0], [0.3, 14], [0, 18]],
+      default: [[0, -4], [1.2, 0], [0, 14]],
       condition: (item) => item.profile === 'parametricFlat' || item.profile === 'parametricFaceted',
       xLabel: 'X (Width)',
       yLabel: 'Y (Length)',

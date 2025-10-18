@@ -17,10 +17,9 @@ const geometryGenerators = {
     // Default points if none provided - creates a simple tapered hand
     // Y=0 represents the pivot point, negative Y extends towards the tail
     const defaultPoints = [
-      [0.3, -2],   // Tail end (below pivot)
-      [0.5, 0],    // Widen at pivot point
-      [0.3, 14],   // Taper towards tip
-      [0, 18]      // End at tip
+      [0, -4],   // Tail end (below pivot)
+      [1.2, 0],    // Widen
+      [0, 14],   // End at tip
     ]
     
     const shapePoints = points || defaultPoints
