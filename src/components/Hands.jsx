@@ -69,7 +69,7 @@ const geometryGenerators = {
     return geometry
   },
   
-  parametric: ({ length, width, points }) => {
+  parametric: ({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout }) => {
     // Default points if none provided - creates a simple tapered hand
     const defaultPoints = [
       [0, 0],      // Start at center/tail
@@ -100,19 +100,44 @@ const geometryGenerators = {
       shape.lineTo(-shapePoints[i][0], shapePoints[i][1])
     }
     
+    // Add cutout hole if cutout > 0
+    if (cutout > 0) {
+      const hole = new THREE.Path()
+      
+      // Create inner shape scaled by cutout factor
+      const innerPoints = shapePoints.map(([x, y]) => [x * cutout, y * cutout])
+      
+      // Start at the first inner point
+      hole.moveTo(innerPoints[0][0], innerPoints[0][1])
+      
+      // Draw the right side of the hole
+      for (let i = 1; i < innerPoints.length; i++) {
+        hole.lineTo(innerPoints[i][0], innerPoints[i][1])
+      }
+      
+      // Mirror back down the left side
+      for (let i = innerPoints.length - 1; i >= 0; i--) {
+        hole.lineTo(-innerPoints[i][0], innerPoints[i][1])
+      }
+      
+      shape.holes.push(hole)
+    }
+    
     // Extrude settings for depth
+    const depth = width || 0.5
+    const shouldBevel = bevelEnabled !== undefined ? bevelEnabled : true
     const extrudeSettings = {
-      depth: width || 0.5,
-      bevelEnabled: true,
-      bevelThickness: (width || 0.5) * 0.1,
-      bevelSize: (width || 0.5) * 0.1,
-      bevelSegments: 3
+      depth: depth,
+      bevelEnabled: shouldBevel,
+      bevelThickness: shouldBevel ? (bevelThickness !== undefined ? bevelThickness : depth * 0.1) : 0,
+      bevelSize: shouldBevel ? (bevelSize !== undefined ? bevelSize : depth * 0.1) : 0,
+      bevelSegments: shouldBevel ? (bevelSegments !== undefined ? Math.round(bevelSegments) : 3) : 1
     }
     
     const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings)
     
     // Center the geometry on the z-axis (depth axis)
-    geometry.translate(0, 0, -(width || 0.5) / 2)
+    geometry.translate(0, 0, -depth / 2)
     
     return geometry
   }
@@ -165,7 +190,7 @@ const handTypeConfig = {
 }
 
 // Single hand component
-function Hand({ type, profile, width, color, length: customLength, offset, points }) {
+function Hand({ type, profile, width, color, length: customLength, offset, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout }) {
   const handRef = useRef()
   const typeConfig = handTypeConfig[type]
   const length = customLength || typeConfig.defaultLength
@@ -178,8 +203,8 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
   
   const geometry = useMemo(() => {
     const generator = geometryGenerators[profile] || geometryGenerators.classic
-    return generator({ length, width, points })
-  }, [profile, length, width, points])
+    return generator({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout })
+  }, [profile, length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout])
   
   useFrame(({ clock }) => {
     if (handRef.current) {
@@ -315,6 +340,11 @@ function Hands({ hands = [] }) {
           length={handConfig.length}
           offset={handConfig.offset}
           points={handConfig.points}
+          bevelEnabled={handConfig.bevelEnabled}
+          bevelThickness={handConfig.bevelThickness}
+          bevelSize={handConfig.bevelSize}
+          bevelSegments={handConfig.bevelSegments}
+          cutout={handConfig.cutout}
         />
       ))}
       

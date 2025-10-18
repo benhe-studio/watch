@@ -76,6 +76,48 @@ export const handsConfig = {
       yMax: 20,
       yStep: 0.5,
       description: 'Define half of the hand shape from center (0,0) to tip'
+    },
+    bevelEnabled: {
+      type: 'checkbox',
+      label: 'Enable Bevel',
+      default: true,
+      condition: (item) => item.profile === 'parametric'
+    },
+    bevelThickness: {
+      type: 'range',
+      label: 'Bevel Thickness',
+      default: 0.05,
+      min: 0.01,
+      max: 0.2,
+      step: 0.01,
+      condition: (item) => item.profile === 'parametric' && item.bevelEnabled
+    },
+    bevelSize: {
+      type: 'range',
+      label: 'Bevel Size',
+      default: 0.05,
+      min: 0.01,
+      max: 0.2,
+      step: 0.01,
+      condition: (item) => item.profile === 'parametric' && item.bevelEnabled
+    },
+    bevelSegments: {
+      type: 'range',
+      label: 'Bevel Segments',
+      default: 3,
+      min: 1,
+      max: 8,
+      step: 1,
+      condition: (item) => item.profile === 'parametric' && item.bevelEnabled
+    },
+    cutout: {
+      type: 'range',
+      label: 'Cutout',
+      default: 0,
+      min: 0,
+      max: 0.95,
+      step: 0.05,
+      condition: (item) => item.profile === 'parametric'
     }
   }
 }
