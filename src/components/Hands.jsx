@@ -71,9 +71,10 @@ const geometryGenerators = {
   
   parametric: ({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout }) => {
     // Default points if none provided - creates a simple tapered hand
+    // Y=0 represents the pivot point, negative Y extends towards the tail
     const defaultPoints = [
-      [0, 0],      // Start at center/tail
-      [0.5, 0],    // Widen at base
+      [0.3, -2],   // Tail end (below pivot)
+      [0.5, 0],    // Widen at pivot point
       [0.3, 14],   // Taper towards tip
       [0, 18]      // End at tip
     ]
@@ -291,19 +292,12 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
   }
   
   if (isParametric) {
-    // For parametric hands, calculate actual length from points
-    const actualLength = points && points.length > 0
-      ? points[points.length - 1][1]
-      : length
-    
-    // Calculate pivot offset position
-    // Parametric geometry starts at origin [0,0], so no need to divide by 2
-    const pivotOffset = actualLength * (offset ?? 0)
-    
+    // For parametric hands, Y=0 in the points represents the pivot point
+    // No offset calculation needed - the geometry is positioned directly at origin
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
         <mesh
-          position={[0, -pivotOffset, typeConfig.zOffset]}
+          position={[0, 0, typeConfig.zOffset]}
           rotation={[0, 0, 0]}
           geometry={geometry}
           castShadow

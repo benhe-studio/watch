@@ -55,7 +55,8 @@ export const handsConfig = {
       default: 0,
       min: 0,
       max: 1,
-      step: 0.05
+      step: 0.05,
+      condition: (item) => item.profile !== 'parametric'
     },
     color: {
       type: 'color',
@@ -65,17 +66,17 @@ export const handsConfig = {
     points: {
       type: 'pointArray',
       label: 'Shape Points',
-      default: [[0, 0], [0.5, 0], [0.3, 14], [0, 18]],
+      default: [[0.3, -2], [0.5, 0], [0.3, 14], [0, 18]],
       condition: (item) => item.profile === 'parametric',
       xLabel: 'X (Width)',
       yLabel: 'Y (Length)',
       xMin: 0,
       xMax: 2,
       xStep: 0.1,
-      yMin: 0,
+      yMin: -5,
       yMax: 20,
       yStep: 0.5,
-      description: 'Define half of the hand shape from center (0,0) to tip'
+      description: 'Define half of the hand shape. Y=0 is the pivot point, negative Y extends towards tail, positive Y towards tip'
     },
     bevelEnabled: {
       type: 'checkbox',
