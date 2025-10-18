@@ -6,6 +6,7 @@ import { markersConfig } from './markersConfig'
 import { minuteMarkersConfig } from './minuteMarkersConfig'
 import { decorationsConfig } from './decorationsConfig'
 import { handsConfig } from './handsConfig'
+import { complicationWindowsConfig } from './complicationWindowsConfig'
 import { complicationsConfig } from './complicationsConfig'
 
 export const watchConfig = {
@@ -14,6 +15,7 @@ export const watchConfig = {
   minuteMarkers: minuteMarkersConfig,
   decorations: decorationsConfig,
   hands: handsConfig,
+  complicationWindows: complicationWindowsConfig,
   complications: complicationsConfig
 }
 

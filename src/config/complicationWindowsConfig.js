@@ -1,16 +1,16 @@
-export const complicationsConfig = {
-  label: 'Complications',
+export const complicationWindowsConfig = {
+  label: 'Complication Windows',
   expanded: true,
   isArray: true,
-  itemLabel: 'Complication',
+  itemLabel: 'Window',
   controls: {
     type: {
       type: 'buttons',
-      label: 'Type',
-      default: 'rectangle',
+      label: 'Shape',
+      default: 'circle',
       options: [
-        { value: 'rectangle', label: 'Rectangle' },
-        { value: 'circle', label: 'Circle' }
+        { value: 'circle', label: 'Circle' },
+        { value: 'rectangle', label: 'Rectangle' }
       ]
     },
     vector: {
@@ -31,35 +31,30 @@ export const complicationsConfig = {
     },
     radius: {
       type: 'range',
-      label: 'Radius',
-      default: 2,
-      min: 0.5,
+      label: 'Window Radius',
+      default: 2.2,
+      min: 1.5,
       max: 4,
       step: 0.1,
       condition: (item) => item.type === 'circle'
     },
     width: {
       type: 'range',
-      label: 'Width',
-      default: 3.5,
-      min: 1,
+      label: 'Window Width',
+      default: 4,
+      min: 2,
       max: 6,
       step: 0.1,
       condition: (item) => item.type === 'rectangle'
     },
     height: {
       type: 'range',
-      label: 'Height',
-      default: 2.5,
-      min: 1,
+      label: 'Window Height',
+      default: 3,
+      min: 2,
       max: 5,
       step: 0.1,
       condition: (item) => item.type === 'rectangle'
-    },
-    color: {
-      type: 'color',
-      label: 'Color',
-      default: '#000000'
     }
   }
 }
