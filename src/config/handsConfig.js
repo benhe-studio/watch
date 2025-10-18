@@ -120,7 +120,22 @@ export const handsConfig = {
       min: 0,
       max: 0.95,
       step: 0.05,
-      condition: (item) => item.profile === 'parametricFlat' || item.profile === 'parametricFaceted'
+      condition: (item) => item.profile === 'parametricFlat'
+    },
+    cutoutPoints: {
+      type: 'pointArray',
+      label: 'Cutout Points',
+      default: [],
+      condition: (item) => item.profile === 'parametricFaceted',
+      xLabel: 'X (Width)',
+      yLabel: 'Y (Length)',
+      xMin: 0,
+      xMax: 2,
+      xStep: 0.1,
+      yMin: -5,
+      yMax: 20,
+      yStep: 0.5,
+      description: 'Define half of the cutout shape. Points create a hole that is subtracted from the hand shape'
     }
   }
 }

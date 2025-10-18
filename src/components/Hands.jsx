@@ -1,6 +1,7 @@
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { getMaterialInstance } from '../config/materials'
 
 // Geometry generator functions - return THREE.BufferGeometry
@@ -102,7 +103,7 @@ const geometryGenerators = {
     return geometry
   },
   
-  parametricFaceted: ({ length, width, points, cutout }) => {
+  parametricFaceted: ({ length, width, points, cutout, cutoutPoints }) => {
     // Default points if none provided
     const defaultPoints = [
       [0.3, -2],   // Tail end (below pivot)
@@ -113,103 +114,121 @@ const geometryGenerators = {
     
     const shapePoints = points || defaultPoints
     
-    // Create two planes that meet at a ridge in the center
-    // This creates a faceted/beveled edge effect
-    const geometry = new THREE.BufferGeometry()
-    const positions = []
-    const indices = []
-    const normals = []
+    // Extrusion depth - reduced by factor of 4 for minimal thickness
+    const extrudeDepth = (width || 0.3) / 4
     
-    // Process cutout if needed
-    let outerPoints = shapePoints
-    let innerPoints = null
+    // Rotation angle for tilting the outer edges down (in radians)
+    const tiltAngle = Math.PI / 12 // 15 degrees
     
-    if (cutout > 0) {
-      innerPoints = shapePoints.map(([x, y]) => [x * cutout, y])
+    // Create the right half shape
+    const rightShape = new THREE.Shape()
+    
+    // Start at the center line (x=0) at the first point's y position
+    rightShape.moveTo(0, shapePoints[0][1])
+    
+    // Draw to each point on the right side
+    for (let i = 0; i < shapePoints.length; i++) {
+      rightShape.lineTo(shapePoints[i][0], shapePoints[i][1])
     }
     
-    // Ridge height (how far the center ridge extends in Z)
-    const ridgeHeight = width || 0.3
+    // Close back to the center line at the last point
+    rightShape.lineTo(0, shapePoints[shapePoints.length - 1][1])
     
-    // Helper to add a vertex
-    const addVertex = (x, y, z) => {
-      positions.push(x, y, z)
-      return (positions.length / 3) - 1
-    }
-    
-    // Helper to add a triangle
-    const addTriangle = (i1, i2, i3, nx, ny, nz) => {
-      indices.push(i1, i2, i3)
-      // Add normals for each vertex of the triangle
-      normals.push(nx, ny, nz)
-      normals.push(nx, ny, nz)
-      normals.push(nx, ny, nz)
-    }
-    
-    // Build the geometry segment by segment
-    for (let i = 0; i < outerPoints.length - 1; i++) {
-      const [x1, y1] = outerPoints[i]
-      const [x2, y2] = outerPoints[i + 1]
+    // Add cutout hole to right shape if cutoutPoints are provided
+    // Need at least 2 points to create a valid cutout shape
+    if (cutoutPoints && cutoutPoints.length >= 2) {
+      const rightHole = new THREE.Path()
       
-      // Right side vertices (positive X)
-      const rightOuter1 = addVertex(x1, y1, 0)
-      const rightOuter2 = addVertex(x2, y2, 0)
-      const rightRidge1 = addVertex(0, y1, ridgeHeight)
-      const rightRidge2 = addVertex(0, y2, ridgeHeight)
+      // Start at the center line
+      rightHole.moveTo(0, cutoutPoints[0][1])
       
-      // Left side vertices (negative X)
-      const leftOuter1 = addVertex(-x1, y1, 0)
-      const leftOuter2 = addVertex(-x2, y2, 0)
-      const leftRidge1 = addVertex(0, y1, ridgeHeight)
-      const leftRidge2 = addVertex(0, y2, ridgeHeight)
-      
-      // Calculate normal for right face (pointing right and up)
-      const rightNormal = new THREE.Vector3(1, 0, 1).normalize()
-      // Calculate normal for left face (pointing left and up)
-      const leftNormal = new THREE.Vector3(-1, 0, 1).normalize()
-      
-      // Right face triangles
-      addTriangle(rightOuter1, rightOuter2, rightRidge1, rightNormal.x, rightNormal.y, rightNormal.z)
-      addTriangle(rightOuter2, rightRidge2, rightRidge1, rightNormal.x, rightNormal.y, rightNormal.z)
-      
-      // Left face triangles
-      addTriangle(leftOuter1, leftRidge1, leftOuter2, leftNormal.x, leftNormal.y, leftNormal.z)
-      addTriangle(leftOuter2, leftRidge1, leftRidge2, leftNormal.x, leftNormal.y, leftNormal.z)
-      
-      // If there's a cutout, add inner faces
-      if (innerPoints) {
-        const [ix1, iy1] = innerPoints[i]
-        const [ix2, iy2] = innerPoints[i + 1]
-        
-        // Right inner vertices
-        const rightInner1 = addVertex(ix1, iy1, 0)
-        const rightInner2 = addVertex(ix2, iy2, 0)
-        
-        // Left inner vertices
-        const leftInner1 = addVertex(-ix1, iy1, 0)
-        const leftInner2 = addVertex(-ix2, iy2, 0)
-        
-        // Inner ridge vertices (same as outer ridge)
-        const innerRidge1 = addVertex(0, iy1, ridgeHeight)
-        const innerRidge2 = addVertex(0, iy2, ridgeHeight)
-        
-        // Inner right face (normals pointing inward/down)
-        const innerRightNormal = new THREE.Vector3(-1, 0, -1).normalize()
-        addTriangle(rightInner1, innerRidge1, rightInner2, innerRightNormal.x, innerRightNormal.y, innerRightNormal.z)
-        addTriangle(rightInner2, innerRidge1, innerRidge2, innerRightNormal.x, innerRightNormal.y, innerRightNormal.z)
-        
-        // Inner left face (normals pointing inward/down)
-        const innerLeftNormal = new THREE.Vector3(1, 0, -1).normalize()
-        addTriangle(leftInner1, leftInner2, innerRidge1, innerLeftNormal.x, innerLeftNormal.y, innerLeftNormal.z)
-        addTriangle(leftInner2, innerRidge2, innerRidge1, innerLeftNormal.x, innerLeftNormal.y, innerLeftNormal.z)
+      // Draw to each cutout point on the right side
+      for (let i = 0; i < cutoutPoints.length; i++) {
+        rightHole.lineTo(cutoutPoints[i][0], cutoutPoints[i][1])
       }
+      
+      // Close back to the center line
+      rightHole.lineTo(0, cutoutPoints[cutoutPoints.length - 1][1])
+      rightHole.closePath()
+      
+      rightShape.holes.push(rightHole)
     }
     
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
-    geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3))
-    geometry.setIndex(indices)
+    // Create the left half shape (mirrored)
+    const leftShape = new THREE.Shape()
     
-    return geometry
+    // Start at the center line at the first point's y position
+    leftShape.moveTo(0, shapePoints[0][1])
+    
+    // Draw to each mirrored point on the left side
+    for (let i = 0; i < shapePoints.length; i++) {
+      leftShape.lineTo(-shapePoints[i][0], shapePoints[i][1])
+    }
+    
+    // Close back to the center line at the last point
+    leftShape.lineTo(0, shapePoints[shapePoints.length - 1][1])
+    
+    // Add cutout hole to left shape if cutoutPoints are provided
+    // Need at least 2 points to create a valid cutout shape
+    if (cutoutPoints && cutoutPoints.length >= 2) {
+      const leftHole = new THREE.Path()
+      
+      // Start at the center line
+      leftHole.moveTo(0, cutoutPoints[0][1])
+      
+      // Draw to each mirrored cutout point on the left side
+      for (let i = 0; i < cutoutPoints.length; i++) {
+        leftHole.lineTo(-cutoutPoints[i][0], cutoutPoints[i][1])
+      }
+      
+      // Close back to the center line
+      leftHole.lineTo(0, cutoutPoints[cutoutPoints.length - 1][1])
+      leftHole.closePath()
+      
+      leftShape.holes.push(leftHole)
+    }
+    
+    // Extrude settings
+    const extrudeSettings = {
+      depth: extrudeDepth,
+      bevelEnabled: false
+    }
+    
+    // Create extruded geometries for both halves
+    const rightGeometry = new THREE.ExtrudeGeometry(rightShape, extrudeSettings)
+    const leftGeometry = new THREE.ExtrudeGeometry(leftShape, extrudeSettings)
+    
+    // Center both on the z-axis initially
+    rightGeometry.translate(0, 0, -extrudeDepth / 2)
+    leftGeometry.translate(0, 0, -extrudeDepth / 2)
+    
+    // Now rotate each half about the top edge (at z = extrudeDepth/2)
+    // We need to: translate to move rotation axis to origin, rotate, translate back
+    
+    // For right half: rotate counter-clockwise (positive) around Y-axis
+    // Move top edge to origin (the top surface is at -extrudeDepth/2 after centering)
+    rightGeometry.translate(0, 0, -extrudeDepth / 2)
+    // Rotate around Y-axis (tilts outer edge down)
+    const rightMatrix = new THREE.Matrix4()
+    rightMatrix.makeRotationY(tiltAngle)
+    rightGeometry.applyMatrix4(rightMatrix)
+    // Move back
+    rightGeometry.translate(0, 0, extrudeDepth / 2)
+    
+    // For left half: rotate clockwise (negative) around Y-axis
+    // Move top edge to origin (the top surface is at -extrudeDepth/2 after centering)
+    leftGeometry.translate(0, 0, -extrudeDepth / 2)
+    // Rotate around Y-axis (tilts outer edge down)
+    const leftMatrix = new THREE.Matrix4()
+    leftMatrix.makeRotationY(-tiltAngle)
+    leftGeometry.applyMatrix4(leftMatrix)
+    // Move back
+    leftGeometry.translate(0, 0, extrudeDepth / 2)
+    
+    // Merge both geometries using THREE.js utility
+    const mergedGeometry = mergeGeometries([rightGeometry, leftGeometry])
+    
+    return mergedGeometry
   }
 }
 
@@ -260,7 +279,7 @@ const handTypeConfig = {
 }
 
 // Single hand component
-function Hand({ type, profile, width, material, length: customLength, offset, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout }) {
+function Hand({ type, profile, width, material, length: customLength, offset, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints }) {
   const handRef = useRef()
   const typeConfig = handTypeConfig[type]
   const length = customLength || typeConfig.defaultLength
@@ -273,8 +292,8 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
   
   const geometry = useMemo(() => {
     const generator = geometryGenerators[profile] || geometryGenerators.classic
-    return generator({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout })
-  }, [profile, length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout])
+    return generator({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints })
+  }, [profile, length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints])
   
   // Get material instance
   const materialInstance = useMemo(() => getMaterialInstance(material), [material])
@@ -386,6 +405,7 @@ function Hands({ hands = [] }) {
           bevelSize={handConfig.bevelSize}
           bevelSegments={handConfig.bevelSegments}
           cutout={handConfig.cutout}
+          cutoutPoints={handConfig.cutoutPoints}
         />
         )
       })}
