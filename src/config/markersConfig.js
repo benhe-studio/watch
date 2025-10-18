@@ -45,7 +45,7 @@ export const markersConfig = {
       options: getMaterialOptions(),
       condition: (item) => item.type === 'blocks' || item.type === 'circle'
     },
-    radius: {
+    spread: {
       type: 'range',
       label: 'Spread',
       default: 17,

@@ -25,11 +25,11 @@ function Markers({ markers }) {
           // Start at 12 (top) which should be at positive Y
           // i=0 -> 12 o'clock (top, +Y), i=3 -> 3 o'clock (right, +X), etc.
           const angle = (i * Math.PI) / 6
-          const radius = markerConfig.radius || 17
-          // For 12 at top: when i=0, we want x=0, y=+radius
+          const spread = markerConfig.spread || 17
+          // For 12 at top: when i=0, we want x=0, y=+spread
           // sin(0) = 0, cos(0) = 1
-          const x = Math.sin(angle) * radius
-          const y = Math.cos(angle) * radius
+          const x = Math.sin(angle) * spread
+          const y = Math.cos(angle) * spread
           
           markerElements.push(
             <group

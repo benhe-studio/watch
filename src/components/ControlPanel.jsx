@@ -324,7 +324,7 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad }) {
         </div>
         {expandedSections[sectionKey] && (
           <div className="section-content">
-            <div className="add-item-container" ref={isDropdownOpen ? dropdownRef : null}>
+            <div className={`add-item-container ${isDropdownOpen ? 'dropdown-active' : ''}`} ref={isDropdownOpen ? dropdownRef : null}>
               <button
                 className="add-item-button"
                 onClick={() => toggleTypeSelection(sectionKey)}

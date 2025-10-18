@@ -12,14 +12,14 @@ function MinuteMarkers({ minuteMarkers }) {
       {minuteMarkers.map((markerConfig, markerIndex) => {
         // Handle border type separately - it's a single ring, not 60 markers
         if (markerConfig.type === 'border') {
-          const distance = markerConfig.distance || 17
+          const spread = markerConfig.spread || 17
           const thickness = markerConfig.thickness || 1
           const depth = markerConfig.borderDepth || 0.5
           const material = getMaterial(markerConfig.material || 'polishedSilver')
           
           // Create a ring shape (doughnut) for extrusion
-          const outerRadius = distance + thickness / 2
-          const innerRadius = distance - thickness / 2
+          const outerRadius = spread + thickness / 2
+          const innerRadius = spread - thickness / 2
           
           // Create the ring shape with more segments for smoothness
           const shape = new THREE.Shape()
@@ -76,9 +76,9 @@ function MinuteMarkers({ minuteMarkers }) {
           // Start at 12 (top) which should be at positive Y
           // i=0 -> 12 o'clock (top, +Y), i=15 -> 3 o'clock (right, +X), etc.
           const angle = (i * Math.PI) / 30 // 60 minutes = 2π radians, so each minute is π/30
-          const distance = markerConfig.distance || 17
-          const x = Math.sin(angle) * distance
-          const y = Math.cos(angle) * distance
+          const spread = markerConfig.spread || 17
+          const x = Math.sin(angle) * spread
+          const y = Math.cos(angle) * spread
           
           markerElements.push(
             <group

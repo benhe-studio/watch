@@ -33,9 +33,9 @@ export const minuteMarkersConfig = {
       default: 'polishedSilver',
       options: getMaterialOptions()
     },
-    distance: {
+    spread: {
       type: 'range',
-      label: 'Distance',
+      label: 'Spread',
       default: 17,
       min: 10,
       max: 25,
@@ -70,7 +70,7 @@ export const minuteMarkersConfig = {
     },
     radius: {
       type: 'range',
-      label: 'Spread',
+      label: 'Radius',
       default: 0.3,
       min: 0.1,
       max: 1,
