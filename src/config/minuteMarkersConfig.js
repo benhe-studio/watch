@@ -13,8 +13,7 @@ export const minuteMarkersConfig = {
       options: [
         { value: 'line', label: 'Line' },
         { value: 'dot', label: 'Dot' },
-        { value: 'numeral', label: 'Numeral' },
-        { value: 'border', label: 'Border' }
+        { value: 'numeral', label: 'Numeral' }
       ]
     },
     rotate: {
@@ -91,24 +90,6 @@ export const minuteMarkersConfig = {
       label: 'Color',
       default: '#000000',
       condition: (item) => item.type === 'numeral'
-    },
-    thickness: {
-      type: 'range',
-      label: 'Thickness',
-      default: 1,
-      min: 0.1,
-      max: 5,
-      step: 0.1,
-      condition: (item) => item.type === 'border'
-    },
-    borderDepth: {
-      type: 'range',
-      label: 'Depth',
-      default: 0.5,
-      min: 0.1,
-      max: 2,
-      step: 0.1,
-      condition: (item) => item.type === 'border'
     },
     visibleMinutes: {
       type: 'minuteSelector',

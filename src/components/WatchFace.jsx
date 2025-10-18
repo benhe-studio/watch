@@ -1,6 +1,7 @@
 import Face from './Face'
 import Markers from './Markers'
 import MinuteMarkers from './MinuteMarkers'
+import Decorations from './Decorations'
 import Hands from './Hands'
 import Complications from './Complications'
 
@@ -11,16 +12,19 @@ function WatchFace({ config }) {
       <Face config={config.face} complications={config.complications} />
 
       {/* Markers */}
-      <Markers markers={config.markers} />
+      {config.markers && <Markers markers={config.markers} />}
 
       {/* Minute Markers */}
-      <MinuteMarkers minuteMarkers={config.minuteMarkers} />
+      {config.minuteMarkers && <MinuteMarkers minuteMarkers={config.minuteMarkers} />}
+
+      {/* Decorations */}
+      {config.decorations && <Decorations decorations={config.decorations} />}
 
       {/* Complications */}
-      <Complications complications={config.complications} />
+      {config.complications && <Complications complications={config.complications} />}
 
       {/* Watch hands */}
-      <Hands hands={config.hands} />
+      {config.hands && <Hands hands={config.hands} />}
     </group>
   )
 }
