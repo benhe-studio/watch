@@ -14,6 +14,12 @@ const geometryGenerators = {
     return geometry
   },
   
+  circle: ({ radius, circleShape }) => {
+    // For circle profile, we return null and handle geometry in the component
+    // This is because we need to render different geometries (cylinder vs sphere)
+    return null
+  },
+  
   parametricFlat: ({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout }) => {
     // Default points if none provided - creates a simple tapered hand
     // Y=0 represents the pivot point, negative Y extends towards the tail
@@ -306,7 +312,7 @@ const handTypeConfig = {
 }
 
 // Single hand component
-function Hand({ type, profile, width, material, length: customLength, offset, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints }) {
+function Hand({ type, profile, width, material, length: customLength, offset, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, zOffset, radius, spread, circleShape }) {
   const handRef = useRef()
   const typeConfig = handTypeConfig[type]
   const length = customLength || typeConfig.defaultLength
@@ -319,8 +325,11 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
   
   const geometry = useMemo(() => {
     const generator = geometryGenerators[profile] || geometryGenerators.classic
-    return generator({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints })
-  }, [profile, length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints])
+    return generator({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, radius, spread, circleShape })
+  }, [profile, length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, radius, spread, circleShape])
+  
+  // Calculate final Z position with optional offset
+  const finalZOffset = typeConfig.zOffset + (zOffset || 0)
   
   // Get material instance
   const materialInstance = useMemo(() => getMaterialInstance(material), [material])
@@ -336,6 +345,7 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
   const isTaperedCylinder = profile === 'taperedCylinder'
   const isParametricFlat = profile === 'parametricFlat'
   const isParametricFaceted = profile === 'parametricFaceted'
+  const isCircle = profile === 'circle'
   
   if (isTaperedCylinder) {
     const radiusTop = width * 0.3
@@ -372,20 +382,52 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
         <mesh
-          position={[0, 0, typeConfig.zOffset]}
+          position={[0, 0, finalZOffset]}
           rotation={[0, 0, 0]}
           geometry={geometry}
           material={materialInstance}
           castShadow
           receiveShadow
         />
-        
-        {/* Pivot point cylinder */}
-        <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} material={materialInstance} castShadow receiveShadow>
-          <cylinderGeometry args={[0.75, 0.75, 0.5, 32]} />
-        </mesh>
       </group>
     )
+  }
+  
+  // Circle profile - positioned at spread distance from center
+  if (isCircle) {
+    const shape = circleShape || 'flat'
+    
+    if (shape === 'dome') {
+      // Render a sphere
+      return (
+        <group ref={handRef} rotation={[0, 0, 0]}>
+          <mesh
+            position={[0, spread || 0, finalZOffset]}
+            material={materialInstance}
+            castShadow
+            receiveShadow
+          >
+            <sphereGeometry args={[radius || 1, 32, 32]} />
+          </mesh>
+        </group>
+      )
+    } else {
+      // Render a flat cylinder with bevel
+      const depth = (radius || 1) * 0.3
+      return (
+        <group ref={handRef} rotation={[0, 0, 0]}>
+          <mesh
+            position={[0, spread || 0, finalZOffset]}
+            rotation={[Math.PI / 2, 0, 0]}
+            material={materialInstance}
+            castShadow
+            receiveShadow
+          >
+            <cylinderGeometry args={[radius || 1, radius || 1, depth, 32]} />
+          </mesh>
+        </group>
+      )
+    }
   }
   
   // Fallback for any other profiles
@@ -433,6 +475,10 @@ function Hands({ hands = [] }) {
           bevelSegments={handConfig.bevelSegments}
           cutout={handConfig.cutout}
           cutoutPoints={handConfig.cutoutPoints}
+          zOffset={handConfig.zOffset}
+          radius={handConfig.radius}
+          spread={handConfig.spread}
+          circleShape={handConfig.circleShape}
         />
         )
       })}

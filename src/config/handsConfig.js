@@ -23,7 +23,8 @@ export const handsConfig = {
       options: [
         { value: 'taperedCylinder', label: 'Tapered' },
         { value: 'parametricFlat', label: 'Parametric Flat' },
-        { value: 'parametricFaceted', label: 'Parametric Faceted' }
+        { value: 'parametricFaceted', label: 'Parametric Faceted' },
+        { value: 'circle', label: 'Circle' }
       ]
     },
     width: {
@@ -138,6 +139,45 @@ export const handsConfig = {
       yStep: 0.5,
       minPoints: 0,
       description: 'Define half of the cutout shape. Points create a hole that is subtracted from the hand shape'
+    },
+    radius: {
+      type: 'range',
+      label: 'Radius',
+      default: 1,
+      min: 0.1,
+      max: 5,
+      step: 0.1,
+      condition: (item) => item.profile === 'circle'
+    },
+    spread: {
+      type: 'range',
+      label: 'Spread',
+      default: 0,
+      min: 0,
+      max: 20,
+      step: 0.5,
+      condition: (item) => item.profile === 'circle',
+      description: 'Distance from center (0,0) where the circle is positioned'
+    },
+    circleShape: {
+      type: 'buttons',
+      label: 'Shape',
+      default: 'flat',
+      options: [
+        { value: 'flat', label: 'Flat' },
+        { value: 'dome', label: 'Dome' }
+      ],
+      condition: (item) => item.profile === 'circle'
+    },
+    zOffset: {
+      type: 'range',
+      label: 'Z Offset',
+      default: 0,
+      min: -2,
+      max: 2,
+      step: 0.1,
+      condition: (item) => item.profile === 'parametricFlat' || item.profile === 'parametricFaceted' || item.profile === 'circle',
+      description: 'Additional Z-axis offset for fine-tuning hand height'
     }
   }
 }
