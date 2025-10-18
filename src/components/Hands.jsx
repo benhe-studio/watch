@@ -104,21 +104,37 @@ const geometryGenerators = {
     if (cutout > 0) {
       const hole = new THREE.Path()
       
-      // Create inner shape scaled by cutout factor
-      const innerPoints = shapePoints.map(([x, y]) => [x * cutout, y * cutout])
+      // Create inset points by removing a percentage of the width
+      // cutout is a value between 0 and 1 representing the percentage of width to remove
+      // 0 = no cutout (full width), 0.9 = 90% removed (10% remaining width)
+      const innerPoints = []
       
-      // Start at the first inner point
+      for (let i = 0; i < shapePoints.length; i++) {
+        const [x, y] = shapePoints[i]
+        
+        // Keep (1 - cutout) percentage of the original width
+        // So cutout=0.1 keeps 90%, cutout=0.9 keeps 10%
+        const insetX = x * cutout
+        const insetY = y
+        
+        innerPoints.push([insetX, insetY])
+      }
+      
+      // Draw the hole path - start at the first inner point
       hole.moveTo(innerPoints[0][0], innerPoints[0][1])
       
-      // Draw the right side of the hole
+      // Draw the right side of the hole (positive x)
       for (let i = 1; i < innerPoints.length; i++) {
         hole.lineTo(innerPoints[i][0], innerPoints[i][1])
       }
       
-      // Mirror back down the left side
+      // Mirror back down the left side (negative x)
       for (let i = innerPoints.length - 1; i >= 0; i--) {
         hole.lineTo(-innerPoints[i][0], innerPoints[i][1])
       }
+      
+      // Close the hole path
+      hole.closePath()
       
       shape.holes.push(hole)
     }
