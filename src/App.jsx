@@ -10,6 +10,7 @@ import './App.css'
 function App() {
   const [config, setConfig] = useState(generateInitialState(watchConfig))
   const [isLoading, setIsLoading] = useState(true)
+  const [environmentLight, setEnvironmentLight] = useState(true)
 
   // Load default config on mount
   useEffect(() => {
@@ -90,25 +91,30 @@ function App() {
 
   return (
     <div style={{ display: 'flex', width: '100vw', height: '100vh' }}>
-      <div style={{ flex: 1, background: '#e8e8e8' }}>
+      <div style={{ flex: 1, background: environmentLight ? '#e8e8e8' : '#000000' }}>
         <Canvas shadows camera={{ position: [0, -30, 60], fov: 50 }}>
-          <color attach="background" args={['#e8e8e8']} />
+          <color attach="background" args={[environmentLight ? '#e8e8e8' : '#000000']} />
           
-          <directionalLight
-            position={[50, 50, 50]}
-            intensity={2}
-            castShadow
-            shadow-mapSize={[2048, 2048]}
-            shadow-camera-left={-30}
-            shadow-camera-right={30}
-            shadow-camera-top={30}
-            shadow-camera-bottom={-30}
-            shadow-camera-near={0.1}
-            shadow-camera-far={100}
-          />
+          {/* Minimal ambient light when environment is off to make emissive materials visible */}
+          <ambientLight intensity={environmentLight ? 0.4 : 0.01} />
+          
+          {environmentLight && (
+            <directionalLight
+              position={[50, 50, 50]}
+              intensity={2}
+              castShadow
+              shadow-mapSize={[2048, 2048]}
+              shadow-camera-left={-30}
+              shadow-camera-right={30}
+              shadow-camera-top={30}
+              shadow-camera-bottom={-30}
+              shadow-camera-near={0.1}
+              shadow-camera-far={100}
+            />
+          )}
           
           {/* Environment for realistic metallic reflections */}
-          <Environment preset="studio" />
+          {environmentLight && <Environment preset="studio" />}
           
           {/* Axis helper to show X (red), Y (green), Z (blue) */}
           <primitive object={new THREE.AxesHelper(30)} />
@@ -124,6 +130,8 @@ function App() {
         schema={watchConfig}
         onSave={saveConfig}
         onLoad={loadConfig}
+        environmentLight={environmentLight}
+        onToggleEnvironmentLight={() => setEnvironmentLight(!environmentLight)}
       />
     </div>
   )

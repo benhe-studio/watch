@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import './ControlPanel.css'
 
-function ControlPanel({ config, updateConfig, schema, onSave, onLoad }) {
+function ControlPanel({ config, updateConfig, schema, onSave, onLoad, environmentLight, onToggleEnvironmentLight }) {
   const dropdownRef = useRef(null)
   const [expandedSections, setExpandedSections] = useState(
     Object.keys(schema).reduce((acc, key) => {
@@ -407,6 +407,13 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad }) {
       <div className="control-panel-header">
         <h2>Watch Face Designer</h2>
         <div className="config-actions">
+          <button
+            onClick={onToggleEnvironmentLight}
+            className="config-button"
+            title={environmentLight ? "Turn off environment light" : "Turn on environment light"}
+          >
+            {environmentLight ? '☀️' : '🌙'}
+          </button>
           <button onClick={onSave} className="config-button">
             💾 Save Config
           </button>

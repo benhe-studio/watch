@@ -301,26 +301,26 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
         <group position={[0, length / 2 - pivotOffset, typeConfig.zOffset]} rotation={[0, 0, 0]}>
           {/* Tapered cylinder body */}
           <mesh geometry={geometry} castShadow receiveShadow>
-            <meshPhysicalMaterial {...materialProps} />
+            <meshPhysicalMaterial {...materialProps} emissive={materialProps.emissive || '#000000'} emissiveIntensity={materialProps.emissiveIntensity || 0} toneMapped={false} />
           </mesh>
           
           {/* Sphere cap at the large end (base) */}
           <mesh position={[0, length / 2, 0]} castShadow receiveShadow>
             <sphereGeometry args={[radiusBottom, 16, 16]} />
-            <meshPhysicalMaterial {...materialProps} />
+            <meshPhysicalMaterial {...materialProps} emissive={materialProps.emissive || '#000000'} emissiveIntensity={materialProps.emissiveIntensity || 0} toneMapped={false} />
           </mesh>
           
           {/* Sphere cap at the narrow end (tip) */}
           <mesh position={[0, -length / 2, 0]} castShadow receiveShadow>
             <sphereGeometry args={[radiusTop, 16, 16]} />
-            <meshPhysicalMaterial {...materialProps} />
+            <meshPhysicalMaterial {...materialProps} emissive={materialProps.emissive || '#000000'} emissiveIntensity={materialProps.emissiveIntensity || 0} toneMapped={false} />
           </mesh>
         </group>
         
         {/* Pivot point cylinder */}
         <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
-          <meshPhysicalMaterial {...materialProps} />
+          <meshPhysicalMaterial {...materialProps} emissive={materialProps.emissive || '#000000'} emissiveIntensity={materialProps.emissiveIntensity || 0} toneMapped={false} />
         </mesh>
       </group>
     )
@@ -338,13 +338,13 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
           castShadow
           receiveShadow
         >
-          <meshPhysicalMaterial {...materialProps} />
+          <meshPhysicalMaterial {...materialProps} emissive={materialProps.emissive || '#000000'} emissiveIntensity={materialProps.emissiveIntensity || 0} toneMapped={false} />
         </mesh>
         
         {/* Pivot point cylinder */}
         <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[0.75, 0.75, 0.5, 32]} />
-          <meshPhysicalMaterial {...materialProps} />
+          <meshPhysicalMaterial {...materialProps} emissive={materialProps.emissive || '#000000'} emissiveIntensity={materialProps.emissiveIntensity || 0} toneMapped={false} />
         </mesh>
       </group>
     )
@@ -359,13 +359,13 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
         castShadow
         receiveShadow
       >
-        <meshPhysicalMaterial {...materialProps} />
+        <meshPhysicalMaterial {...materialProps} emissive={materialProps.emissive || '#000000'} emissiveIntensity={materialProps.emissiveIntensity || 0} toneMapped={false} />
       </mesh>
       
       {/* Pivot point cylinder */}
       <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
         <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
-        <meshPhysicalMaterial {...materialProps} />
+        <meshPhysicalMaterial {...materialProps} emissive={materialProps.emissive || '#000000'} emissiveIntensity={materialProps.emissiveIntensity || 0} toneMapped={false} />
       </mesh>
     </group>
   )

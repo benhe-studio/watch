@@ -115,6 +115,9 @@ function Markers({ markers }) {
                       clearcoatRoughness={material.clearcoatRoughness}
                       reflectivity={material.reflectivity}
                       ior={material.ior}
+                      emissive={material.emissive || '#000000'}
+                      emissiveIntensity={material.emissiveIntensity || 0}
+                      toneMapped={false}
                     />
                   </mesh>
                 )
@@ -221,6 +224,9 @@ function Markers({ markers }) {
                       clearcoatRoughness={material.clearcoatRoughness}
                       reflectivity={material.reflectivity}
                       ior={material.ior}
+                      emissive={material.emissive || '#000000'}
+                      emissiveIntensity={material.emissiveIntensity || 0}
+                      toneMapped={false}
                     />
                   </mesh>
                 )

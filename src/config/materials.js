@@ -81,6 +81,18 @@ export const materials = {
     clearcoatRoughness: 0.2,
     reflectivity: 0.9,
     ior: 1.5
+  },
+  lume: {
+    name: 'Lume',
+    color: '#a3a52b',
+    roughness: 0.7,
+    metalness: 0.0,
+    clearcoat: 0.0,
+    clearcoatRoughness: 0.0,
+    reflectivity: 0.3,
+    ior: 1.5,
+    emissive: '#7ddfb9',
+    emissiveIntensity: 20.0
   }
 }
 

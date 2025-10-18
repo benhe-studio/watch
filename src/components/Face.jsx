@@ -88,6 +88,9 @@ function Face({ config, complications }) {
         clearcoatRoughness={material.clearcoatRoughness || 0}
         reflectivity={material.reflectivity || 0.5}
         ior={material.ior || 1.5}
+        emissive={material.emissive || '#000000'}
+        emissiveIntensity={material.emissiveIntensity || 0}
+        toneMapped={false}
       />
     </mesh>
   )
