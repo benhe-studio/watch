@@ -12,6 +12,7 @@ function App() {
   const [config, setConfig] = useState(generateInitialState(watchConfig))
   const [isLoading, setIsLoading] = useState(true)
   const [environmentLight, setEnvironmentLight] = useState(true)
+  const [debugView, setDebugView] = useState(false)
 
   // Load default config on mount
   useEffect(() => {
@@ -134,12 +135,12 @@ function App() {
           {/* Environment for realistic metallic reflections */}
           {environmentLight && <Environment preset="studio" />}
           
-          {/* Axis helper to show X (red), Y (green), Z (blue) */}
-          <primitive object={new THREE.AxesHelper(30)} />
+          {/* Axis helper to show X (red), Y (green), Z (blue) - only visible in debug mode */}
+          {debugView && <primitive object={new THREE.AxesHelper(30)} />}
           
           <WatchFace config={config} environmentLight={environmentLight} />
           <OrbitControls enablePan={false} />
-          <Stats />
+          {debugView && <Stats />}
         </Canvas>
       </div>
       <ControlPanel
@@ -150,6 +151,8 @@ function App() {
         onLoad={loadConfig}
         environmentLight={environmentLight}
         onToggleEnvironmentLight={() => setEnvironmentLight(!environmentLight)}
+        debugView={debugView}
+        onToggleDebugView={() => setDebugView(!debugView)}
       />
     </div>
   )

@@ -12,7 +12,6 @@ export const markersConfig = {
       default: 'arabic',
       options: [
         { value: 'arabic', label: 'Arabic' },
-        { value: 'roman', label: 'Roman' },
         { value: 'blocks', label: 'Blocks' },
         { value: 'circle', label: 'Circle' }
       ]
@@ -145,33 +144,6 @@ export const markersConfig = {
       max: 8,
       step: 1,
       condition: (item) => (item.type === 'blocks' || item.type === 'circle') && item.bevelEnabled
-    },
-    romanWidth: {
-      type: 'range',
-      label: 'Width',
-      default: 0.8,
-      min: 0.4,
-      max: 2,
-      step: 0.1,
-      condition: (item) => item.type === 'roman'
-    },
-    romanHeight: {
-      type: 'range',
-      label: 'Height',
-      default: 2.5,
-      min: 1,
-      max: 5,
-      step: 0.1,
-      condition: (item) => item.type === 'roman'
-    },
-    romanDepth: {
-      type: 'range',
-      label: 'Depth',
-      default: 0.2,
-      min: 0.1,
-      max: 0.5,
-      step: 0.1,
-      condition: (item) => item.type === 'roman'
     },
     circleRadius: {
       type: 'range',

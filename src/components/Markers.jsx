@@ -10,6 +10,11 @@ function Markers({ markers }) {
   return (
     <>
       {markers.map((markerConfig, markerIndex) => {
+        // Skip rendering if marker is hidden
+        if (markerConfig.hidden) {
+          return null
+        }
+        
         const markerElements = []
         const visibleHours = markerConfig.visibleHours || [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
         
@@ -137,16 +142,6 @@ function Markers({ markers }) {
                 >
                   {number}
                 </Text>
-              )}
-              {markerConfig.type === 'roman' && (
-                <mesh castShadow receiveShadow>
-                  <boxGeometry args={[
-                    markerConfig.romanWidth || 0.08,
-                    markerConfig.romanHeight || 0.25,
-                    markerConfig.romanDepth || 0.02
-                  ]} />
-                  <meshStandardMaterial color={markerConfig.color || '#000000'} />
-                </mesh>
               )}
               {markerConfig.type === 'circle' && (() => {
                 const radius = markerConfig.circleRadius || 0.15

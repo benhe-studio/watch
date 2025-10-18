@@ -9,6 +9,11 @@ function Decorations({ decorations }) {
   return (
     <>
       {decorations.map((decorationConfig, decorationIndex) => {
+        // Skip rendering if decoration is hidden
+        if (decorationConfig.hidden) {
+          return null
+        }
+        
         if (decorationConfig.type === 'ring') {
           const spread = decorationConfig.spread || 17
           const thickness = decorationConfig.thickness || 1

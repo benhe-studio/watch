@@ -11,8 +11,13 @@ function ComplicationWindows({ windows }) {
   return (
     <>
       {windows.map((windowConfig, index) => {
+        // Skip rendering if window is hidden
+        if (windowConfig.hidden) {
+          return null
+        }
+        
         // Calculate position based on vector (0-12 like clock hours) and offset
-        const { 
+        const {
           vector, 
           offset, 
           type, 

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import './ControlPanel.css'
 
-function ControlPanel({ config, updateConfig, schema, onSave, onLoad, environmentLight, onToggleEnvironmentLight }) {
+function ControlPanel({ config, updateConfig, schema, onSave, onLoad, environmentLight, onToggleEnvironmentLight, debugView, onToggleDebugView }) {
   const dropdownRef = useRef(null)
   const [expandedSections, setExpandedSections] = useState(
     Object.keys(schema).reduce((acc, key) => {
@@ -102,6 +102,15 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad, environmen
     newArray[index] = {
       ...newArray[index],
       [controlKey]: value
+    }
+    updateConfig(section, null, newArray)
+  }
+
+  const toggleItemVisibility = (section, index) => {
+    const newArray = [...config[section]]
+    newArray[index] = {
+      ...newArray[index],
+      hidden: !newArray[index].hidden
     }
     updateConfig(section, null, newArray)
   }
@@ -354,8 +363,18 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad, environmen
               return (
                 <div key={index} className="array-item">
                   <div className="array-item-header" onClick={() => toggleItem(sectionKey, index)}>
-                    <span>{section.itemLabel || 'Item'} {index + 1} ({item.type})</span>
+                    <span>{section.itemLabel || 'Item'} {index + 1} ({item.type}){item.hidden ? ' (Hidden)' : ''}</span>
                     <div className="array-item-actions">
+                      <button
+                        className="hide-item-button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleItemVisibility(sectionKey, index)
+                        }}
+                        title={item.hidden ? "Show item" : "Hide item"}
+                      >
+                        {item.hidden ? '👁️' : '🙈'}
+                      </button>
                       <button
                         className="remove-item-button"
                         onClick={(e) => {
@@ -413,6 +432,13 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad, environmen
             title={environmentLight ? "Turn off environment light" : "Turn on environment light"}
           >
             {environmentLight ? '☀️' : '🌙'}
+          </button>
+          <button
+            onClick={onToggleDebugView}
+            className="config-button"
+            title={debugView ? "Hide debug view (axes & stats)" : "Show debug view (axes & stats)"}
+          >
+            {debugView ? '🐛' : '🔍'}
           </button>
           <button onClick={onSave} className="config-button">
             💾 Save Config

@@ -10,6 +10,11 @@ function MinuteMarkers({ minuteMarkers }) {
   return (
     <>
       {minuteMarkers.map((markerConfig, markerIndex) => {
+        // Skip rendering if marker is hidden
+        if (markerConfig.hidden) {
+          return null
+        }
+        
         const markerElements = []
         const visibleMinutes = markerConfig.visibleMinutes || Array.from({ length: 60 }, (_, i) => i)
         

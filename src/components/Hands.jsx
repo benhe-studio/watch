@@ -366,8 +366,14 @@ function Hands({ hands = [] }) {
   return (
     <group>
       {/* Render each hand from the configuration */}
-      {hands.map((handConfig, index) => (
-        <Hand
+      {hands.map((handConfig, index) => {
+        // Skip rendering if hand is hidden
+        if (handConfig.hidden) {
+          return null
+        }
+        
+        return (
+          <Hand
           key={`${handConfig.type}-${index}`}
           type={handConfig.type}
           profile={handConfig.profile}
@@ -382,7 +388,8 @@ function Hands({ hands = [] }) {
           bevelSegments={handConfig.bevelSegments}
           cutout={handConfig.cutout}
         />
-      ))}
+        )
+      })}
       
       {/* Center cap */}
       <mesh position={[0, 0, 0.5]} rotation={[0, 0, 0]} castShadow receiveShadow>

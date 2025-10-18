@@ -148,9 +148,14 @@ function Primitives({ primitives }) {
 
   return (
     <>
-      {primitives.map((primitiveConfig, index) => (
-        <Primitive key={index} primitiveConfig={primitiveConfig} />
-      ))}
+      {primitives.map((primitiveConfig, index) => {
+        // Skip rendering if primitive is hidden
+        if (primitiveConfig.hidden) {
+          return null
+        }
+        
+        return <Primitive key={index} primitiveConfig={primitiveConfig} />
+      })}
     </>
   )
 }

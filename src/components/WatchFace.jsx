@@ -4,7 +4,6 @@ import MinuteMarkers from './MinuteMarkers'
 import Decorations from './Decorations'
 import Hands from './Hands'
 import ComplicationWindows from './ComplicationWindows'
-import Complications from './Complications'
 import Primitives from './Primitives'
 
 function WatchFace({ config }) {
@@ -24,9 +23,6 @@ function WatchFace({ config }) {
 
       {/* Complication Windows (background visible through face cutouts) */}
       {config.complicationWindows && <ComplicationWindows windows={config.complicationWindows} />}
-
-      {/* Complications (content rendered on top of windows) */}
-      {config.complications && <Complications complications={config.complications} />}
 
       {/* Primitives */}
       {config.primitives && <Primitives primitives={config.primitives} />}
