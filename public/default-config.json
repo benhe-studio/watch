@@ -24,17 +24,25 @@
   "hands": [
     {
       "type": "hours",
-      "profile": "classic",
-      "width": 0.8,
-      "length": 10,
-      "material": "matteBlackPlastic"
+      "profile": "parametricFlat",
+      "material": "matteBlackPlastic",
+      "points": [[0.3, -2], [0.5, 0], [0.3, 8], [0, 10]],
+      "bevelEnabled": true,
+      "bevelThickness": 0.05,
+      "bevelSize": 0.05,
+      "bevelSegments": 3,
+      "cutout": 0
     },
     {
       "type": "minutes",
-      "profile": "classic",
-      "width": 0.6,
-      "length": 14,
-      "material": "matteBlackPlastic"
+      "profile": "parametricFlat",
+      "material": "matteBlackPlastic",
+      "points": [[0.3, -2], [0.4, 0], [0.25, 12], [0, 14]],
+      "bevelEnabled": true,
+      "bevelThickness": 0.05,
+      "bevelSize": 0.05,
+      "bevelSegments": 3,
+      "cutout": 0
     },
     {
       "type": "seconds",

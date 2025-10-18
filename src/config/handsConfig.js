@@ -19,12 +19,11 @@ export const handsConfig = {
     profile: {
       type: 'buttons',
       label: 'Profile',
-      default: 'classic',
+      default: 'parametricFlat',
       options: [
-        { value: 'classic', label: 'Classic' },
-        { value: 'dauphine', label: 'Dauphine' },
         { value: 'taperedCylinder', label: 'Tapered' },
-        { value: 'parametric', label: 'Parametric' }
+        { value: 'parametricFlat', label: 'Parametric Flat' },
+        { value: 'parametricFaceted', label: 'Parametric Faceted' }
       ]
     },
     width: {
@@ -34,7 +33,7 @@ export const handsConfig = {
       min: 0.1,
       max: 2,
       step: 0.1,
-      condition: (item) => item.profile !== 'parametric'
+      condition: (item) => item.profile === 'taperedCylinder'
     },
     length: {
       type: 'range',
@@ -49,7 +48,7 @@ export const handsConfig = {
       min: 5,
       max: 20,
       step: 0.5,
-      condition: (item) => item.profile !== 'parametric'
+      condition: (item) => item.profile === 'taperedCylinder'
     },
     offset: {
       type: 'range',
@@ -58,7 +57,7 @@ export const handsConfig = {
       min: 0,
       max: 1,
       step: 0.05,
-      condition: (item) => item.profile !== 'parametric'
+      condition: (item) => item.profile === 'taperedCylinder'
     },
     material: {
       type: 'select',
@@ -70,7 +69,7 @@ export const handsConfig = {
       type: 'pointArray',
       label: 'Shape Points',
       default: [[0.3, -2], [0.5, 0], [0.3, 14], [0, 18]],
-      condition: (item) => item.profile === 'parametric',
+      condition: (item) => item.profile === 'parametricFlat' || item.profile === 'parametricFaceted',
       xLabel: 'X (Width)',
       yLabel: 'Y (Length)',
       xMin: 0,
@@ -85,7 +84,7 @@ export const handsConfig = {
       type: 'checkbox',
       label: 'Enable Bevel',
       default: true,
-      condition: (item) => item.profile === 'parametric'
+      condition: (item) => item.profile === 'parametricFlat'
     },
     bevelThickness: {
       type: 'range',
@@ -94,7 +93,7 @@ export const handsConfig = {
       min: 0.01,
       max: 0.2,
       step: 0.01,
-      condition: (item) => item.profile === 'parametric' && item.bevelEnabled
+      condition: (item) => item.profile === 'parametricFlat' && item.bevelEnabled
     },
     bevelSize: {
       type: 'range',
@@ -103,7 +102,7 @@ export const handsConfig = {
       min: 0.01,
       max: 0.2,
       step: 0.01,
-      condition: (item) => item.profile === 'parametric' && item.bevelEnabled
+      condition: (item) => item.profile === 'parametricFlat' && item.bevelEnabled
     },
     bevelSegments: {
       type: 'range',
@@ -112,7 +111,7 @@ export const handsConfig = {
       min: 1,
       max: 8,
       step: 1,
-      condition: (item) => item.profile === 'parametric' && item.bevelEnabled
+      condition: (item) => item.profile === 'parametricFlat' && item.bevelEnabled
     },
     cutout: {
       type: 'range',
@@ -121,7 +120,7 @@ export const handsConfig = {
       min: 0,
       max: 0.95,
       step: 0.05,
-      condition: (item) => item.profile === 'parametric'
+      condition: (item) => item.profile === 'parametricFlat' || item.profile === 'parametricFaceted'
     }
   }
 }

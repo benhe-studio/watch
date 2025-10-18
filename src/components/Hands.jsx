@@ -5,63 +5,6 @@ import { getMaterial } from '../config/materials'
 
 // Geometry generator functions - return THREE.BufferGeometry
 const geometryGenerators = {
-  classic: ({ length, width }) => {
-    // Create box extending along Y-axis, then rotate to lie flat in XY plane
-    const geometry = new THREE.BoxGeometry(width, length, 0.5)
-    return geometry
-  },
-  
-  dauphine: ({ length, width }) => {
-    const shape = new THREE.Shape()
-    const halfLength = length / 2
-    
-    // First triangle (from center to tip) - pointing up in Y (will be rotated to Z)
-    shape.moveTo(0, 0)
-    shape.lineTo(-width / 2, 0)
-    shape.lineTo(0, halfLength)
-    shape.lineTo(0, 0)
-    
-    const topGeometry = new THREE.ShapeGeometry(shape)
-    
-    // Second triangle (from center to tip, other side)
-    const shape2 = new THREE.Shape()
-    shape2.moveTo(0, 0)
-    shape2.lineTo(width / 2, 0)
-    shape2.lineTo(0, halfLength)
-    shape2.lineTo(0, 0)
-    
-    const bottomGeometry = new THREE.ShapeGeometry(shape2)
-    
-    // Merge geometries
-    const mergedGeometry = new THREE.BufferGeometry()
-    const positions = []
-    const indices = []
-    
-    const topPositions = topGeometry.attributes.position.array
-    for (let i = 0; i < topPositions.length; i += 3) {
-      positions.push(topPositions[i], topPositions[i + 1], topPositions[i + 2])
-    }
-    
-    const bottomPositions = bottomGeometry.attributes.position.array
-    const offset = topPositions.length / 3
-    for (let i = 0; i < bottomPositions.length; i += 3) {
-      positions.push(bottomPositions[i], bottomPositions[i + 1], bottomPositions[i + 2])
-    }
-    
-    for (let i = 0; i < topPositions.length / 3; i++) {
-      indices.push(i)
-    }
-    for (let i = 0; i < bottomPositions.length / 3; i++) {
-      indices.push(offset + i)
-    }
-    
-    mergedGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
-    mergedGeometry.setIndex(indices)
-    mergedGeometry.computeVertexNormals()
-    
-    return mergedGeometry
-  },
-  
   taperedCylinder: ({ length, width }) => {
     const radiusTop = width * 0.3
     const radiusBottom = width
@@ -70,7 +13,7 @@ const geometryGenerators = {
     return geometry
   },
   
-  parametric: ({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout }) => {
+  parametricFlat: ({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout }) => {
     // Default points if none provided - creates a simple tapered hand
     // Y=0 represents the pivot point, negative Y extends towards the tail
     const defaultPoints = [
@@ -158,6 +101,116 @@ const geometryGenerators = {
     geometry.translate(0, 0, -depth / 2)
     
     return geometry
+  },
+  
+  parametricFaceted: ({ length, width, points, cutout }) => {
+    // Default points if none provided
+    const defaultPoints = [
+      [0.3, -2],   // Tail end (below pivot)
+      [0.5, 0],    // Widen at pivot point
+      [0.3, 14],   // Taper towards tip
+      [0, 18]      // End at tip
+    ]
+    
+    const shapePoints = points || defaultPoints
+    
+    // Create two planes that meet at a ridge in the center
+    // This creates a faceted/beveled edge effect
+    const geometry = new THREE.BufferGeometry()
+    const positions = []
+    const indices = []
+    const normals = []
+    
+    // Process cutout if needed
+    let outerPoints = shapePoints
+    let innerPoints = null
+    
+    if (cutout > 0) {
+      innerPoints = shapePoints.map(([x, y]) => [x * cutout, y])
+    }
+    
+    // Ridge height (how far the center ridge extends in Z)
+    const ridgeHeight = width || 0.3
+    
+    // Helper to add a vertex
+    const addVertex = (x, y, z) => {
+      positions.push(x, y, z)
+      return (positions.length / 3) - 1
+    }
+    
+    // Helper to add a triangle
+    const addTriangle = (i1, i2, i3, nx, ny, nz) => {
+      indices.push(i1, i2, i3)
+      // Add normals for each vertex of the triangle
+      normals.push(nx, ny, nz)
+      normals.push(nx, ny, nz)
+      normals.push(nx, ny, nz)
+    }
+    
+    // Build the geometry segment by segment
+    for (let i = 0; i < outerPoints.length - 1; i++) {
+      const [x1, y1] = outerPoints[i]
+      const [x2, y2] = outerPoints[i + 1]
+      
+      // Right side vertices (positive X)
+      const rightOuter1 = addVertex(x1, y1, 0)
+      const rightOuter2 = addVertex(x2, y2, 0)
+      const rightRidge1 = addVertex(0, y1, ridgeHeight)
+      const rightRidge2 = addVertex(0, y2, ridgeHeight)
+      
+      // Left side vertices (negative X)
+      const leftOuter1 = addVertex(-x1, y1, 0)
+      const leftOuter2 = addVertex(-x2, y2, 0)
+      const leftRidge1 = addVertex(0, y1, ridgeHeight)
+      const leftRidge2 = addVertex(0, y2, ridgeHeight)
+      
+      // Calculate normal for right face (pointing right and up)
+      const rightNormal = new THREE.Vector3(1, 0, 1).normalize()
+      // Calculate normal for left face (pointing left and up)
+      const leftNormal = new THREE.Vector3(-1, 0, 1).normalize()
+      
+      // Right face triangles
+      addTriangle(rightOuter1, rightOuter2, rightRidge1, rightNormal.x, rightNormal.y, rightNormal.z)
+      addTriangle(rightOuter2, rightRidge2, rightRidge1, rightNormal.x, rightNormal.y, rightNormal.z)
+      
+      // Left face triangles
+      addTriangle(leftOuter1, leftRidge1, leftOuter2, leftNormal.x, leftNormal.y, leftNormal.z)
+      addTriangle(leftOuter2, leftRidge1, leftRidge2, leftNormal.x, leftNormal.y, leftNormal.z)
+      
+      // If there's a cutout, add inner faces
+      if (innerPoints) {
+        const [ix1, iy1] = innerPoints[i]
+        const [ix2, iy2] = innerPoints[i + 1]
+        
+        // Right inner vertices
+        const rightInner1 = addVertex(ix1, iy1, 0)
+        const rightInner2 = addVertex(ix2, iy2, 0)
+        
+        // Left inner vertices
+        const leftInner1 = addVertex(-ix1, iy1, 0)
+        const leftInner2 = addVertex(-ix2, iy2, 0)
+        
+        // Inner ridge vertices (same as outer ridge)
+        const innerRidge1 = addVertex(0, iy1, ridgeHeight)
+        const innerRidge2 = addVertex(0, iy2, ridgeHeight)
+        
+        // Inner right face (normals pointing inward/down)
+        const innerRightNormal = new THREE.Vector3(-1, 0, -1).normalize()
+        addTriangle(rightInner1, innerRidge1, rightInner2, innerRightNormal.x, innerRightNormal.y, innerRightNormal.z)
+        addTriangle(rightInner2, innerRidge1, innerRidge2, innerRightNormal.x, innerRightNormal.y, innerRightNormal.z)
+        
+        // Inner left face (normals pointing inward/down)
+        const innerLeftNormal = new THREE.Vector3(1, 0, -1).normalize()
+        addTriangle(leftInner1, leftInner2, innerRidge1, innerLeftNormal.x, innerLeftNormal.y, innerLeftNormal.z)
+        addTriangle(leftInner2, innerRidge2, innerRidge1, innerLeftNormal.x, innerLeftNormal.y, innerLeftNormal.z)
+      }
+    }
+    
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
+    geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3))
+    geometry.setIndex(indices)
+    
+    return geometry
   }
 }
 
@@ -234,10 +287,10 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
     }
   })
   
-  // Determine if this profile needs special rendering (like tapered cylinder with spheres)
+  // Determine if this profile needs special rendering
   const isTaperedCylinder = profile === 'taperedCylinder'
-  const isDauphine = profile === 'dauphine'
-  const isParametric = profile === 'parametric'
+  const isParametricFlat = profile === 'parametricFlat'
+  const isParametricFaceted = profile === 'parametricFaceted'
   
   if (isTaperedCylinder) {
     const radiusTop = width * 0.3
@@ -273,29 +326,7 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
     )
   }
   
-  if (isDauphine) {
-    return (
-      <group ref={handRef} rotation={[0, 0, 0]}>
-        <mesh
-          position={[0, length / 2 - pivotOffset, typeConfig.zOffset]}
-          rotation={[0, 0, 0]}
-          geometry={geometry}
-          castShadow
-          receiveShadow
-        >
-          <meshPhysicalMaterial {...materialProps} side={THREE.DoubleSide} />
-        </mesh>
-        
-        {/* Pivot point cylinder */}
-        <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
-          <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
-          <meshPhysicalMaterial {...materialProps} />
-        </mesh>
-      </group>
-    )
-  }
-  
-  if (isParametric) {
+  if (isParametricFlat || isParametricFaceted) {
     // For parametric hands, Y=0 in the points represents the pivot point
     // No offset calculation needed - the geometry is positioned directly at origin
     return (
@@ -319,7 +350,7 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
     )
   }
   
-  // Classic and other profiles
+  // Fallback for any other profiles
   return (
     <group ref={handRef} rotation={[0, 0, 0]}>
       <mesh
