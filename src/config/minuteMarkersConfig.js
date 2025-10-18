@@ -70,7 +70,7 @@ export const minuteMarkersConfig = {
     },
     radius: {
       type: 'range',
-      label: 'Radius',
+      label: 'Spread',
       default: 0.3,
       min: 0.1,
       max: 1,

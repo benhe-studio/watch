@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './ControlPanel.css'
 
 function ControlPanel({ config, updateConfig, schema, onSave, onLoad }) {
+  const dropdownRef = useRef(null)
   const [expandedSections, setExpandedSections] = useState(
     Object.keys(schema).reduce((acc, key) => {
       acc[key] = schema[key].expanded || false
@@ -10,6 +11,23 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad }) {
   )
 
   const [expandedItems, setExpandedItems] = useState({})
+  const [typeSelectionDropdown, setTypeSelectionDropdown] = useState(null)
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setTypeSelectionDropdown(null)
+      }
+    }
+
+    if (typeSelectionDropdown) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside)
+      }
+    }
+  }, [typeSelectionDropdown])
 
   const toggleSection = (section) => {
     setExpandedSections(prev => ({
@@ -26,12 +44,39 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad }) {
     }))
   }
 
-  const addItem = (section) => {
+  const toggleTypeSelection = (section) => {
+    if (typeSelectionDropdown === section) {
+      setTypeSelectionDropdown(null)
+    } else {
+      const sectionConfig = schema[section]
+      const typeControl = sectionConfig.controls.type
+      
+      if (typeControl && typeControl.type === 'buttons' && typeControl.options) {
+        setTypeSelectionDropdown(section)
+      } else {
+        // No type selection needed, create item directly
+        createItemWithType(section, null)
+      }
+    }
+  }
+
+  const createItemWithType = (section, selectedType) => {
     const sectionConfig = schema[section]
     const defaultItem = {}
     
+    // If a type was selected, set it first so getDefault can use it
+    if (selectedType !== null) {
+      defaultItem.type = selectedType
+    }
+    
     Object.keys(sectionConfig.controls).forEach(control => {
       const controlConfig = sectionConfig.controls[control]
+      
+      // Skip type if already set
+      if (control === 'type' && selectedType !== null) {
+        return
+      }
+      
       // Use getDefault function if available, otherwise use default value
       if (controlConfig.getDefault) {
         defaultItem[control] = controlConfig.getDefault(defaultItem)
@@ -42,6 +87,9 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad }) {
     
     const newArray = [...config[section], defaultItem]
     updateConfig(section, null, newArray)
+    
+    // Close dropdown
+    setTypeSelectionDropdown(null)
   }
 
   const removeItem = (section, index) => {
@@ -67,8 +115,13 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad }) {
       return null
     }
 
+    // Hide type field for array items since it's locked after creation
+    if (itemData && controlKey === 'type' && controlConfig.type === 'buttons') {
+      return null
+    }
+
     const value = itemData ? itemData[controlKey] : config[section][controlKey]
-    const onChange = itemData 
+    const onChange = itemData
       ? (newValue) => updateArrayItem(section, itemIndex, controlKey, newValue)
       : (newValue) => updateConfig(section, controlKey, newValue)
 
@@ -259,6 +312,9 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad }) {
 
   const renderArraySection = (sectionKey, section) => {
     const items = config[sectionKey] || []
+    const typeControl = section.controls.type
+    const hasTypeSelection = typeControl && typeControl.type === 'buttons' && typeControl.options
+    const isDropdownOpen = typeSelectionDropdown === sectionKey
     
     return (
       <div key={sectionKey} className="section">
@@ -268,12 +324,28 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad }) {
         </div>
         {expandedSections[sectionKey] && (
           <div className="section-content">
-            <button 
-              className="add-item-button"
-              onClick={() => addItem(sectionKey)}
-            >
-              + Add {section.itemLabel || 'Item'}
-            </button>
+            <div className="add-item-container" ref={isDropdownOpen ? dropdownRef : null}>
+              <button
+                className="add-item-button"
+                onClick={() => toggleTypeSelection(sectionKey)}
+              >
+                + Add {section.itemLabel || 'Item'}
+              </button>
+              
+              {hasTypeSelection && isDropdownOpen && (
+                <div className="type-dropdown">
+                  {typeControl.options.map(option => (
+                    <button
+                      key={option.value}
+                      className="type-dropdown-item"
+                      onClick={() => createItemWithType(sectionKey, option.value)}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             
             {items.map((item, index) => {
               const itemKey = `${sectionKey}-${index}`

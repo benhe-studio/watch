@@ -47,7 +47,7 @@ export const markersConfig = {
     },
     radius: {
       type: 'range',
-      label: 'Radius',
+      label: 'Spread',
       default: 17,
       min: 10,
       max: 25,
