@@ -104,6 +104,26 @@ const geometryGenerators = {
   },
   
   parametricFaceted: ({ length, width, points, cutout, cutoutPoints }) => {
+    // Helper function to ensure points start and end at x=0
+    const ensurePointsAtCenterLine = (pointsList) => {
+      if (!pointsList || pointsList.length === 0) return pointsList
+      
+      const processed = [...pointsList]
+      
+      // Check first point - if x is not 0, add a point at x=0 with same y
+      if (processed[0][0] !== 0) {
+        processed.unshift([0, processed[0][1]])
+      }
+      
+      // Check last point - if x is not 0, add a point at x=0 with same y
+      const lastIdx = processed.length - 1
+      if (processed[lastIdx][0] !== 0) {
+        processed.push([0, processed[lastIdx][1]])
+      }
+      
+      return processed
+    }
+    
     // Default points if none provided
     const defaultPoints = [
       [0.3, -2],   // Tail end (below pivot)
@@ -114,78 +134,85 @@ const geometryGenerators = {
     
     const shapePoints = points || defaultPoints
     
+    // Process shape points to ensure they start and end at x=0
+    const processedShapePoints = ensurePointsAtCenterLine(shapePoints)
+    
     // Extrusion depth - reduced by factor of 4 for minimal thickness
     const extrudeDepth = (width || 0.3) / 4
     
     // Rotation angle for tilting the outer edges down (in radians)
     const tiltAngle = Math.PI / 12 // 15 degrees
     
+    // Check if we have cutout points to process
+    const hasCutout = cutoutPoints && cutoutPoints.length >= 2
+    
+    // Process cutout points if they exist
+    const processedCutoutPoints = hasCutout ? ensurePointsAtCenterLine(cutoutPoints) : null
+    
     // Create the right half shape
     const rightShape = new THREE.Shape()
     
-    // Start at the center line (x=0) at the first point's y position
-    rightShape.moveTo(0, shapePoints[0][1])
-    
-    // Draw to each point on the right side
-    for (let i = 0; i < shapePoints.length; i++) {
-      rightShape.lineTo(shapePoints[i][0], shapePoints[i][1])
-    }
-    
-    // Close back to the center line at the last point
-    rightShape.lineTo(0, shapePoints[shapePoints.length - 1][1])
-    
-    // Add cutout hole to right shape if cutoutPoints are provided
-    // Need at least 2 points to create a valid cutout shape
-    if (cutoutPoints && cutoutPoints.length >= 2) {
-      const rightHole = new THREE.Path()
+    if (hasCutout) {
+      // Trace the shape: start at first shape point, go through all shape points,
+      // then back through cutout points in reverse
+      rightShape.moveTo(processedShapePoints[0][0], processedShapePoints[0][1])
       
-      // Start at the center line
-      rightHole.moveTo(0, cutoutPoints[0][1])
-      
-      // Draw to each cutout point on the right side
-      for (let i = 0; i < cutoutPoints.length; i++) {
-        rightHole.lineTo(cutoutPoints[i][0], cutoutPoints[i][1])
+      // Draw through all shape points
+      for (let i = 1; i < processedShapePoints.length; i++) {
+        rightShape.lineTo(processedShapePoints[i][0], processedShapePoints[i][1])
       }
       
-      // Close back to the center line
-      rightHole.lineTo(0, cutoutPoints[cutoutPoints.length - 1][1])
-      rightHole.closePath()
+      // Now trace back through cutout points in reverse
+      for (let i = processedCutoutPoints.length - 1; i >= 0; i--) {
+        rightShape.lineTo(processedCutoutPoints[i][0], processedCutoutPoints[i][1])
+      }
       
-      rightShape.holes.push(rightHole)
+      // Close the shape
+      rightShape.closePath()
+    } else {
+      // No cutout - trace through shape points
+      rightShape.moveTo(processedShapePoints[0][0], processedShapePoints[0][1])
+      
+      // Draw through all shape points
+      for (let i = 1; i < processedShapePoints.length; i++) {
+        rightShape.lineTo(processedShapePoints[i][0], processedShapePoints[i][1])
+      }
+      
+      // Close the shape
+      rightShape.closePath()
     }
     
     // Create the left half shape (mirrored)
     const leftShape = new THREE.Shape()
     
-    // Start at the center line at the first point's y position
-    leftShape.moveTo(0, shapePoints[0][1])
-    
-    // Draw to each mirrored point on the left side
-    for (let i = 0; i < shapePoints.length; i++) {
-      leftShape.lineTo(-shapePoints[i][0], shapePoints[i][1])
-    }
-    
-    // Close back to the center line at the last point
-    leftShape.lineTo(0, shapePoints[shapePoints.length - 1][1])
-    
-    // Add cutout hole to left shape if cutoutPoints are provided
-    // Need at least 2 points to create a valid cutout shape
-    if (cutoutPoints && cutoutPoints.length >= 2) {
-      const leftHole = new THREE.Path()
+    if (hasCutout) {
+      // Trace the shape: start at first shape point (mirrored), go through all shape points,
+      // then back through cutout points in reverse
+      leftShape.moveTo(-processedShapePoints[0][0], processedShapePoints[0][1])
       
-      // Start at the center line
-      leftHole.moveTo(0, cutoutPoints[0][1])
-      
-      // Draw to each mirrored cutout point on the left side
-      for (let i = 0; i < cutoutPoints.length; i++) {
-        leftHole.lineTo(-cutoutPoints[i][0], cutoutPoints[i][1])
+      // Draw through all mirrored shape points
+      for (let i = 1; i < processedShapePoints.length; i++) {
+        leftShape.lineTo(-processedShapePoints[i][0], processedShapePoints[i][1])
       }
       
-      // Close back to the center line
-      leftHole.lineTo(0, cutoutPoints[cutoutPoints.length - 1][1])
-      leftHole.closePath()
+      // Now trace back through mirrored cutout points in reverse
+      for (let i = processedCutoutPoints.length - 1; i >= 0; i--) {
+        leftShape.lineTo(-processedCutoutPoints[i][0], processedCutoutPoints[i][1])
+      }
       
-      leftShape.holes.push(leftHole)
+      // Close the shape
+      leftShape.closePath()
+    } else {
+      // No cutout - trace through mirrored shape points
+      leftShape.moveTo(-processedShapePoints[0][0], processedShapePoints[0][1])
+      
+      // Draw through all mirrored shape points
+      for (let i = 1; i < processedShapePoints.length; i++) {
+        leftShape.lineTo(-processedShapePoints[i][0], processedShapePoints[i][1])
+      }
+      
+      // Close the shape
+      leftShape.closePath()
     }
     
     // Extrude settings

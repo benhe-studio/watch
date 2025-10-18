@@ -243,6 +243,7 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad, environmen
 
     case 'pointArray':
       const points = value || controlConfig.default || []
+      const minPoints = controlConfig.minPoints ?? 2
       
       const addPoint = () => {
         const newPoints = [...points, [0, 0]]
@@ -275,8 +276,8 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad, environmen
                   <button
                     className="remove-point-button"
                     onClick={() => removePoint(pointIndex)}
-                    disabled={points.length <= 2}
-                    title={points.length <= 2 ? "Need at least 2 points" : "Remove point"}
+                    disabled={points.length <= minPoints}
+                    title={points.length <= minPoints ? `Need at least ${minPoints} point${minPoints !== 1 ? 's' : ''}` : "Remove point"}
                   >
                     ✕
                   </button>

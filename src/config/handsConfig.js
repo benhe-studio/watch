@@ -78,6 +78,7 @@ export const handsConfig = {
       yMin: -5,
       yMax: 20,
       yStep: 0.5,
+      minPoints: 2,
       description: 'Define half of the hand shape. Y=0 is the pivot point, negative Y extends towards tail, positive Y towards tip'
     },
     bevelEnabled: {
@@ -135,6 +136,7 @@ export const handsConfig = {
       yMin: -5,
       yMax: 20,
       yStep: 0.5,
+      minPoints: 0,
       description: 'Define half of the cutout shape. Points create a hole that is subtracted from the hand shape'
     }
   }
