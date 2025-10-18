@@ -1,6 +1,7 @@
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import { getMaterial } from '../config/materials'
 
 // Geometry generator functions - return THREE.BufferGeometry
 const geometryGenerators = {
@@ -207,7 +208,7 @@ const handTypeConfig = {
 }
 
 // Single hand component
-function Hand({ type, profile, width, color, length: customLength, offset, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout }) {
+function Hand({ type, profile, width, material, length: customLength, offset, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout }) {
   const handRef = useRef()
   const typeConfig = handTypeConfig[type]
   const length = customLength || typeConfig.defaultLength
@@ -222,6 +223,9 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
     const generator = geometryGenerators[profile] || geometryGenerators.classic
     return generator({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout })
   }, [profile, length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout])
+  
+  // Get material properties
+  const materialProps = getMaterial(material)
   
   useFrame(({ clock }) => {
     if (handRef.current) {
@@ -244,26 +248,26 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
         <group position={[0, length / 2 - pivotOffset, typeConfig.zOffset]} rotation={[0, 0, 0]}>
           {/* Tapered cylinder body */}
           <mesh geometry={geometry} castShadow receiveShadow>
-            <meshStandardMaterial color={color} />
+            <meshPhysicalMaterial {...materialProps} />
           </mesh>
           
           {/* Sphere cap at the large end (base) */}
           <mesh position={[0, length / 2, 0]} castShadow receiveShadow>
             <sphereGeometry args={[radiusBottom, 16, 16]} />
-            <meshStandardMaterial color={color} />
+            <meshPhysicalMaterial {...materialProps} />
           </mesh>
           
           {/* Sphere cap at the narrow end (tip) */}
           <mesh position={[0, -length / 2, 0]} castShadow receiveShadow>
             <sphereGeometry args={[radiusTop, 16, 16]} />
-            <meshStandardMaterial color={color} />
+            <meshPhysicalMaterial {...materialProps} />
           </mesh>
         </group>
         
         {/* Pivot point cylinder */}
         <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
-          <meshStandardMaterial color={color} />
+          <meshPhysicalMaterial {...materialProps} />
         </mesh>
       </group>
     )
@@ -279,13 +283,13 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
           castShadow
           receiveShadow
         >
-          <meshStandardMaterial color={color} side={THREE.DoubleSide} />
+          <meshPhysicalMaterial {...materialProps} side={THREE.DoubleSide} />
         </mesh>
         
         {/* Pivot point cylinder */}
         <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
-          <meshStandardMaterial color={color} />
+          <meshPhysicalMaterial {...materialProps} />
         </mesh>
       </group>
     )
@@ -303,13 +307,13 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
           castShadow
           receiveShadow
         >
-          <meshStandardMaterial color={color} />
+          <meshPhysicalMaterial {...materialProps} />
         </mesh>
         
         {/* Pivot point cylinder */}
         <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[0.75, 0.75, 0.5, 32]} />
-          <meshStandardMaterial color={color} />
+          <meshPhysicalMaterial {...materialProps} />
         </mesh>
       </group>
     )
@@ -324,13 +328,13 @@ function Hand({ type, profile, width, color, length: customLength, offset, point
         castShadow
         receiveShadow
       >
-        <meshStandardMaterial color={color} />
+        <meshPhysicalMaterial {...materialProps} />
       </mesh>
       
       {/* Pivot point cylinder */}
       <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
         <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
-        <meshStandardMaterial color={color} />
+        <meshPhysicalMaterial {...materialProps} />
       </mesh>
     </group>
   )
@@ -346,7 +350,7 @@ function Hands({ hands = [] }) {
           type={handConfig.type}
           profile={handConfig.profile}
           width={handConfig.width}
-          color={handConfig.color}
+          material={handConfig.material}
           length={handConfig.length}
           offset={handConfig.offset}
           points={handConfig.points}

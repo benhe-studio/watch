@@ -1,3 +1,5 @@
+import { getMaterialOptions } from './materials'
+
 export const handsConfig = {
   label: 'Hands',
   expanded: true,
@@ -58,10 +60,11 @@ export const handsConfig = {
       step: 0.05,
       condition: (item) => item.profile !== 'parametric'
     },
-    color: {
-      type: 'color',
-      label: 'Color',
-      default: '#000000'
+    material: {
+      type: 'select',
+      label: 'Material',
+      default: 'matteBlackPlastic',
+      options: getMaterialOptions()
     },
     points: {
       type: 'pointArray',

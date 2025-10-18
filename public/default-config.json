@@ -27,21 +27,21 @@
       "profile": "classic",
       "width": 0.8,
       "length": 10,
-      "color": "#000000"
+      "material": "matteBlackPlastic"
     },
     {
       "type": "minutes",
       "profile": "classic",
       "width": 0.6,
       "length": 14,
-      "color": "#000000"
+      "material": "matteBlackPlastic"
     },
     {
       "type": "seconds",
       "profile": "taperedCylinder",
       "width": 0.2,
       "length": 16,
-      "color": "#ff0000"
+      "material": "polishedCopper"
     }
   ]
 }
