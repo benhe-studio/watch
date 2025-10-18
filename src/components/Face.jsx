@@ -26,17 +26,17 @@ function Face({ config, complications }) {
 
     // Create holes for each complication
     complications.forEach((complication) => {
-      const { position, distance, windowShape, windowRadius, windowWidth, windowHeight } = complication
-      const angle = {
-        12: 0,
-        3: Math.PI / 2,
-        6: Math.PI,
-        9: (3 * Math.PI) / 2
-      }[position] || 0
+      const { vector, offset, windowShape, windowRadius, windowWidth, windowHeight } = complication
+      
+      // Convert vector (0-12) to angle
+      // vector=0 or 12 -> 0 rad (top), vector=3 -> π/2 rad (right), etc.
+      const hourValue = vector !== undefined ? vector : 3
+      const angle = ((hourValue === 12 || hourValue === 0) ? 0 : hourValue) * Math.PI / 6
+      const distance = offset || 15
 
-      // Calculate x, z coordinates for the window
+      // Calculate x, y coordinates for the window (in XY plane)
       const x = Math.sin(angle) * distance
-      const z = -Math.cos(angle) * distance
+      const y = Math.cos(angle) * distance
 
       // Create a hole for the complication window
       const windowHole = new THREE.Path()
@@ -44,7 +44,7 @@ function Face({ config, complications }) {
       if (windowShape === 'circle') {
         // Circular window
         const radius = windowRadius || 2.2
-        windowHole.absarc(x, z, radius, 0, Math.PI * 2, true)
+        windowHole.absarc(x, y, radius, 0, Math.PI * 2, true)
       } else {
         // Rectangular window
         const width = windowWidth || 4
@@ -52,11 +52,11 @@ function Face({ config, complications }) {
         const halfWidth = width / 2
         const halfHeight = height / 2
         
-        windowHole.moveTo(x - halfWidth, z - halfHeight)
-        windowHole.lineTo(x + halfWidth, z - halfHeight)
-        windowHole.lineTo(x + halfWidth, z + halfHeight)
-        windowHole.lineTo(x - halfWidth, z + halfHeight)
-        windowHole.lineTo(x - halfWidth, z - halfHeight)
+        windowHole.moveTo(x - halfWidth, y - halfHeight)
+        windowHole.lineTo(x + halfWidth, y - halfHeight)
+        windowHole.lineTo(x + halfWidth, y + halfHeight)
+        windowHole.lineTo(x - halfWidth, y + halfHeight)
+        windowHole.lineTo(x - halfWidth, y - halfHeight)
       }
       
       circleShape.holes.push(windowHole)

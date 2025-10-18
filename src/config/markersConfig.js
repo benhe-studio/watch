@@ -71,9 +71,9 @@ export const markersConfig = {
       step: 0.1,
       condition: (item) => item.type === 'blocks'
     },
-    height: {
+    length: {
       type: 'range',
-      label: 'Height',
+      label: 'Length',
       default: 3,
       min: 1,
       max: 6,

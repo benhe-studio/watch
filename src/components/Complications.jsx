@@ -10,27 +10,27 @@ function Complications({ complications }) {
   return (
     <>
       {complications.map((complicationConfig, index) => {
-        // Calculate position based on position choice (12, 3, 6, 9) and distance
-        const { position, distance, type, dateValue, windowShape, windowRadius, windowWidth, windowHeight } = complicationConfig
+        // Calculate position based on vector (0-12 like clock hours) and offset
+        const { vector, offset, type, dateValue, windowShape, windowRadius, windowWidth, windowHeight } = complicationConfig
         
-        const angle = {
-          12: 0,
-          3: Math.PI / 2,
-          6: Math.PI,
-          9: (3 * Math.PI) / 2
-        }[position] || 0
+        // Convert vector (0-12) to angle
+        // vector=0 or 12 -> 0 rad (top), vector=3 -> π/2 rad (right), etc.
+        // Each hour is π/6 radians (30 degrees)
+        const hourValue = vector !== undefined ? vector : 3
+        const angle = ((hourValue === 12 || hourValue === 0) ? 0 : hourValue) * Math.PI / 6
 
-        // Calculate x, z coordinates (y is height above face)
+        // Calculate x, y coordinates (z is height above face)
+        const distance = offset || 15
         const x = Math.sin(angle) * distance
-        const z = -Math.cos(angle) * distance
-        // Position complication at the bottom of the face thickness
-        const datePosition = [x, -FACE_THICKNESS / 2, z]
+        const y = Math.cos(angle) * distance
+        // Position complication underneath the face (visible through window)
+        const datePosition = [x, y, -FACE_THICKNESS / 2]
 
         return (
           <group key={index}>
             {/* Date complication */}
             {type === 'date' && (
-              <group position={datePosition} rotation={[-Math.PI / 2, 0, 0]}>
+              <group position={datePosition} rotation={[0, 0, 0]}>
                 {/* Background plane for date - matches window shape */}
                 <mesh>
                   {windowShape === 'circle' ? (

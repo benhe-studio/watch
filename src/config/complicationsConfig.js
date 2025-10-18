@@ -12,22 +12,19 @@ export const complicationsConfig = {
         { value: 'date', label: 'Date' }
       ]
     },
-    position: {
-      type: 'buttons',
-      label: 'Position',
-      default: 3,
-      options: [
-        { value: 12, label: '12' },
-        { value: 3, label: '3' },
-        { value: 6, label: '6' },
-        { value: 9, label: '9' }
-      ]
-    },
-    distance: {
+    vector: {
       type: 'range',
-      label: 'Distance from Center',
+      label: 'Position Vector (Clock Hour)',
+      default: 3,
+      min: 0,
+      max: 12,
+      step: 0.1
+    },
+    offset: {
+      type: 'range',
+      label: 'Offset from Center',
       default: 15,
-      min: 10,
+      min: 5,
       max: 18,
       step: 0.5
     },

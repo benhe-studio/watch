@@ -40,7 +40,7 @@ function Markers({ markers }) {
               {markerConfig.type === 'blocks' && (() => {
                 const topWidth = markerConfig.topWidth !== undefined ? markerConfig.topWidth : 0.1
                 const bottomWidth = markerConfig.bottomWidth !== undefined ? markerConfig.bottomWidth : 0.1
-                const height = markerConfig.height || 0.3
+                const length = markerConfig.length || 0.3
                 const depth = markerConfig.depth || 0.05
                 const cutout = markerConfig.blocksCutout !== undefined ? markerConfig.blocksCutout : 0
                 const material = getMaterial(markerConfig.material || 'polishedSilver')
@@ -55,21 +55,21 @@ function Markers({ markers }) {
                 const shape = new THREE.Shape()
                 const halfTopWidth = topWidth / 2
                 const halfBottomWidth = bottomWidth / 2
-                const halfHeight = height / 2
+                const halfLength = length / 2
                 
                 if (bottomWidth === 0) {
                   // Create triangle shape (point at bottom)
-                  shape.moveTo(0, -halfHeight)
-                  shape.lineTo(halfTopWidth, halfHeight)
-                  shape.lineTo(-halfTopWidth, halfHeight)
-                  shape.lineTo(0, -halfHeight)
+                  shape.moveTo(0, -halfLength)
+                  shape.lineTo(halfTopWidth, halfLength)
+                  shape.lineTo(-halfTopWidth, halfLength)
+                  shape.lineTo(0, -halfLength)
                 } else {
                   // Create trapezoid shape (viewed from the side)
-                  shape.moveTo(-halfBottomWidth, -halfHeight)
-                  shape.lineTo(halfBottomWidth, -halfHeight)
-                  shape.lineTo(halfTopWidth, halfHeight)
-                  shape.lineTo(-halfTopWidth, halfHeight)
-                  shape.lineTo(-halfBottomWidth, -halfHeight)
+                  shape.moveTo(-halfBottomWidth, -halfLength)
+                  shape.lineTo(halfBottomWidth, -halfLength)
+                  shape.lineTo(halfTopWidth, halfLength)
+                  shape.lineTo(-halfTopWidth, halfLength)
+                  shape.lineTo(-halfBottomWidth, -halfLength)
                 }
                 
                 // Add cutout hole if cutout > 0
@@ -77,21 +77,21 @@ function Markers({ markers }) {
                   const hole = new THREE.Path()
                   const innerHalfTopWidth = halfTopWidth * cutout
                   const innerHalfBottomWidth = halfBottomWidth * cutout
-                  const innerHalfHeight = halfHeight * cutout
+                  const innerHalfLength = halfLength * cutout
                   
                   if (bottomWidth === 0) {
                     // Create smaller triangle hole
-                    hole.moveTo(0, -innerHalfHeight)
-                    hole.lineTo(innerHalfTopWidth, innerHalfHeight)
-                    hole.lineTo(-innerHalfTopWidth, innerHalfHeight)
-                    hole.lineTo(0, -innerHalfHeight)
+                    hole.moveTo(0, -innerHalfLength)
+                    hole.lineTo(innerHalfTopWidth, innerHalfLength)
+                    hole.lineTo(-innerHalfTopWidth, innerHalfLength)
+                    hole.lineTo(0, -innerHalfLength)
                   } else {
                     // Create smaller trapezoid hole
-                    hole.moveTo(-innerHalfBottomWidth, -innerHalfHeight)
-                    hole.lineTo(innerHalfBottomWidth, -innerHalfHeight)
-                    hole.lineTo(innerHalfTopWidth, innerHalfHeight)
-                    hole.lineTo(-innerHalfTopWidth, innerHalfHeight)
-                    hole.lineTo(-innerHalfBottomWidth, -innerHalfHeight)
+                    hole.moveTo(-innerHalfBottomWidth, -innerHalfLength)
+                    hole.lineTo(innerHalfBottomWidth, -innerHalfLength)
+                    hole.lineTo(innerHalfTopWidth, innerHalfLength)
+                    hole.lineTo(-innerHalfTopWidth, innerHalfLength)
+                    hole.lineTo(-innerHalfBottomWidth, -innerHalfLength)
                   }
                   shape.holes.push(hole)
                 }
