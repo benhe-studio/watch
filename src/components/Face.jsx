@@ -46,7 +46,8 @@ function Face({ config, complicationWindows }) {
         windowHole.absarc(x, y, windowRadius, 0, Math.PI * 2, true)
         circleShape.holes.push(windowHole)
       } else if (type === 'moonphase') {
-        // Moon phase window - using arc + three bezier curves approach
+        // Moon phase window - using arc + five bezier curves approach
+        // Added transitional bezier curves to smooth the corners
         const R = radius || 2.2
         
         const moonHole = new THREE.Path()
@@ -59,35 +60,54 @@ function Face({ config, complicationWindows }) {
         moonHole.absarc(x, y, R, Math.PI, 0, true)
         
         // Now we're at (x + R, y)
-        // Three bezier curves to create the top shape
+        // Five bezier curves to create the top shape with smooth transitions
         
-        // First bezier curve: from R to R/4
-        // Control points can be adjusted to shape the curve
-        const cp1x = x + R
-        const cp1y = y + R * 0.5
-        const cp2x = x + R / 3
-        const cp2y = y + R * 0.6
-        const end1x = x + R / 5
+        // First transitional bezier curve: from (R, 0) to (R*0.7, 0) curving inward
+        // This curves in the opposite direction to smooth the transition from the arc
+        const trans1_cp1x = x + R
+        const trans1_cp1y = y - R * 0.04
+        const trans1_cp2x = x + R * 0.97
+        const trans1_cp2y = y - R * 0.04
+        const trans1_endx = x + R * 0.95
+        const trans1_endy = y
+        moonHole.bezierCurveTo(trans1_cp1x, trans1_cp1y, trans1_cp2x, trans1_cp2y, trans1_endx, trans1_endy)
+        
+        // Second bezier curve: from (R*0.7, 0) to (R/5, R/8)
+        const cp1x = x + R * 0.82
+        const cp1y = y + R * 0.4
+        const cp2x = x + R / 2.4
+        const cp2y = y + R * 0.5
+        const end1x = x + R / 6
         const end1y = y + R/8
         moonHole.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, end1x, end1y)
         
-        // Second bezier curve: from R/4 to -R/4
+        // Third bezier curve: from (R/5, R/8) to (-R/5, R/8) (center top)
         const cp3x = x + R / 8
         const cp3y = y + R * 0.3
         const cp4x = x - R / 8
         const cp4y = y + R * 0.3
-        const end2x = x - R / 5
+        const end2x = x - R / 6
         const end2y = y + R/8
         moonHole.bezierCurveTo(cp3x, cp3y, cp4x, cp4y, end2x, end2y)
         
-        // Third bezier curve: from -R/4 to -R
-        const cp5x = x - R / 3
-        const cp5y = y + R * 0.6
-        const cp6x = x - R
-        const cp6y = y + R * 0.5
-        const end3x = x - R
+        // Fourth bezier curve: from (-R/5, R/8) to (-R*0.7, 0)
+        const cp5x = x - R / 2.4
+        const cp5y = y + R * 0.5
+        const cp6x = x - R * 0.82
+        const cp6y = y + R * 0.4
+        const end3x = x - R * 0.95
         const end3y = y
         moonHole.bezierCurveTo(cp5x, cp5y, cp6x, cp6y, end3x, end3y)
+        
+        // Fifth transitional bezier curve: from (-R*0.7, 0) back to (-R, 0)
+        // This curves in the opposite direction to smooth the transition back to the arc
+        const trans2_cp1x = x - R * 0.97
+        const trans2_cp1y = y - R * 0.04
+        const trans2_cp2x = x - R
+        const trans2_cp2y = y - R * 0.04
+        const trans2_endx = x - R
+        const trans2_endy = y
+        moonHole.bezierCurveTo(trans2_cp1x, trans2_cp1y, trans2_cp2x, trans2_cp2y, trans2_endx, trans2_endy)
         
         circleShape.holes.push(moonHole)
       } else {

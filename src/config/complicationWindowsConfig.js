@@ -35,7 +35,7 @@ export const complicationWindowsConfig = {
     radius: {
       type: 'range',
       label: 'Window Radius',
-      default: 2.2,
+      default: 4,
       min: 1.5,
       max: 8,
       step: 0.1,
