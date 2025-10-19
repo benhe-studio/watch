@@ -1,6 +1,6 @@
 {
   "face": {
-    "material": "brushedSteel"
+    "material": "matteBlackPlastic"
   },
   "markers": [
     {
@@ -242,15 +242,15 @@
       "radius": 4,
       "width": 4,
       "height": 3,
-      "frameEnabled": false,
+      "frameEnabled": true,
       "frameWidth": 0.3,
       "frameThickness": 0.5,
-      "frameDepth": -0.05,
-      "frameMaterial": "polishedSilver",
+      "frameDepth": -0.85,
+      "frameMaterial": "matteBlackPlastic",
       "frameBevelEnabled": true,
-      "frameBevelThickness": 0.05,
-      "frameBevelSize": 0.05,
-      "frameBevelSegments": 3
+      "frameBevelThickness": 0.09,
+      "frameBevelSize": 0.23,
+      "frameBevelSegments": 1
     }
   ],
   "complications": [],

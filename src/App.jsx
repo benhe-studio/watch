@@ -129,9 +129,6 @@ function App() {
         <Canvas shadows camera={{ position: [0, -30, 60], fov: 50 }}>
           <color attach="background" args={[environmentLight ? '#e8e8e8' : '#000000']} />
           
-          {/* Minimal ambient light when environment is off to make emissive materials visible */}
-          <ambientLight intensity={environmentLight ? 0.4 : 0.01} />
-          
           {environmentLight && (
             <directionalLight
               position={[50, 50, 50]}
@@ -148,7 +145,7 @@ function App() {
           )}
           
           {/* Environment for realistic metallic reflections */}
-          {environmentLight && <Environment preset="studio" />}
+          {environmentLight && <Environment preset="studio" environmentIntensity={0.2}/>}
           
           {/* Axis helper to show X (red), Y (green), Z (blue) - only visible in debug mode */}
           {debugView && <primitive object={new THREE.AxesHelper(30)} />}
@@ -175,3 +172,4 @@ function App() {
 }
 
 export default App
+
