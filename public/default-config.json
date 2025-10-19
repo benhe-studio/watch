@@ -4,23 +4,249 @@
   },
   "markers": [
     {
-      "type": "blocks",
-      "rotate": true,
+      "type": "circle",
+      "rotate": false,
+      "fontSize": 2.5,
+      "color": "#000000",
       "material": "polishedSilver",
-      "spread": 17,
+      "spread": 16,
       "topWidth": 1,
       "bottomWidth": 1,
       "length": 3,
       "depth": 0.5,
+      "blocksCutout": 0,
+      "doubleBlock": false,
+      "separation": 1.5,
       "bevelEnabled": true,
       "bevelThickness": 0.1,
       "bevelSize": 0.1,
       "bevelSegments": 3,
-      "visibleHours": [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      "circleRadius": 1.6,
+      "circleDepth": 0.6,
+      "circleCutout": 0.95,
+      "visibleHours": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8,
+        10,
+        11
+      ]
+    },
+    {
+      "type": "circle",
+      "rotate": false,
+      "fontSize": 2.5,
+      "color": "#000000",
+      "material": "lume",
+      "spread": 16,
+      "topWidth": 1,
+      "bottomWidth": 1,
+      "length": 3,
+      "depth": 0.5,
+      "blocksCutout": 0,
+      "doubleBlock": false,
+      "separation": 1.5,
+      "bevelEnabled": true,
+      "bevelThickness": 0.1,
+      "bevelSize": 0.1,
+      "bevelSegments": 3,
+      "circleRadius": 1.5,
+      "circleDepth": 0.5,
+      "circleCutout": 0,
+      "visibleHours": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8,
+        10,
+        11
+      ]
+    },
+    {
+      "type": "blocks",
+      "rotate": true,
+      "fontSize": 2.5,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "spread": 18.9,
+      "topWidth": 0.5,
+      "bottomWidth": 0.5,
+      "length": 1.1,
+      "depth": 0.2,
+      "blocksCutout": 0,
+      "doubleBlock": false,
+      "separation": 1.5,
+      "bevelEnabled": true,
+      "bevelThickness": 0.1,
+      "bevelSize": 0.1,
+      "bevelSegments": 3,
+      "circleRadius": 1.5,
+      "circleDepth": 0.5,
+      "circleCutout": 0,
+      "visibleHours": [
+        12,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "hidden": false
+    },
+    {
+      "type": "blocks",
+      "rotate": true,
+      "fontSize": 2.5,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "spread": 15.7,
+      "topWidth": 1.3,
+      "bottomWidth": 1.3,
+      "length": 4.3,
+      "depth": 0.5,
+      "blocksCutout": 0.95,
+      "doubleBlock": false,
+      "separation": 1.5,
+      "bevelEnabled": true,
+      "bevelThickness": 0.1,
+      "bevelSize": 0.1,
+      "bevelSegments": 3,
+      "circleRadius": 1.5,
+      "circleDepth": 0.5,
+      "circleCutout": 0,
+      "visibleHours": [
+        6,
+        9
+      ]
+    },
+    {
+      "type": "blocks",
+      "rotate": true,
+      "fontSize": 2.5,
+      "color": "#000000",
+      "material": "lume",
+      "spread": 15.7,
+      "topWidth": 1,
+      "bottomWidth": 1,
+      "length": 3.9,
+      "depth": 0.5,
+      "blocksCutout": 0,
+      "doubleBlock": false,
+      "separation": 1.5,
+      "bevelEnabled": true,
+      "bevelThickness": 0.1,
+      "bevelSize": 0.1,
+      "bevelSegments": 3,
+      "circleRadius": 1.5,
+      "circleDepth": 0.5,
+      "circleCutout": 0,
+      "visibleHours": [
+        6,
+        9
+      ]
     }
   ],
-  "minuteMarkers": [],
-  "decorations": [],
+  "minuteMarkers": [
+    {
+      "type": "line",
+      "rotate": true,
+      "hideHourMarks": true,
+      "material": "polishedSilver",
+      "spread": 19,
+      "width": 0.1,
+      "height": 1,
+      "depth": 0.2,
+      "radius": 0.3,
+      "fontSize": 1.5,
+      "color": "#000000",
+      "visibleMinutes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ]
+    }
+  ],
+  "decorations": [
+    {
+      "type": "ring",
+      "vector": 0,
+      "offset": 0,
+      "material": "polishedSilver",
+      "spread": 19.5,
+      "thickness": 0.1,
+      "depth": 0.2,
+      "length": 5,
+      "rotation": 0
+    }
+  ],
   "complicationWindows": [],
   "complications": [],
   "primitives": [],
@@ -29,18 +255,70 @@
       "type": "hours",
       "profile": "parametricFlat",
       "material": "matteBlackPlastic",
-      "points": [[0.3, -2], [0.5, 0], [0.3, 8], [0, 10]],
+      "points": [
+        [
+          0.6166659268465909,
+          -0.030302567915483358
+        ],
+        [
+          0.9075750177556818,
+          1.1060610684481533
+        ],
+        [
+          0.9075750177556818,
+          7.810606522993609
+        ],
+        [
+          2.5416648171164775,
+          9.794871990497297
+        ],
+        [
+          0.9053011807528409,
+          11.766025836651142
+        ],
+        [
+          0.9053011807528409,
+          13.352564298189602
+        ]
+      ],
       "bevelEnabled": true,
-      "bevelThickness": 0.05,
-      "bevelSize": 0.05,
+      "bevelThickness": 0.01,
+      "bevelSize": 0.04,
       "bevelSegments": 3,
-      "cutout": 0
+      "cutout": 0,
+      "cutoutPoints": [
+        [
+          0.7689375443892045,
+          1.473557398869441
+        ],
+        [
+          0.6780284534801138,
+          7.771634321946365
+        ]
+      ]
     },
     {
       "type": "minutes",
       "profile": "parametricFlat",
       "material": "matteBlackPlastic",
-      "points": [[0.3, -2], [0.4, 0], [0.25, 12], [0, 14]],
+      "points": [
+        [
+          0.3,
+          -2
+        ],
+        [
+          0.4,
+          0
+        ],
+        [
+          0.25,
+          12
+        ],
+        [
+          0,
+          14
+        ]
+      ],
       "bevelEnabled": true,
       "bevelThickness": 0.05,
       "bevelSize": 0.05,
@@ -49,10 +327,82 @@
     },
     {
       "type": "seconds",
-      "profile": "taperedCylinder",
+      "profile": "parametricFlat",
       "width": 0.2,
       "length": 16,
-      "material": "polishedCopper"
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.3825739080255681,
+          -4.387820317195012
+        ],
+        [
+          0.1553011807528409,
+          -0.1089741633488579
+        ],
+        [
+          0.22348299893465906,
+          11.044871990497295
+        ],
+        [
+          1.5189375443892046,
+          12.439102759728065
+        ],
+        [
+          0.22348299893465906,
+          13.737179682804989
+        ],
+        [
+          0.24621027166193182,
+          18.496795067420372
+        ]
+      ],
+      "cutoutPoints": [
+        [
+          0,
+          11.185095860407902
+        ],
+        [
+          1.1553011807528408,
+          12.435095860407905
+        ],
+        [
+          0.018937544389204544,
+          13.492788168100212
+        ]
+      ]
+    },
+    {
+      "type": "seconds",
+      "profile": "parametricFlat",
+      "width": 0.5,
+      "length": 16,
+      "offset": 0,
+      "material": "lume",
+      "points": [
+        [
+          0,
+          11.277242807241588
+        ],
+        [
+          1.0416648171164773,
+          12.431088961087742
+        ],
+        [
+          0,
+          13.536858191856972
+        ]
+      ],
+      "bevelEnabled": true,
+      "bevelThickness": 0.05,
+      "bevelSize": 0.05,
+      "bevelSegments": 3,
+      "cutout": 0,
+      "cutoutPoints": [],
+      "radius": 1,
+      "spread": 0,
+      "circleShape": "flat",
+      "zOffset": 0
     }
   ]
 }

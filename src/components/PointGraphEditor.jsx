@@ -16,7 +16,7 @@ function PointGraphEditor({
   const canvasRef = useRef(null)
   const [draggingIndex, setDraggingIndex] = useState(null)
   const [hoveredIndex, setHoveredIndex] = useState(null)
-  const [canvasSize, setCanvasSize] = useState({ width: 300, height: 300 })
+  const [canvasSize, setCanvasSize] = useState({ width: 300, height: 600 })
   
   const padding = 40
   const pointRadius = 6

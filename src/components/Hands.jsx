@@ -20,7 +20,27 @@ const geometryGenerators = {
     return null
   },
   
-  parametricFlat: ({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout }) => {
+  parametricFlat: ({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints }) => {
+    // Helper function to ensure points start and end at x=0
+    const ensurePointsAtCenterLine = (pointsList) => {
+      if (!pointsList || pointsList.length === 0) return pointsList
+      
+      const processed = [...pointsList]
+      
+      // Check first point - if x is not 0, add a point at x=0 with same y
+      if (processed[0][0] !== 0) {
+        processed.unshift([0, processed[0][1]])
+      }
+      
+      // Check last point - if x is not 0, add a point at x=0 with same y
+      const lastIdx = processed.length - 1
+      if (processed[lastIdx][0] !== 0) {
+        processed.push([0, processed[lastIdx][1]])
+      }
+      
+      return processed
+    }
+    
     // Default points if none provided - creates a simple tapered hand
     // Y=0 represents the pivot point, negative Y extends towards the tail
     const defaultPoints = [
@@ -31,63 +51,71 @@ const geometryGenerators = {
     
     const shapePoints = points || defaultPoints
     
-    // Calculate the actual length from the points
-    const actualLength = shapePoints[shapePoints.length - 1][1]
+    // Process shape points to ensure they start and end at x=0
+    const processedShapePoints = ensurePointsAtCenterLine(shapePoints)
+    
+    // Check if we have cutout points to process (need at least 2 points for a valid cutout)
+    const hasCutout = cutoutPoints && cutoutPoints.length >= 2
+    
+    // Process cutout points only if we have a valid cutout
+    const processedCutoutPoints = hasCutout ? ensurePointsAtCenterLine(cutoutPoints) : null
     
     // Create the shape by mirroring points across the center line
     // Create shape pointing up in positive Y (will be rotated to Z)
     const shape = new THREE.Shape()
     
-    // Start at the first point
-    shape.moveTo(shapePoints[0][0], shapePoints[0][1])
-    
-    // Draw the right side (positive x, positive y)
-    for (let i = 1; i < shapePoints.length; i++) {
-      shape.lineTo(shapePoints[i][0], shapePoints[i][1])
-    }
-    
-    // Mirror back down the left side (negative x), including the last point
-    for (let i = shapePoints.length - 1; i >= 0; i--) {
-      shape.lineTo(-shapePoints[i][0], shapePoints[i][1])
-    }
-    
-    // Add cutout hole if cutout > 0
-    if (cutout > 0) {
-      const hole = new THREE.Path()
+    if (hasCutout) {
+      // Trace the shape: start at first shape point, go through all shape points,
+      // then back through cutout points in reverse
+      shape.moveTo(processedShapePoints[0][0], processedShapePoints[0][1])
       
-      // Create inset points by removing a percentage of the width
-      // cutout is a value between 0 and 1 representing the percentage of width to remove
-      // 0 = no cutout (full width), 0.9 = 90% removed (10% remaining width)
-      const innerPoints = []
-      
-      for (let i = 0; i < shapePoints.length; i++) {
-        const [x, y] = shapePoints[i]
-        
-        // Keep (1 - cutout) percentage of the original width
-        // So cutout=0.1 keeps 90%, cutout=0.9 keeps 10%
-        const insetX = x * cutout
-        const insetY = y
-        
-        innerPoints.push([insetX, insetY])
-      }
-      
-      // Draw the hole path - start at the first inner point
-      hole.moveTo(innerPoints[0][0], innerPoints[0][1])
-      
-      // Draw the right side of the hole (positive x)
-      for (let i = 1; i < innerPoints.length; i++) {
-        hole.lineTo(innerPoints[i][0], innerPoints[i][1])
+      // Draw through all shape points
+      for (let i = 1; i < processedShapePoints.length; i++) {
+        shape.lineTo(processedShapePoints[i][0], processedShapePoints[i][1])
       }
       
       // Mirror back down the left side (negative x)
-      for (let i = innerPoints.length - 1; i >= 0; i--) {
-        hole.lineTo(-innerPoints[i][0], innerPoints[i][1])
+      for (let i = processedShapePoints.length - 1; i >= 0; i--) {
+        shape.lineTo(-processedShapePoints[i][0], processedShapePoints[i][1])
+      }
+      
+      // Close the outer shape
+      shape.closePath()
+      
+      // Now create the cutout hole
+      const hole = new THREE.Path()
+      
+      // Start at first cutout point
+      hole.moveTo(processedCutoutPoints[0][0], processedCutoutPoints[0][1])
+      
+      // Draw through all cutout points
+      for (let i = 1; i < processedCutoutPoints.length; i++) {
+        hole.lineTo(processedCutoutPoints[i][0], processedCutoutPoints[i][1])
+      }
+      
+      // Mirror back down the left side (negative x)
+      for (let i = processedCutoutPoints.length - 1; i >= 0; i--) {
+        hole.lineTo(-processedCutoutPoints[i][0], processedCutoutPoints[i][1])
       }
       
       // Close the hole path
       hole.closePath()
       
       shape.holes.push(hole)
+    } else {
+      // No cutout - use simple mirrored shape
+      // Start at the first point
+      shape.moveTo(processedShapePoints[0][0], processedShapePoints[0][1])
+      
+      // Draw the right side (positive x, positive y)
+      for (let i = 1; i < processedShapePoints.length; i++) {
+        shape.lineTo(processedShapePoints[i][0], processedShapePoints[i][1])
+      }
+      
+      // Mirror back down the left side (negative x), including the last point
+      for (let i = processedShapePoints.length - 1; i >= 0; i--) {
+        shape.lineTo(-processedShapePoints[i][0], processedShapePoints[i][1])
+      }
     }
     
     // Extrude settings for depth
@@ -412,8 +440,12 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
         </group>
       )
     } else {
-      // Render a flat cylinder with bevel
-      const depth = (radius || 1) * 0.3
+      // Render a flat cylinder
+      const outerRadius = radius || 1
+      const depth = outerRadius * 0.3
+      const cutoutValue = cutout || 0
+      const innerRadius = outerRadius * cutoutValue
+      
       return (
         <group ref={handRef} rotation={[0, 0, 0]}>
           <mesh
@@ -423,8 +455,21 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
             castShadow
             receiveShadow
           >
-            <cylinderGeometry args={[radius || 1, radius || 1, depth, 32]} />
+            <cylinderGeometry args={[outerRadius, outerRadius, depth, 32]} />
           </mesh>
+          
+          {/* Inner cutout cylinder if cutout > 0 */}
+          {cutoutValue > 0 && (
+            <mesh
+              position={[0, spread || 0, finalZOffset]}
+              rotation={[Math.PI / 2, 0, 0]}
+              material={materialInstance}
+              castShadow
+              receiveShadow
+            >
+              <cylinderGeometry args={[innerRadius, innerRadius, depth * 1.1, 32]} />
+            </mesh>
+          )}
         </group>
       )
     }
