@@ -12,7 +12,7 @@ const geometryGenerators = {
     return null
   },
   
-  parametricFlat: ({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints }) => {
+  parametricFlat: ({ points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints }) => {
     // Helper function to ensure points start and end at x=0
     const ensurePointsAtCenterLine = (pointsList) => {
       if (!pointsList || pointsList.length === 0) return pointsList
@@ -110,8 +110,8 @@ const geometryGenerators = {
       }
     }
     
-    // Extrude settings for depth
-    const depth = width || 0.5
+    // Extrude settings for depth - fixed at 0.3 for parametric flat hands
+    const depth = 0.3
     const shouldBevel = bevelEnabled !== undefined ? bevelEnabled : true
     const extrudeSettings = {
       depth: depth,
@@ -129,7 +129,7 @@ const geometryGenerators = {
     return geometry
   },
   
-  parametricFaceted: ({ length, width, points, cutout, cutoutPoints }) => {
+  parametricFaceted: ({ points, cutout, cutoutPoints }) => {
     // Helper function to ensure points start and end at x=0
     const ensurePointsAtCenterLine = (pointsList) => {
       if (!pointsList || pointsList.length === 0) return pointsList
@@ -163,8 +163,8 @@ const geometryGenerators = {
     // Process shape points to ensure they start and end at x=0
     const processedShapePoints = ensurePointsAtCenterLine(shapePoints)
     
-    // Extrusion depth - reduced by factor of 4 for minimal thickness
-    const extrudeDepth = (width || 0.3) / 4
+    // Extrusion depth - fixed at 0.1 for parametric faceted hands
+    const extrudeDepth = 0.1
     
     // Rotation angle for tilting the outer edges down (in radians)
     const tiltAngle = Math.PI / 12 // 15 degrees
@@ -345,8 +345,8 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
   
   const geometry = useMemo(() => {
     const generator = geometryGenerators[profile] || geometryGenerators.classic
-    return generator({ length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, radius, spread, circleShape })
-  }, [profile, length, width, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, radius, spread, circleShape])
+    return generator({ points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, radius, spread, circleShape })
+  }, [profile, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, radius, spread, circleShape])
   
   // Calculate final Z position with optional offset
   const finalZOffset = typeConfig.zOffset + (zOffset || 0)

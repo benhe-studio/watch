@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react'
 import './TabContent.css'
-import PointGraphEditor from '../PointGraphEditor'
+import PointGraphEditor from './PointGraphEditor'
 
 function TabContent({ 
   sectionKey, 

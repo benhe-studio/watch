@@ -410,7 +410,7 @@ function PointGraphEditor({
               <input
                 type="number"
                 value={selectedPoint[0].toFixed(2)}
-                step={0.1}
+                step={0.01}
                 min={xMin}
                 max={xMax}
                 onChange={(e) => updateSelectedPoint(parseFloat(e.target.value), selectedPoint[1])}
@@ -421,7 +421,7 @@ function PointGraphEditor({
               <input
                 type="number"
                 value={selectedPoint[1].toFixed(2)}
-                step={0.1}
+                step={0.01}
                 min={yMin}
                 max={yMax}
                 onChange={(e) => updateSelectedPoint(selectedPoint[0], parseFloat(e.target.value))}
