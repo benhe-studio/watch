@@ -73,7 +73,7 @@ function createHandGeometry(points) {
 }
 
 function Primitive({ primitiveConfig }) {
-  const { vector, offset, zOffset, rotation, type, fontSize, number, color, material, points, labels, labelRadius } = primitiveConfig
+  const { vector, offset, zOffset, rotation, type, fontSize, text, color, material, points, labels, spread, markerCount, markerSkip, markerLength, markerWidth } = primitiveConfig
   
   // Convert vector (0-12) to angle
   const hourValue = vector !== undefined ? vector : 6
@@ -116,21 +116,21 @@ function Primitive({ primitiveConfig }) {
 
   return (
     <group position={primitivePosition} rotation={[0, 0, rotationZ]}>
-      {/* Number primitive */}
-      {type === 'number' && (
+      {/* Label primitive */}
+      {type === 'label' && (
         <Text
           fontSize={fontSize || 2}
           color={color || '#000000'}
           anchorX="center"
           anchorY="middle"
         >
-          {number !== undefined ? number : 0}
+          {text !== undefined ? text : '12'}
         </Text>
       )}
 
       {/* Circular Label primitive */}
       {type === 'circularLabel' && labelArray.map((label, index) => {
-        const radius = labelRadius !== undefined ? labelRadius : 15
+        const radius = spread !== undefined ? spread : 5
         const labelCount = labelArray.length
         // Start at 12 o'clock (0 radians) and distribute evenly
         const labelAngle = (index / labelCount) * Math.PI * 2
@@ -150,6 +150,43 @@ function Primitive({ primitiveConfig }) {
           </Text>
         )
       })}
+
+      {/* Circular Markers primitive */}
+      {type === 'circularMarkers' && (() => {
+        const radius = spread !== undefined ? spread : 5
+        const count = markerCount !== undefined ? markerCount : 12
+        const skip = markerSkip !== undefined ? markerSkip : 0
+        const length = markerLength !== undefined ? markerLength : 1
+        const width = markerWidth !== undefined ? markerWidth : 0.1
+        const markerColor = color || '#000000'
+        
+        const markers = []
+        for (let i = 0; i < count; i++) {
+          // Skip pattern: if skip is 1, skip every other (i % 2 === 1)
+          // if skip is 2, skip every second (i % 3 === 1 or i % 3 === 2)
+          // if skip is N, skip when i % (N+1) !== 0
+          if (skip > 0 && i % (skip + 1) !== 0) {
+            continue
+          }
+          
+          const markerAngle = (i / count) * Math.PI * 2
+          const markerX = Math.sin(markerAngle) * radius
+          const markerY = Math.cos(markerAngle) * radius
+          
+          markers.push(
+            <mesh
+              key={i}
+              position={[markerX, markerY, 0]}
+              rotation={[0, 0, -markerAngle]}
+            >
+              <boxGeometry args={[width, length, 0.1]} />
+              <meshStandardMaterial color={markerColor} />
+            </mesh>
+          )
+        }
+        
+        return markers
+      })()}
 
       {/* Hand primitive */}
       {type === 'hand' && handGeometry && (

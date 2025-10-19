@@ -9,11 +9,12 @@ export const primitivesConfig = {
     type: {
       type: 'buttons',
       label: 'Type',
-      default: 'number',
+      default: 'label',
       options: [
-        { value: 'number', label: 'Number' },
+        { value: 'label', label: 'Label' },
         { value: 'hand', label: 'Hand' },
-        { value: 'circularLabel', label: 'Circular Label' }
+        { value: 'circularLabel', label: 'Circular Label' },
+        { value: 'circularMarkers', label: 'Circular Markers' }
       ]
     },
     vector: {
@@ -48,14 +49,12 @@ export const primitivesConfig = {
       max: 180,
       step: 1
     },
-    number: {
-      type: 'range',
-      label: 'Number',
-      default: 0,
-      min: 0,
-      max: 360,
-      step: 1,
-      condition: (item) => item.type === 'number'
+    text: {
+      type: 'text',
+      label: 'Text',
+      default: '12',
+      description: 'Text to display',
+      condition: (item) => item.type === 'label'
     },
     fontSize: {
       type: 'range',
@@ -64,13 +63,13 @@ export const primitivesConfig = {
       min: 0.5,
       max: 10,
       step: 0.1,
-      condition: (item) => item.type === 'number' || item.type === 'circularLabel'
+      condition: (item) => item.type === 'label' || item.type === 'circularLabel'
     },
     color: {
       type: 'color',
       label: 'Color',
       default: '#000000',
-      condition: (item) => item.type === 'number' || item.type === 'circularLabel'
+      condition: (item) => item.type === 'label' || item.type === 'circularLabel' || item.type === 'circularMarkers'
     },
     material: {
       type: 'select',
@@ -94,20 +93,60 @@ export const primitivesConfig = {
     },
     labels: {
       type: 'text',
-      label: 'Labels (comma separated)',
+      label: 'Labels',
       default: '12,1,2,3,4,5,6,7,8,9,10,11',
-      description: 'Comma-separated list of labels to display around the circle',
+      description: 'Comma-separated list of text labels',
       condition: (item) => item.type === 'circularLabel'
     },
-    labelRadius: {
+    spread: {
       type: 'range',
-      label: 'Label Radius',
+      label: 'Spread',
       default: 5,
       min: 2,
       max: 20,
       step: 0.1,
-      description: 'Distance of labels from center',
-      condition: (item) => item.type === 'circularLabel'
+      description: 'Distance from center',
+      condition: (item) => item.type === 'circularLabel' || item.type === 'circularMarkers'
+    },
+    markerCount: {
+      type: 'range',
+      label: 'Number of Markers',
+      default: 12,
+      min: 1,
+      max: 60,
+      step: 1,
+      description: 'Total number of markers to render',
+      condition: (item) => item.type === 'circularMarkers'
+    },
+    markerSkip: {
+      type: 'range',
+      label: 'Skip Pattern',
+      default: 0,
+      min: 0,
+      max: 10,
+      step: 1,
+      description: 'Skip every Nth marker (0 = no skip, 1 = every other, 2 = every second)',
+      condition: (item) => item.type === 'circularMarkers'
+    },
+    markerLength: {
+      type: 'range',
+      label: 'Marker Length',
+      default: 1,
+      min: 0.1,
+      max: 5,
+      step: 0.1,
+      description: 'Length of each marker line',
+      condition: (item) => item.type === 'circularMarkers'
+    },
+    markerWidth: {
+      type: 'range',
+      label: 'Marker Width',
+      default: 0.1,
+      min: 0.01,
+      max: 0.5,
+      step: 0.01,
+      description: 'Width/thickness of each marker line',
+      condition: (item) => item.type === 'circularMarkers'
     }
   }
 }
