@@ -12,9 +12,9 @@ import { primitivesConfig } from './primitivesConfig'
 export const watchConfig = {
   face: faceConfig,
   markers: markersConfig,
+  hands: handsConfig,
   minuteMarkers: minuteMarkersConfig,
   decorations: decorationsConfig,
-  hands: handsConfig,
   complicationWindows: complicationWindowsConfig,
   primitives: primitivesConfig
 }
