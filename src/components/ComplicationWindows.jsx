@@ -18,11 +18,11 @@ function ComplicationWindows({ windows }) {
         
         // Calculate position based on vector (0-12 like clock hours) and offset
         const {
-          vector, 
-          offset, 
-          type, 
-          radius, 
-          width, 
+          vector,
+          offset,
+          type,
+          radius,
+          width,
           height,
           frameEnabled,
           frameWidth,
@@ -34,6 +34,9 @@ function ComplicationWindows({ windows }) {
           frameBevelSize,
           frameBevelSegments
         } = windowConfig
+        
+        // Skip frame rendering for moonphase type
+        const shouldRenderFrame = frameEnabled && type !== 'moonphase'
         
         // Convert vector (0-12) to angle
         // vector=0 or 12 -> 0 rad (top), vector=3 -> π/2 rad (right), etc.
@@ -48,9 +51,9 @@ function ComplicationWindows({ windows }) {
         // Position window background underneath the face (visible through cutout)
         const windowPosition = [x, y, -FACE_THICKNESS / 2]
 
-        // Create frame geometry if enabled
+        // Create frame geometry if enabled (not for moonphase)
         const frameGeometry = useMemo(() => {
-          if (!frameEnabled) return null
+          if (!shouldRenderFrame) return null
 
           const frameWidthValue = frameWidth || 0.3
           const frameThicknessValue = frameThickness || 0.5
@@ -110,11 +113,11 @@ function ComplicationWindows({ windows }) {
 
             return new THREE.ExtrudeGeometry(outerShape, extrudeSettings)
           }
-        }, [type, radius, width, height, frameEnabled, frameWidth, frameThickness, frameBevelEnabled, frameBevelThickness, frameBevelSize, frameBevelSegments])
+        }, [type, radius, width, height, shouldRenderFrame, frameWidth, frameThickness, frameBevelEnabled, frameBevelThickness, frameBevelSize, frameBevelSegments])
 
-        const frameMaterialInstance = useMemo(() => 
-          frameEnabled ? getMaterialInstance(frameMaterial || 'polishedSilver') : null,
-          [frameEnabled, frameMaterial]
+        const frameMaterialInstance = useMemo(() =>
+          shouldRenderFrame ? getMaterialInstance(frameMaterial || 'polishedSilver') : null,
+          [shouldRenderFrame, frameMaterial]
         )
 
         // Position frame on top of face (frameDepth is Z offset, frameThickness is extrusion depth)
@@ -126,7 +129,7 @@ function ComplicationWindows({ windows }) {
           <group key={index}>
             {/* Window background - visible through face cutout */}
             <mesh position={windowPosition}>
-              {type === 'circle' ? (
+              {type === 'circle' || type === 'moonphase' ? (
                 <circleGeometry args={[radius || 2.2, 32]} />
               ) : (
                 <planeGeometry args={[width || 4, height || 3]} />
@@ -137,8 +140,8 @@ function ComplicationWindows({ windows }) {
               />
             </mesh>
 
-            {/* Optional frame around window */}
-            {frameEnabled && frameGeometry && (
+            {/* Optional frame around window (not for moonphase) */}
+            {shouldRenderFrame && frameGeometry && (
               <mesh position={framePosition} material={frameMaterialInstance} castShadow>
                 <primitive object={frameGeometry} attach="geometry" />
               </mesh>

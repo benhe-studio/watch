@@ -12,13 +12,14 @@ export const complicationWindowsConfig = {
       default: 'circle',
       options: [
         { value: 'circle', label: 'Circle' },
-        { value: 'rectangle', label: 'Rectangle' }
+        { value: 'rectangle', label: 'Rectangle' },
+        { value: 'moonphase', label: 'Moon Phase' }
       ]
     },
     vector: {
       type: 'range',
       label: 'Position Vector (Clock Hour)',
-      default: 3,
+      default: 6,
       min: 0,
       max: 12,
       step: 0.1
@@ -26,10 +27,10 @@ export const complicationWindowsConfig = {
     offset: {
       type: 'range',
       label: 'Offset from Center',
-      default: 15,
+      default: 10,
       min: 5,
       max: 18,
-      step: 0.5
+      step: 0.1
     },
     radius: {
       type: 'range',
@@ -38,7 +39,7 @@ export const complicationWindowsConfig = {
       min: 1.5,
       max: 8,
       step: 0.1,
-      condition: (item) => item.type === 'circle'
+      condition: (item) => item.type === 'circle' || item.type === 'moonphase'
     },
     width: {
       type: 'range',
@@ -61,7 +62,8 @@ export const complicationWindowsConfig = {
     frameEnabled: {
       type: 'checkbox',
       label: 'Enable Frame',
-      default: false
+      default: false,
+      condition: (item) => item.type !== 'moonphase'
     },
     frameWidth: {
       type: 'range',
