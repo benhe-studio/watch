@@ -117,17 +117,32 @@ function ComplicationWindow({ windowConfig, index }) {
   return (
     <group key={index}>
       {/* Window background - visible through face cutout */}
-      <mesh position={windowPosition}>
+      <mesh position={windowPosition} receiveShadow>
         {type === 'circle' || type === 'moonphase' ? (
           <circleGeometry args={[radius || 2.2, 32]} />
         ) : (
           <planeGeometry args={[width || 4, height || 3]} />
         )}
         <meshStandardMaterial
-          color="#ffffff"
+          color={type === 'moonphase' ? "#1a2a4a" : "#ffffff"}
           side={THREE.DoubleSide}
         />
       </mesh>
+
+      {/* Moonphase gold circle at 2 o'clock position */}
+      {type === 'moonphase' && (
+        <mesh position={[
+          windowPosition[0] + (radius || 2.2) * 0.62 * Math.sin(Math.PI / 6),
+          windowPosition[1] + (radius || 2.2) * 0.62 * Math.cos(Math.PI / 6),
+          windowPosition[2] + 0.01
+        ]} receiveShadow>
+          <circleGeometry args={[(radius || 2.2) * 0.32, 32]} />
+          <meshStandardMaterial
+            color="#d4af37"
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+      )}
 
       {/* Optional frame around window (not for moonphase) */}
       {shouldRenderFrame && frameGeometry && (
