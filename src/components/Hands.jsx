@@ -6,14 +6,6 @@ import { getMaterialInstance } from '../config/materials'
 
 // Geometry generator functions - return THREE.BufferGeometry
 const geometryGenerators = {
-  taperedCylinder: ({ length, width }) => {
-    const radiusTop = width * 0.3
-    const radiusBottom = width
-    const geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, length, 16, 1)
-    // Cylinder is already along Y-axis by default, no rotation needed
-    return geometry
-  },
-  
   circle: ({ radius, circleShape }) => {
     // For circle profile, we return null and handle geometry in the component
     // This is because we need to render different geometries (cylinder vs sphere)
@@ -370,39 +362,9 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
   })
   
   // Determine if this profile needs special rendering
-  const isTaperedCylinder = profile === 'taperedCylinder'
   const isParametricFlat = profile === 'parametricFlat'
   const isParametricFaceted = profile === 'parametricFaceted'
   const isCircle = profile === 'circle'
-  
-  if (isTaperedCylinder) {
-    const radiusTop = width * 0.3
-    const radiusBottom = width
-    
-    return (
-      <group ref={handRef} rotation={[0, 0, 0]}>
-        <group position={[0, length / 2 - pivotOffset, typeConfig.zOffset]} rotation={[0, 0, 0]}>
-          {/* Tapered cylinder body */}
-          <mesh geometry={geometry} material={materialInstance} castShadow receiveShadow />
-          
-          {/* Sphere cap at the large end (base) */}
-          <mesh position={[0, length / 2, 0]} material={materialInstance} castShadow receiveShadow>
-            <sphereGeometry args={[radiusBottom, 16, 16]} />
-          </mesh>
-          
-          {/* Sphere cap at the narrow end (tip) */}
-          <mesh position={[0, -length / 2, 0]} material={materialInstance} castShadow receiveShadow>
-            <sphereGeometry args={[radiusTop, 16, 16]} />
-          </mesh>
-        </group>
-        
-        {/* Pivot point cylinder */}
-        <mesh position={[0, 0, typeConfig.zOffset]} rotation={[Math.PI / 2, 0, 0]} material={materialInstance} castShadow receiveShadow>
-          <cylinderGeometry args={[width * 1.5, width * 1.5, 0.5, 32]} />
-        </mesh>
-      </group>
-    )
-  }
   
   if (isParametricFlat || isParametricFaceted) {
     // For parametric hands, Y=0 in the points represents the pivot point

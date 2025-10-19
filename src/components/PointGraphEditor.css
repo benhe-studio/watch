@@ -61,11 +61,80 @@
   cursor: not-allowed;
 }
 
+.graph-button-cutout {
+  background: #3a1a1a;
+  border-color: #664444;
+}
+
+.graph-button-cutout:hover:not(:disabled) {
+  background: #4a2a2a;
+  border-color: #775555;
+}
+
+.graph-button-delete {
+  background: #4a1a1a;
+  border-color: #664444;
+}
+
+.graph-button-delete:hover:not(:disabled) {
+  background: #5a2a2a;
+  border-color: #775555;
+}
+
 .point-count {
   margin-left: auto;
   font-size: 13px;
   color: #888;
   font-weight: 500;
+}
+
+.point-editor {
+  padding: 12px;
+  background: #151515;
+  border-radius: 4px;
+  border: 1px solid #2a2a2a;
+}
+
+.point-editor h4 {
+  margin: 0 0 10px 0;
+  color: #ccc;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.point-editor-controls {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.point-editor-input {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.point-editor-input label {
+  font-size: 12px;
+  color: #999;
+  font-weight: 500;
+}
+
+.point-editor-input input {
+  width: 80px;
+  padding: 6px 8px;
+  background: #0a0a0a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 13px;
+  font-family: monospace;
+}
+
+.point-editor-input input:focus {
+  outline: none;
+  border-color: #4a9eff;
 }
 
 .graph-instructions {

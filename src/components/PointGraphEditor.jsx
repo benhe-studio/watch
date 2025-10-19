@@ -1,12 +1,14 @@
 import { useRef, useEffect, useState } from 'react'
 import './PointGraphEditor.css'
 
-function PointGraphEditor({ 
-  points = [], 
-  onChange, 
-  xMin = 0, 
-  xMax = 10, 
-  yMin = 0, 
+function PointGraphEditor({
+  points = [],
+  onChange,
+  cutoutPoints = [],
+  onCutoutChange,
+  xMin = 0,
+  xMax = 10,
+  yMin = 0,
   yMax = 10,
   xLabel = 'X',
   yLabel = 'Y',
@@ -15,7 +17,11 @@ function PointGraphEditor({
 }) {
   const canvasRef = useRef(null)
   const [draggingIndex, setDraggingIndex] = useState(null)
+  const [draggingType, setDraggingType] = useState(null) // 'points' or 'cutout'
   const [hoveredIndex, setHoveredIndex] = useState(null)
+  const [hoveredType, setHoveredType] = useState(null) // 'points' or 'cutout'
+  const [selectedIndex, setSelectedIndex] = useState(null)
+  const [selectedType, setSelectedType] = useState(null) // 'points' or 'cutout'
   const [canvasSize, setCanvasSize] = useState({ width: 300, height: 600 })
   
   const padding = 40
@@ -42,14 +48,29 @@ function PointGraphEditor({
 
   // Find point at canvas coordinates
   const findPointAtPosition = (canvasX, canvasY) => {
+    // Check cutout points first (they should be on top)
+    if (cutoutPoints && cutoutPoints.length > 0) {
+      for (let i = 0; i < cutoutPoints.length; i++) {
+        const canvasPoint = pointToCanvas(cutoutPoints[i])
+        const distance = Math.sqrt(
+          Math.pow(canvasPoint.x - canvasX, 2) +
+          Math.pow(canvasPoint.y - canvasY, 2)
+        )
+        if (distance <= hoverRadius) {
+          return { index: i, type: 'cutout' }
+        }
+      }
+    }
+    
+    // Then check regular points
     for (let i = 0; i < points.length; i++) {
       const canvasPoint = pointToCanvas(points[i])
       const distance = Math.sqrt(
-        Math.pow(canvasPoint.x - canvasX, 2) + 
+        Math.pow(canvasPoint.x - canvasX, 2) +
         Math.pow(canvasPoint.y - canvasY, 2)
       )
       if (distance <= hoverRadius) {
-        return i
+        return { index: i, type: 'points' }
       }
     }
     return null
@@ -140,7 +161,7 @@ function PointGraphEditor({
     ctx.fillText(yLabel, 0, 0)
     ctx.restore()
 
-    // Draw shape outline
+    // Draw shape outline for regular points
     if (points.length > 0) {
       ctx.strokeStyle = '#4a9eff'
       ctx.lineWidth = 2
@@ -157,12 +178,31 @@ function PointGraphEditor({
       ctx.stroke()
     }
 
-    // Draw points
+    // Draw shape outline for cutout points
+    if (cutoutPoints && cutoutPoints.length > 0) {
+      ctx.strokeStyle = '#ff4a4a'
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      
+      const firstPoint = pointToCanvas(cutoutPoints[0])
+      ctx.moveTo(firstPoint.x, firstPoint.y)
+      
+      for (let i = 1; i < cutoutPoints.length; i++) {
+        const canvasPoint = pointToCanvas(cutoutPoints[i])
+        ctx.lineTo(canvasPoint.x, canvasPoint.y)
+      }
+      
+      ctx.stroke()
+    }
+
+    // Draw regular points (blue)
     points.forEach((point, index) => {
       const canvasPoint = pointToCanvas(point)
+      const isHovered = hoveredType === 'points' && index === hoveredIndex
+      const isDragging = draggingType === 'points' && index === draggingIndex
       
       // Draw point
-      ctx.fillStyle = index === hoveredIndex ? '#ffaa00' : index === draggingIndex ? '#ff6600' : '#4a9eff'
+      ctx.fillStyle = isHovered ? '#ffaa00' : isDragging ? '#ff6600' : '#4a9eff'
       ctx.beginPath()
       ctx.arc(canvasPoint.x, canvasPoint.y, pointRadius, 0, Math.PI * 2)
       ctx.fill()
@@ -183,7 +223,38 @@ function PointGraphEditor({
       ctx.fillStyle = '#aaa'
       ctx.fillText(`(${point[0].toFixed(1)}, ${point[1].toFixed(1)})`, canvasPoint.x, canvasPoint.y + 20)
     })
-  }, [points, canvasSize, hoveredIndex, draggingIndex, xMin, xMax, yMin, yMax, xLabel, yLabel])
+
+    // Draw cutout points (red)
+    if (cutoutPoints && cutoutPoints.length > 0) {
+      cutoutPoints.forEach((point, index) => {
+        const canvasPoint = pointToCanvas(point)
+        const isHovered = hoveredType === 'cutout' && index === hoveredIndex
+        const isDragging = draggingType === 'cutout' && index === draggingIndex
+        
+        // Draw point
+        ctx.fillStyle = isHovered ? '#ffaa00' : isDragging ? '#ff6600' : '#ff4a4a'
+        ctx.beginPath()
+        ctx.arc(canvasPoint.x, canvasPoint.y, pointRadius, 0, Math.PI * 2)
+        ctx.fill()
+        
+        // Draw point border
+        ctx.strokeStyle = '#fff'
+        ctx.lineWidth = 2
+        ctx.stroke()
+        
+        // Draw point label with 'C' prefix for cutout
+        ctx.fillStyle = '#fff'
+        ctx.font = 'bold 11px sans-serif'
+        ctx.textAlign = 'center'
+        ctx.fillText(`C${index + 1}`, canvasPoint.x, canvasPoint.y - 12)
+        
+        // Draw coordinates
+        ctx.font = '10px sans-serif'
+        ctx.fillStyle = '#aaa'
+        ctx.fillText(`(${point[0].toFixed(1)}, ${point[1].toFixed(1)})`, canvasPoint.x, canvasPoint.y + 20)
+      })
+    }
+  }, [points, cutoutPoints, canvasSize, hoveredIndex, hoveredType, draggingIndex, draggingType, xMin, xMax, yMin, yMax, xLabel, yLabel])
 
   // Mouse event handlers
   const handleMouseDown = (e) => {
@@ -192,9 +263,15 @@ function PointGraphEditor({
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
 
-    const pointIndex = findPointAtPosition(x, y)
-    if (pointIndex !== null) {
-      setDraggingIndex(pointIndex)
+    const result = findPointAtPosition(x, y)
+    if (result !== null) {
+      setDraggingIndex(result.index)
+      setDraggingType(result.type)
+      setSelectedIndex(result.index)
+      setSelectedType(result.type)
+    } else {
+      setSelectedIndex(null)
+      setSelectedType(null)
     }
   }
 
@@ -204,50 +281,42 @@ function PointGraphEditor({
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
 
-    if (draggingIndex !== null) {
+    if (draggingIndex !== null && draggingType !== null) {
       // Update point position
       const newPoint = canvasToPoint(x, y)
-      const newPoints = [...points]
-      newPoints[draggingIndex] = newPoint
-      onChange(newPoints)
+      
+      if (draggingType === 'points') {
+        const newPoints = [...points]
+        newPoints[draggingIndex] = newPoint
+        onChange(newPoints)
+      } else if (draggingType === 'cutout' && onCutoutChange) {
+        const newCutoutPoints = [...cutoutPoints]
+        newCutoutPoints[draggingIndex] = newPoint
+        onCutoutChange(newCutoutPoints)
+      }
     } else {
       // Update hover state
-      const pointIndex = findPointAtPosition(x, y)
-      setHoveredIndex(pointIndex)
+      const result = findPointAtPosition(x, y)
+      if (result !== null) {
+        setHoveredIndex(result.index)
+        setHoveredType(result.type)
+      } else {
+        setHoveredIndex(null)
+        setHoveredType(null)
+      }
     }
   }
 
   const handleMouseUp = () => {
     setDraggingIndex(null)
+    setDraggingType(null)
   }
 
   const handleMouseLeave = () => {
     setDraggingIndex(null)
+    setDraggingType(null)
     setHoveredIndex(null)
-  }
-
-  const handleDoubleClick = (e) => {
-    if (draggingIndex !== null) return
-
-    const canvas = canvasRef.current
-    const rect = canvas.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-
-    const pointIndex = findPointAtPosition(x, y)
-    
-    if (pointIndex !== null) {
-      // Remove point if double-clicked and we have more than minimum
-      if (points.length > minPoints) {
-        const newPoints = points.filter((_, i) => i !== pointIndex)
-        onChange(newPoints)
-      }
-    } else {
-      // Add point if double-clicked on empty space
-      const newPoint = canvasToPoint(x, y)
-      const newPoints = [...points, newPoint]
-      onChange(newPoints)
-    }
+    setHoveredType(null)
   }
 
   const addPoint = () => {
@@ -257,17 +326,50 @@ function PointGraphEditor({
     onChange([...points, [centerX, centerY]])
   }
 
-  const removeLastPoint = () => {
-    if (points.length > minPoints) {
-      onChange(points.slice(0, -1))
+  const addCutoutPoint = () => {
+    if (onCutoutChange) {
+      const centerX = (xMin + xMax) / 2
+      const centerY = (yMin + yMax) / 2
+      onCutoutChange([...cutoutPoints, [centerX, centerY]])
     }
   }
 
-  const clearPoints = () => {
-    if (minPoints === 0) {
-      onChange([])
+  const removeSelectedPoint = () => {
+    if (selectedIndex === null || selectedType === null) return
+    
+    if (selectedType === 'points' && points.length > minPoints) {
+      const newPoints = points.filter((_, i) => i !== selectedIndex)
+      onChange(newPoints)
+      setSelectedIndex(null)
+      setSelectedType(null)
+    } else if (selectedType === 'cutout' && onCutoutChange) {
+      const newCutoutPoints = cutoutPoints.filter((_, i) => i !== selectedIndex)
+      onCutoutChange(newCutoutPoints)
+      setSelectedIndex(null)
+      setSelectedType(null)
     }
   }
+
+  const updateSelectedPoint = (newX, newY) => {
+    if (selectedIndex === null || selectedType === null) return
+    
+    const clampedX = Math.max(xMin, Math.min(xMax, newX))
+    const clampedY = Math.max(yMin, Math.min(yMax, newY))
+    
+    if (selectedType === 'points') {
+      const newPoints = [...points]
+      newPoints[selectedIndex] = [clampedX, clampedY]
+      onChange(newPoints)
+    } else if (selectedType === 'cutout' && onCutoutChange) {
+      const newCutoutPoints = [...cutoutPoints]
+      newCutoutPoints[selectedIndex] = [clampedX, clampedY]
+      onCutoutChange(newCutoutPoints)
+    }
+  }
+
+  const selectedPoint = selectedIndex !== null && selectedType !== null
+    ? (selectedType === 'points' ? points[selectedIndex] : cutoutPoints[selectedIndex])
+    : null
 
   return (
     <div className="point-graph-editor">
@@ -280,38 +382,68 @@ function PointGraphEditor({
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
-        onDoubleClick={handleDoubleClick}
       />
       
       <div className="graph-controls">
         <button onClick={addPoint} className="graph-button">
           + Add Point
         </button>
-        <button 
-          onClick={removeLastPoint} 
-          className="graph-button"
-          disabled={points.length <= minPoints}
-        >
-          Remove Last
-        </button>
-        {minPoints === 0 && (
-          <button 
-            onClick={clearPoints} 
-            className="graph-button"
-            disabled={points.length === 0}
-          >
-            Clear All
+        {onCutoutChange && (
+          <button onClick={addCutoutPoint} className="graph-button graph-button-cutout">
+            + Add Cutout Point
           </button>
         )}
-        <span className="point-count">{points.length} point{points.length !== 1 ? 's' : ''}</span>
+        <span className="point-count">
+          {points.length} point{points.length !== 1 ? 's' : ''} (blue)
+          {cutoutPoints && cutoutPoints.length > 0 && `, ${cutoutPoints.length} cutout (red)`}
+        </span>
       </div>
+      
+      {selectedPoint && (
+        <div className="point-editor">
+          <h4>
+            {selectedType === 'points' ? 'Point' : 'Cutout Point'} {selectedIndex + 1}
+          </h4>
+          <div className="point-editor-controls">
+            <div className="point-editor-input">
+              <label>X:</label>
+              <input
+                type="number"
+                value={selectedPoint[0].toFixed(2)}
+                step={0.1}
+                min={xMin}
+                max={xMax}
+                onChange={(e) => updateSelectedPoint(parseFloat(e.target.value), selectedPoint[1])}
+              />
+            </div>
+            <div className="point-editor-input">
+              <label>Y:</label>
+              <input
+                type="number"
+                value={selectedPoint[1].toFixed(2)}
+                step={0.1}
+                min={yMin}
+                max={yMax}
+                onChange={(e) => updateSelectedPoint(selectedPoint[0], parseFloat(e.target.value))}
+              />
+            </div>
+            <button
+              onClick={removeSelectedPoint}
+              className="graph-button graph-button-delete"
+              disabled={selectedType === 'points' && points.length <= minPoints}
+            >
+              Delete Point
+            </button>
+          </div>
+        </div>
+      )}
       
       <div className="graph-instructions">
         <strong>Instructions:</strong>
         <ul>
+          <li>Click a point to select and edit it</li>
           <li>Drag points to move them</li>
-          <li>Double-click empty space to add a point</li>
-          <li>Double-click a point to remove it</li>
+          <li>Use the buttons above to add new points</li>
         </ul>
       </div>
     </div>

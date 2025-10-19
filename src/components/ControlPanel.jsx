@@ -245,12 +245,25 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad, environmen
     case 'pointArray':
       const points = value || controlConfig.default || []
       
+      // Check if this is the 'points' control and if there's a corresponding 'cutoutPoints' control
+      let cutoutPoints = []
+      let onCutoutChange = null
+      
+      if (controlKey === 'points' && itemData && itemData.cutoutPoints !== undefined) {
+        cutoutPoints = itemData.cutoutPoints || []
+        onCutoutChange = (newCutoutPoints) => {
+          updateArrayItem(section, itemIndex, 'cutoutPoints', newCutoutPoints)
+        }
+      }
+      
       return (
         <div key={controlKey} className="control-group point-array-control">
           <label>{controlConfig.label}</label>
           <PointGraphEditor
             points={points}
             onChange={onChange}
+            cutoutPoints={cutoutPoints}
+            onCutoutChange={onCutoutChange}
             xMin={controlConfig.xMin ?? 0}
             xMax={controlConfig.xMax ?? 10}
             yMin={controlConfig.yMin ?? 0}

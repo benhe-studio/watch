@@ -21,44 +21,10 @@ export const handsConfig = {
       label: 'Profile',
       default: 'parametricFlat',
       options: [
-        { value: 'taperedCylinder', label: 'Tapered' },
         { value: 'parametricFlat', label: 'Parametric Flat' },
         { value: 'parametricFaceted', label: 'Parametric Faceted' },
         { value: 'circle', label: 'Circle' }
       ]
-    },
-    width: {
-      type: 'range',
-      label: 'Width',
-      default: 0.5,
-      min: 0.1,
-      max: 2,
-      step: 0.1,
-      condition: (item) => item.profile === 'taperedCylinder'
-    },
-    length: {
-      type: 'range',
-      label: 'Length',
-      default: 14,
-      getDefault: (item) => {
-        if (item.type === 'hours') return 10
-        if (item.type === 'minutes') return 14
-        if (item.type === 'seconds') return 16
-        return 14
-      },
-      min: 5,
-      max: 20,
-      step: 0.5,
-      condition: (item) => item.profile === 'taperedCylinder'
-    },
-    offset: {
-      type: 'range',
-      label: 'Offset',
-      default: 0,
-      min: 0,
-      max: 1,
-      step: 0.05,
-      condition: (item) => item.profile === 'taperedCylinder'
     },
     material: {
       type: 'select',
@@ -74,7 +40,7 @@ export const handsConfig = {
       xLabel: 'X (Width)',
       yLabel: 'Y (Length)',
       xMin: 0,
-      xMax: 5,
+      xMax: 4,
       xStep: 0.1,
       yMin: -5,
       yMax: 20,
@@ -128,7 +94,7 @@ export const handsConfig = {
       type: 'pointArray',
       label: 'Cutout Points',
       default: [],
-      condition: (item) => item.profile === 'parametricFlat' || item.profile === 'parametricFaceted',
+      condition: () => false, // Hidden - now integrated into the points editor
       xLabel: 'X (Width)',
       yLabel: 'Y (Length)',
       xMin: 0,
