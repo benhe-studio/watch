@@ -15,6 +15,56 @@ function MinuteMarkers({ minuteMarkers }) {
           return null
         }
         
+        // Handle subminute type separately
+        if (markerConfig.type === 'subminute') {
+          const markerElements = []
+          const visibleMinutes = markerConfig.visibleMinutes || Array.from({ length: 60 }, (_, i) => i)
+          const ticks = markerConfig.ticks || 2
+          // Total positions includes the ticks between each minute (ticks + 1 positions per minute)
+          const positionsPerMinute = ticks + 1
+          const totalPositions = 60 * positionsPerMinute
+          
+          for (let i = 0; i < totalPositions; i++) {
+            // Skip if this is a minute marker position (every positionsPerMinute)
+            if (i % positionsPerMinute === 0) {
+              continue
+            }
+            
+            // Determine which minute segment this tick belongs to
+            const minuteIndex = Math.floor(i / positionsPerMinute)
+            
+            // Skip if this minute is not visible
+            if (!visibleMinutes.includes(minuteIndex)) {
+              continue
+            }
+            
+            // Calculate angle for this position
+            const angle = (i * Math.PI * 2) / totalPositions
+            const spread = markerConfig.spread || 17
+            const x = Math.sin(angle) * spread
+            const y = Math.cos(angle) * spread
+            
+            markerElements.push(
+              <group
+                key={`${markerIndex}-${i}`}
+                position={[x, y, 0]}
+                rotation={[0, 0, markerConfig.rotate ? -angle : 0]}
+              >
+                <mesh material={getMaterialInstance(markerConfig.material || 'polishedSilver')} castShadow receiveShadow>
+                  <boxGeometry args={[
+                    markerConfig.width || 0.2,
+                    markerConfig.height || 1,
+                    markerConfig.depth || 0.2
+                  ]} />
+                </mesh>
+              </group>
+            )
+          }
+          
+          return markerElements
+        }
+        
+        // Handle regular minute markers (line, dot, numeral)
         const markerElements = []
         const visibleMinutes = markerConfig.visibleMinutes || Array.from({ length: 60 }, (_, i) => i)
         

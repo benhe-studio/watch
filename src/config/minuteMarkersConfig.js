@@ -13,7 +13,8 @@ export const minuteMarkersConfig = {
       options: [
         { value: 'line', label: 'Line' },
         { value: 'dot', label: 'Dot' },
-        { value: 'numeral', label: 'Numeral' }
+        { value: 'numeral', label: 'Numeral' },
+        { value: 'subminute', label: 'Sub Minute' }
       ]
     },
     rotate: {
@@ -47,7 +48,7 @@ export const minuteMarkersConfig = {
       min: 0.1,
       max: 1,
       step: 0.1,
-      condition: (item) => item.type === 'line'
+      condition: (item) => item.type === 'line' || item.type === 'subminute'
     },
     height: {
       type: 'range',
@@ -56,7 +57,7 @@ export const minuteMarkersConfig = {
       min: 0.5,
       max: 3,
       step: 0.1,
-      condition: (item) => item.type === 'line'
+      condition: (item) => item.type === 'line' || item.type === 'subminute'
     },
     depth: {
       type: 'range',
@@ -65,7 +66,16 @@ export const minuteMarkersConfig = {
       min: 0.1,
       max: 1,
       step: 0.1,
-      condition: (item) => item.type === 'line'
+      condition: (item) => item.type === 'line' || item.type === 'subminute'
+    },
+    ticks: {
+      type: 'range',
+      label: 'Ticks',
+      default: 2,
+      min: 1,
+      max: 4,
+      step: 1,
+      condition: (item) => item.type === 'subminute'
     },
     radius: {
       type: 'range',

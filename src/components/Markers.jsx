@@ -143,7 +143,7 @@ function Markers({ markers }) {
                 // Adjust horizontal offset based on number of digits
                 const isTwoDigit = number >= 10
                 const xOffset = isTwoDigit ? -fontSize * 0.8 : -fontSize * 0.4
-                const yOffset = -fontSize * 0.4
+                const yOffset = -fontSize * 0.5
                 
                 return (
                   <Text3D
