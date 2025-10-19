@@ -31,7 +31,8 @@ export const minuteMarkersConfig = {
       type: 'select',
       label: 'Material',
       default: 'polishedSilver',
-      options: getMaterialOptions()
+      options: getMaterialOptions(),
+      condition: (item) => item.type !== 'numeral' && item.type !== 'subminute'
     },
     spread: {
       type: 'range',
@@ -99,12 +100,7 @@ export const minuteMarkersConfig = {
       type: 'color',
       label: 'Color',
       default: '#000000',
-      condition: (item) => item.type === 'numeral'
+      condition: (item) => item.type === 'numeral' || item.type === 'subminute'
     },
-    visibleMinutes: {
-      type: 'minuteSelector',
-      label: 'Visible Minutes',
-      default: Array.from({ length: 60 }, (_, i) => i)
-    }
   }
 }

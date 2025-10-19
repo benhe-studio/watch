@@ -18,7 +18,6 @@ function MinuteMarkers({ minuteMarkers }) {
         // Handle subminute type separately
         if (markerConfig.type === 'subminute') {
           const markerElements = []
-          const visibleMinutes = markerConfig.visibleMinutes || Array.from({ length: 60 }, (_, i) => i)
           const ticks = markerConfig.ticks || 2
           // Total positions includes the ticks between each minute (ticks + 1 positions per minute)
           const positionsPerMinute = ticks + 1
@@ -27,14 +26,6 @@ function MinuteMarkers({ minuteMarkers }) {
           for (let i = 0; i < totalPositions; i++) {
             // Skip if this is a minute marker position (every positionsPerMinute)
             if (i % positionsPerMinute === 0) {
-              continue
-            }
-            
-            // Determine which minute segment this tick belongs to
-            const minuteIndex = Math.floor(i / positionsPerMinute)
-            
-            // Skip if this minute is not visible
-            if (!visibleMinutes.includes(minuteIndex)) {
               continue
             }
             
@@ -50,12 +41,13 @@ function MinuteMarkers({ minuteMarkers }) {
                 position={[x, y, 0]}
                 rotation={[0, 0, markerConfig.rotate ? -angle : 0]}
               >
-                <mesh material={getMaterialInstance(markerConfig.material || 'polishedSilver')} castShadow receiveShadow>
+                <mesh castShadow receiveShadow>
                   <boxGeometry args={[
                     markerConfig.width || 0.2,
                     markerConfig.height || 1,
                     markerConfig.depth || 0.2
                   ]} />
+                  <meshStandardMaterial color={markerConfig.color || '#000000'} />
                 </mesh>
               </group>
             )
@@ -66,16 +58,10 @@ function MinuteMarkers({ minuteMarkers }) {
         
         // Handle regular minute markers (line, dot, numeral)
         const markerElements = []
-        const visibleMinutes = markerConfig.visibleMinutes || Array.from({ length: 60 }, (_, i) => i)
         
         for (let i = 0; i < 60; i++) {
           // For numeral type, only render at hour marks (every 5 minutes)
           if (markerConfig.type === 'numeral' && i % 5 !== 0) {
-            continue
-          }
-          
-          // Skip this minute if it's not in the visible minutes array
-          if (!visibleMinutes.includes(i)) {
             continue
           }
           

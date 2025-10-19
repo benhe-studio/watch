@@ -285,8 +285,8 @@ const geometryGenerators = {
   }
 }
 
-// Hand type configurations
-const handTypeConfig = {
+// Hand movement configurations
+const handMovementConfig = {
   hours: {
     defaultLength: 10,
     zOffset: 0.5,
@@ -328,14 +328,22 @@ const handTypeConfig = {
       // Hand starts at 12 o'clock (positive Y), rotates clockwise
       return -((currentTimeInSeconds % 60) * (Math.PI * 2) / 60)
     }
+  },
+  fixed: {
+    defaultLength: 12,
+    zOffset: 0.75,
+    angleCalculation: (time) => {
+      // Fixed hand doesn't move
+      return 0
+    }
   }
 }
 
 // Single hand component
-function Hand({ type, profile, width, material, length: customLength, offset, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, zOffset, radius, spread, circleShape }) {
+function Hand({ type, movement, width, material, length: customLength, offset, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, zOffset, radius, spread, circleShape }) {
   const handRef = useRef()
-  const typeConfig = handTypeConfig[type]
-  const length = customLength || typeConfig.defaultLength
+  const movementConfig = handMovementConfig[movement] || handMovementConfig.seconds
+  const length = customLength || movementConfig.defaultLength
   
   // Calculate the pivot offset position
   // offset of 0 means pivot at the end (default behavior)
@@ -344,12 +352,12 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
   const pivotOffset = length * (offset ?? 0)
   
   const geometry = useMemo(() => {
-    const generator = geometryGenerators[profile] || geometryGenerators.classic
+    const generator = geometryGenerators[type] || geometryGenerators.parametricFlat
     return generator({ points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, radius, spread, circleShape })
-  }, [profile, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, radius, spread, circleShape])
+  }, [type, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, radius, spread, circleShape])
   
   // Calculate final Z position with optional offset
-  const finalZOffset = typeConfig.zOffset + (zOffset || 0)
+  const finalZOffset = movementConfig.zOffset + (zOffset || 0)
   
   // Get material instance
   const materialInstance = useMemo(() => getMaterialInstance(material), [material])
@@ -357,14 +365,14 @@ function Hand({ type, profile, width, material, length: customLength, offset, po
   useFrame(({ clock }) => {
     if (handRef.current) {
       const time = clock.getElapsedTime()
-      handRef.current.rotation.z = typeConfig.angleCalculation(time)
+      handRef.current.rotation.z = movementConfig.angleCalculation(time)
     }
   })
   
-  // Determine if this profile needs special rendering
-  const isParametricFlat = profile === 'parametricFlat'
-  const isParametricFaceted = profile === 'parametricFaceted'
-  const isCircle = profile === 'circle'
+  // Determine if this type needs special rendering
+  const isParametricFlat = type === 'parametricFlat'
+  const isParametricFaceted = type === 'parametricFaceted'
+  const isCircle = type === 'circle'
   
   if (isParametricFlat || isParametricFaceted) {
     // For parametric hands, Y=0 in the points represents the pivot point
@@ -468,9 +476,9 @@ function Hands({ hands = [] }) {
         
         return (
           <Hand
-          key={`${handConfig.type}-${index}`}
+          key={`${handConfig.type}-${handConfig.movement}-${index}`}
           type={handConfig.type}
-          profile={handConfig.profile}
+          movement={handConfig.movement}
           width={handConfig.width}
           material={handConfig.material}
           length={handConfig.length}

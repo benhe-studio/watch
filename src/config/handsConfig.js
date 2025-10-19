@@ -9,21 +9,22 @@ export const handsConfig = {
     type: {
       type: 'buttons',
       label: 'Type',
-      default: 'seconds',
-      options: [
-        { value: 'hours', label: 'Hours' },
-        { value: 'minutes', label: 'Minutes' },
-        { value: 'seconds', label: 'Seconds' }
-      ]
-    },
-    profile: {
-      type: 'buttons',
-      label: 'Profile',
       default: 'parametricFlat',
       options: [
         { value: 'parametricFlat', label: 'Parametric Flat' },
         { value: 'parametricFaceted', label: 'Parametric Faceted' },
         { value: 'circle', label: 'Circle' }
+      ]
+    },
+    movement: {
+      type: 'buttons',
+      label: 'Movement',
+      default: 'seconds',
+      options: [
+        { value: 'hours', label: 'Hours' },
+        { value: 'minutes', label: 'Minutes' },
+        { value: 'seconds', label: 'Seconds' },
+        { value: 'fixed', label: 'Fixed' }
       ]
     },
     material: {
@@ -36,7 +37,7 @@ export const handsConfig = {
       type: 'pointArray',
       label: 'Shape Points',
       default: [[0, -4], [1.2, 0], [0, 14]],
-      condition: (item) => item.profile === 'parametricFlat' || item.profile === 'parametricFaceted',
+      condition: (item) => item.type === 'parametricFlat' || item.type === 'parametricFaceted',
       xLabel: 'X (Width)',
       yLabel: 'Y (Length)',
       xMin: 0,
@@ -52,7 +53,7 @@ export const handsConfig = {
       type: 'checkbox',
       label: 'Enable Bevel',
       default: true,
-      condition: (item) => item.profile === 'parametricFlat'
+      condition: (item) => item.type === 'parametricFlat'
     },
     bevelThickness: {
       type: 'range',
@@ -61,7 +62,7 @@ export const handsConfig = {
       min: 0.01,
       max: 0.2,
       step: 0.01,
-      condition: (item) => item.profile === 'parametricFlat' && item.bevelEnabled
+      condition: (item) => item.type === 'parametricFlat' && item.bevelEnabled
     },
     bevelSize: {
       type: 'range',
@@ -70,7 +71,7 @@ export const handsConfig = {
       min: 0.01,
       max: 0.2,
       step: 0.01,
-      condition: (item) => item.profile === 'parametricFlat' && item.bevelEnabled
+      condition: (item) => item.type === 'parametricFlat' && item.bevelEnabled
     },
     bevelSegments: {
       type: 'range',
@@ -79,7 +80,7 @@ export const handsConfig = {
       min: 1,
       max: 8,
       step: 1,
-      condition: (item) => item.profile === 'parametricFlat' && item.bevelEnabled
+      condition: (item) => item.type === 'parametricFlat' && item.bevelEnabled
     },
     cutout: {
       type: 'range',
@@ -88,7 +89,7 @@ export const handsConfig = {
       min: 0,
       max: 0.95,
       step: 0.05,
-      condition: (item) => item.profile === 'circle' && item.circleShape === 'flat'
+      condition: (item) => item.type === 'circle' && item.circleShape === 'flat'
     },
     cutoutPoints: {
       type: 'pointArray',
@@ -113,7 +114,7 @@ export const handsConfig = {
       min: 0.1,
       max: 5,
       step: 0.1,
-      condition: (item) => item.profile === 'circle'
+      condition: (item) => item.type === 'circle'
     },
     spread: {
       type: 'range',
@@ -122,7 +123,7 @@ export const handsConfig = {
       min: 0,
       max: 20,
       step: 0.5,
-      condition: (item) => item.profile === 'circle',
+      condition: (item) => item.type === 'circle',
       description: 'Distance from center (0,0) where the circle is positioned'
     },
     circleShape: {
@@ -133,7 +134,7 @@ export const handsConfig = {
         { value: 'flat', label: 'Flat' },
         { value: 'dome', label: 'Dome' }
       ],
-      condition: (item) => item.profile === 'circle'
+      condition: (item) => item.type === 'circle'
     },
     zOffset: {
       type: 'range',
@@ -142,7 +143,7 @@ export const handsConfig = {
       min: -2,
       max: 2,
       step: 0.1,
-      condition: (item) => item.profile === 'parametricFlat' || item.profile === 'parametricFaceted' || item.profile === 'circle',
+      condition: (item) => item.type === 'parametricFlat' || item.type === 'parametricFaceted' || item.type === 'circle',
       description: 'Additional Z-axis offset for fine-tuning hand height'
     }
   }
