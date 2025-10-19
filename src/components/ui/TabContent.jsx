@@ -261,14 +261,25 @@ function TabContent({
           )}
         </div>
         
-        {items.map((item, index) => {
+        {[...items].reverse().map((item, reverseIndex) => {
+          const index = items.length - 1 - reverseIndex
           const itemKey = `${sectionKey}-${index}`
           const isExpanded = expandedItems[itemKey]
           
           return (
             <div key={index} className="array-item">
               <div className="array-item-header" onClick={() => toggleItem(sectionKey, index)}>
-                <span>{section.itemLabel || 'Item'} {index + 1} ({item.type}){item.hidden ? ' (Hidden)' : ''}</span>
+                <span>
+                  {(() => {
+                    const typeControl = section.controls.type
+                    if (typeControl && typeControl.options) {
+                      const typeOption = typeControl.options.find(opt => opt.value === item.type)
+                      return typeOption ? typeOption.label : item.type
+                    }
+                    return section.itemLabel || 'Item'
+                  })()}
+                  {item.hidden ? ' (Hidden)' : ''}
+                </span>
                 <div className="array-item-actions">
                   <button
                     className="hide-item-button"
