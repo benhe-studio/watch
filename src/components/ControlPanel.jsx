@@ -242,6 +242,22 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad, environmen
           </div>
         )
 
+    case 'text':
+      return (
+        <div key={controlKey} className="control-group">
+          <label>{controlConfig.label}</label>
+          {controlConfig.description && (
+            <div className="control-description">{controlConfig.description}</div>
+          )}
+          <input
+            type="text"
+            value={value || ''}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={controlConfig.placeholder || ''}
+          />
+        </div>
+      )
+
     case 'pointArray':
       const points = value || controlConfig.default || []
       

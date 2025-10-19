@@ -12,7 +12,8 @@ export const primitivesConfig = {
       default: 'number',
       options: [
         { value: 'number', label: 'Number' },
-        { value: 'hand', label: 'Hand' }
+        { value: 'hand', label: 'Hand' },
+        { value: 'circularLabel', label: 'Circular Label' }
       ]
     },
     vector: {
@@ -63,13 +64,13 @@ export const primitivesConfig = {
       min: 0.5,
       max: 10,
       step: 0.1,
-      condition: (item) => item.type === 'number'
+      condition: (item) => item.type === 'number' || item.type === 'circularLabel'
     },
     color: {
       type: 'color',
       label: 'Color',
       default: '#000000',
-      condition: (item) => item.type === 'number'
+      condition: (item) => item.type === 'number' || item.type === 'circularLabel'
     },
     material: {
       type: 'select',
@@ -90,6 +91,23 @@ export const primitivesConfig = {
       yMax: 6,
       description: 'Define the hand shape. Y=0 is the pivot point.',
       condition: (item) => item.type === 'hand'
+    },
+    labels: {
+      type: 'text',
+      label: 'Labels (comma separated)',
+      default: '12,1,2,3,4,5,6,7,8,9,10,11',
+      description: 'Comma-separated list of labels to display around the circle',
+      condition: (item) => item.type === 'circularLabel'
+    },
+    labelRadius: {
+      type: 'range',
+      label: 'Label Radius',
+      default: 5,
+      min: 2,
+      max: 20,
+      step: 0.1,
+      description: 'Distance of labels from center',
+      condition: (item) => item.type === 'circularLabel'
     }
   }
 }

@@ -73,7 +73,7 @@ function createHandGeometry(points) {
 }
 
 function Primitive({ primitiveConfig }) {
-  const { vector, offset, zOffset, rotation, type, fontSize, number, color, material, points } = primitiveConfig
+  const { vector, offset, zOffset, rotation, type, fontSize, number, color, material, points, labels, labelRadius } = primitiveConfig
   
   // Convert vector (0-12) to angle
   const hourValue = vector !== undefined ? vector : 6
@@ -90,6 +90,13 @@ function Primitive({ primitiveConfig }) {
   // Convert rotation from degrees to radians for Z-axis rotation
   // Negate to make positive rotation clockwise (Three.js default is counter-clockwise)
   const rotationZ = rotation !== undefined ? (-rotation * Math.PI / 180) : 0
+
+  // Process labels for circular label type
+  const labelArray = useMemo(() => {
+    if (type !== 'circularLabel') return []
+    const labelsString = labels || '12,1,2,3,4,5,6,7,8,9,10,11'
+    return labelsString.split(',').map(label => label.trim()).filter(label => label.length > 0)
+  }, [type, labels])
 
   // Always call hooks in the same order
   const handGeometry = useMemo(() => {
@@ -120,6 +127,29 @@ function Primitive({ primitiveConfig }) {
           {number !== undefined ? number : 0}
         </Text>
       )}
+
+      {/* Circular Label primitive */}
+      {type === 'circularLabel' && labelArray.map((label, index) => {
+        const radius = labelRadius !== undefined ? labelRadius : 15
+        const labelCount = labelArray.length
+        // Start at 12 o'clock (0 radians) and distribute evenly
+        const labelAngle = (index / labelCount) * Math.PI * 2
+        const labelX = Math.sin(labelAngle) * radius
+        const labelY = Math.cos(labelAngle) * radius
+        
+        return (
+          <Text
+            key={index}
+            position={[labelX, labelY, 0]}
+            fontSize={fontSize || 2}
+            color={color || '#000000'}
+            anchorX="center"
+            anchorY="middle"
+          >
+            {label}
+          </Text>
+        )
+      })}
 
       {/* Hand primitive */}
       {type === 'hand' && handGeometry && (
