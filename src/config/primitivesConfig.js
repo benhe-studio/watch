@@ -85,9 +85,9 @@ export const primitivesConfig = {
       xLabel: 'Width',
       yLabel: 'Length',
       xMin: 0,
-      xMax: 3,
-      yMin: -5,
-      yMax: 25,
+      xMax: 2,
+      yMin: -2,
+      yMax: 6,
       description: 'Define the hand shape. Y=0 is the pivot point.',
       condition: (item) => item.type === 'hand'
     }

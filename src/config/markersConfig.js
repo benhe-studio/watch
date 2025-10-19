@@ -9,9 +9,9 @@ export const markersConfig = {
     type: {
       type: 'buttons',
       label: 'Type',
-      default: 'arabic',
+      default: 'numeral',
       options: [
-        { value: 'arabic', label: 'Arabic' },
+        { value: 'numeral', label: 'Numeral' },
         { value: 'blocks', label: 'Blocks' },
         { value: 'circle', label: 'Circle' }
       ]
@@ -20,7 +20,8 @@ export const markersConfig = {
       type: 'checkbox',
       label: 'Rotate',
       default: false,
-      getDefault: (item) => item.type === 'blocks' ? true : false
+      getDefault: (item) => item.type === 'blocks' ? true : false,
+      condition: (item) => item.type !== 'circle'
     },
     fontSize: {
       type: 'range',
@@ -29,20 +30,21 @@ export const markersConfig = {
       min: 1,
       max: 5,
       step: 0.1,
-      condition: (item) => item.type === 'arabic'
-    },
-    color: {
-      type: 'color',
-      label: 'Color',
-      default: '#000000',
-      condition: (item) => item.type !== 'blocks' && item.type !== 'circle'
+      condition: (item) => item.type === 'numeral'
     },
     material: {
       type: 'select',
       label: 'Material',
       default: 'polishedSilver',
-      options: getMaterialOptions(),
-      condition: (item) => item.type === 'blocks' || item.type === 'circle'
+      options: getMaterialOptions()
+    },
+    depth: {
+      type: 'range',
+      label: 'Depth',
+      default: 0.5,
+      min: 0.2,
+      max: 1,
+      step: 0.1
     },
     spread: {
       type: 'range',
@@ -79,15 +81,6 @@ export const markersConfig = {
       step: 0.1,
       condition: (item) => item.type === 'blocks'
     },
-    depth: {
-      type: 'range',
-      label: 'Depth',
-      default: 0.5,
-      min: 0.2,
-      max: 1,
-      step: 0.1,
-      condition: (item) => item.type === 'blocks'
-    },
     blocksCutout: {
       type: 'range',
       label: 'Cutout',
@@ -112,54 +105,12 @@ export const markersConfig = {
       step: 0.1,
       condition: (item) => item.type === 'blocks' && item.doubleBlock
     },
-    bevelEnabled: {
-      type: 'checkbox',
-      label: 'Enable Bevel',
-      default: true,
-      condition: (item) => item.type === 'blocks' || item.type === 'circle'
-    },
-    bevelThickness: {
-      type: 'range',
-      label: 'Bevel Thickness',
-      default: 0.1,
-      min: 0.05,
-      max: 0.3,
-      step: 0.05,
-      condition: (item) => (item.type === 'blocks' || item.type === 'circle') && item.bevelEnabled
-    },
-    bevelSize: {
-      type: 'range',
-      label: 'Bevel Size',
-      default: 0.1,
-      min: 0.05,
-      max: 0.3,
-      step: 0.05,
-      condition: (item) => (item.type === 'blocks' || item.type === 'circle') && item.bevelEnabled
-    },
-    bevelSegments: {
-      type: 'range',
-      label: 'Bevel Segments',
-      default: 3,
-      min: 1,
-      max: 8,
-      step: 1,
-      condition: (item) => (item.type === 'blocks' || item.type === 'circle') && item.bevelEnabled
-    },
     circleRadius: {
       type: 'range',
       label: 'Radius',
       default: 1.5,
       min: 0.5,
       max: 3,
-      step: 0.1,
-      condition: (item) => item.type === 'circle'
-    },
-    circleDepth: {
-      type: 'range',
-      label: 'Depth',
-      default: 0.5,
-      min: 0.2,
-      max: 1,
       step: 0.1,
       condition: (item) => item.type === 'circle'
     },
@@ -171,6 +122,38 @@ export const markersConfig = {
       max: 0.95,
       step: 0.05,
       condition: (item) => item.type === 'circle'
+    },
+    bevelEnabled: {
+      type: 'checkbox',
+      label: 'Enable Bevel',
+      default: true
+    },
+    bevelThickness: {
+      type: 'range',
+      label: 'Bevel Thickness',
+      default: 0.1,
+      min: 0.05,
+      max: 0.3,
+      step: 0.05,
+      condition: (item) => item.bevelEnabled
+    },
+    bevelSize: {
+      type: 'range',
+      label: 'Bevel Size',
+      default: 0.1,
+      min: 0.05,
+      max: 0.3,
+      step: 0.05,
+      condition: (item) => item.bevelEnabled
+    },
+    bevelSegments: {
+      type: 'range',
+      label: 'Bevel Segments',
+      default: 3,
+      min: 1,
+      max: 8,
+      step: 1,
+      condition: (item) => item.bevelEnabled
     },
     visibleHours: {
       type: 'hourSelector',

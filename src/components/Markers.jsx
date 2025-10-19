@@ -1,4 +1,4 @@
-import { Text } from '@react-three/drei'
+import { Text3D } from '@react-three/drei'
 import * as THREE from 'three'
 import { getMaterialInstance } from '../config/materials'
 
@@ -46,7 +46,7 @@ function Markers({ markers }) {
                 const topWidth = markerConfig.topWidth !== undefined ? markerConfig.topWidth : 0.1
                 const bottomWidth = markerConfig.bottomWidth !== undefined ? markerConfig.bottomWidth : 0.1
                 const length = markerConfig.length || 0.3
-                const depth = markerConfig.depth || 0.05
+                const depth = markerConfig.depth || 0.5
                 const cutout = markerConfig.blocksCutout !== undefined ? markerConfig.blocksCutout : 0
                 const material = getMaterialInstance(markerConfig.material || 'polishedSilver')
                 const bevelEnabled = markerConfig.bevelEnabled !== undefined ? markerConfig.bevelEnabled : true
@@ -131,21 +131,42 @@ function Markers({ markers }) {
                 
                 return blockMesh
               })()}
-              {markerConfig.type === 'arabic' && (
-                <Text
-                  position={[0, 0, 0.1]}
-                  rotation={[0, 0, 0]}
-                  fontSize={markerConfig.fontSize || 0.25}
-                  color={markerConfig.color || '#000000'}
-                  anchorX="center"
-                  anchorY="middle"
-                >
-                  {number}
-                </Text>
-              )}
+              {markerConfig.type === 'numeral' && (() => {
+                const fontSize = markerConfig.fontSize || 2.5
+                const depth = markerConfig.depth || 0.5
+                const material = getMaterialInstance(markerConfig.material || 'polishedSilver')
+                const bevelEnabled = markerConfig.bevelEnabled !== undefined ? markerConfig.bevelEnabled : true
+                const bevelThickness = markerConfig.bevelThickness || 0.1
+                const bevelSize = markerConfig.bevelSize || 0.1
+                const bevelSegments = markerConfig.bevelSegments || 3
+                
+                // Adjust horizontal offset based on number of digits
+                const isTwoDigit = number >= 10
+                const xOffset = isTwoDigit ? -fontSize * 0.8 : -fontSize * 0.4
+                const yOffset = -fontSize * 0.4
+                
+                return (
+                  <Text3D
+                    font="/Open Sans Light_Regular.json"
+                    size={fontSize}
+                    height={depth}
+                    curveSegments={12}
+                    bevelEnabled={bevelEnabled}
+                    bevelThickness={bevelEnabled ? bevelThickness : 0}
+                    bevelSize={bevelEnabled ? bevelSize : 0}
+                    bevelSegments={bevelEnabled ? Math.round(bevelSegments) : 1}
+                    position={[xOffset, yOffset, 0]}
+                    material={material}
+                    castShadow
+                    receiveShadow
+                  >
+                    {number.toString()}
+                  </Text3D>
+                )
+              })()}
               {markerConfig.type === 'circle' && (() => {
                 const radius = markerConfig.circleRadius || 0.15
-                const depth = markerConfig.circleDepth || 0.05
+                const depth = markerConfig.depth || 0.5
                 const cutout = markerConfig.circleCutout !== undefined ? markerConfig.circleCutout : 0
                 const material = getMaterialInstance(markerConfig.material || 'polishedSilver')
                 const bevelEnabled = markerConfig.bevelEnabled !== undefined ? markerConfig.bevelEnabled : true
