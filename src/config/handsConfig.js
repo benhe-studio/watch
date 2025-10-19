@@ -120,7 +120,7 @@ export const handsConfig = {
       type: 'range',
       label: 'Spread',
       default: 0,
-      min: 0,
+      min: -10,
       max: 20,
       step: 0.5,
       condition: (item) => item.type === 'circle',

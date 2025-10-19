@@ -104,6 +104,21 @@ function App() {
     input.click()
   }
 
+  const clearConfig = () => {
+    if (confirm('Are you sure you want to clear all elements? This will remove all markers, hands, primitives, and other items.')) {
+      const clearedConfig = {}
+      Object.keys(watchConfig).forEach(sectionKey => {
+        const section = watchConfig[sectionKey]
+        if (section.isArray) {
+          clearedConfig[sectionKey] = []
+        } else {
+          clearedConfig[sectionKey] = { ...config[sectionKey] }
+        }
+      })
+      setConfig(clearedConfig)
+    }
+  }
+
   if (isLoading) {
     return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100vw', height: '100vh' }}>Loading...</div>
   }
@@ -149,6 +164,7 @@ function App() {
         schema={watchConfig}
         onSave={saveConfig}
         onLoad={loadConfig}
+        onClear={clearConfig}
         environmentLight={environmentLight}
         onToggleEnvironmentLight={() => setEnvironmentLight(!environmentLight)}
         debugView={debugView}

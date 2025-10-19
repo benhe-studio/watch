@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react'
 import './TabContent.css'
 import PointGraphEditor from './PointGraphEditor'
+import { EyeIcon, EyeSlashIcon, XMarkIcon, ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 
 function TabContent({ 
   sectionKey, 
@@ -289,7 +290,7 @@ function TabContent({
                     }}
                     title={item.hidden ? "Show item" : "Hide item"}
                   >
-                    {item.hidden ? '👁️' : '🙈'}
+                    {item.hidden ? <EyeIcon className="icon" /> : <EyeSlashIcon className="icon" />}
                   </button>
                   <button
                     className="remove-item-button"
@@ -298,9 +299,11 @@ function TabContent({
                       removeItem(sectionKey, index)
                     }}
                   >
-                    ✕
+                    <XMarkIcon className="icon" />
                   </button>
-                  <span className="toggle-icon">{isExpanded ? '▼' : '▶'}</span>
+                  <span className="toggle-icon">
+                    {isExpanded ? <ChevronDownIcon className="icon" /> : <ChevronRightIcon className="icon" />}
+                  </span>
                 </div>
               </div>
               {isExpanded && (

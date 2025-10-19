@@ -58,8 +58,8 @@ export const markersConfig = {
       type: 'range',
       label: 'Top Width',
       default: 1,
-      min: 0.5,
-      max: 3,
+      min: 0.1,
+      max: 5,
       step: 0.1,
       condition: (item) => item.type === 'blocks'
     },
@@ -68,7 +68,7 @@ export const markersConfig = {
       label: 'Bottom Width',
       default: 1,
       min: 0,
-      max: 3,
+      max: 5,
       step: 0.1,
       condition: (item) => item.type === 'blocks'
     },
