@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { useState, useEffect, useRef } from 'react'
+import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, Environment, Stats } from '@react-three/drei'
 import * as THREE from 'three'
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js'
 import WatchFace from './components/WatchFace'
 import ControlPanel from './components/ControlPanel'
 import { watchConfig, generateInitialState } from './config/watchConfig'
@@ -9,11 +10,21 @@ import { updateMaterialProperties } from './config/helpers/materials'
 import { SunIcon, MoonIcon, BugAntIcon } from '@heroicons/react/24/outline'
 import './App.css'
 
+// Component to capture the scene reference
+function SceneCapture({ sceneRef }) {
+  const { scene } = useThree()
+  useEffect(() => {
+    sceneRef.current = scene
+  }, [scene, sceneRef])
+  return null
+}
+
 function App() {
   const [config, setConfig] = useState(generateInitialState(watchConfig))
   const [isLoading, setIsLoading] = useState(true)
   const [environmentLight, setEnvironmentLight] = useState(true)
   const [debugView, setDebugView] = useState(false)
+  const sceneRef = useRef(null)
 
   // Load default config on mount
   useEffect(() => {
@@ -131,6 +142,41 @@ function App() {
     }
   }
 
+  const exportGLB = () => {
+    if (!sceneRef.current) {
+      alert('Scene not ready for export')
+      return
+    }
+
+    const exporter = new GLTFExporter()
+    
+    // Find the watch face group in the scene
+    const watchGroup = sceneRef.current.children.find(child => child.name === 'watch-face-group')
+    
+    if (!watchGroup) {
+      alert('Watch face not found in scene')
+      return
+    }
+
+    exporter.parse(
+      watchGroup,
+      (gltf) => {
+        const blob = new Blob([gltf], { type: 'application/octet-stream' })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = 'watch-face.glb'
+        link.click()
+        URL.revokeObjectURL(url)
+      },
+      (error) => {
+        console.error('Error exporting GLB:', error)
+        alert('Error exporting GLB: ' + error.message)
+      },
+      { binary: true }
+    )
+  }
+
   if (isLoading) {
     return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100vw', height: '100vh' }}>Loading...</div>
   }
@@ -139,6 +185,7 @@ function App() {
     <div style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <div style={{ flex: 1, minWidth: 0, background: environmentLight ? '#e8e8e8' : '#000000', position: 'relative' }}>
         <Canvas shadows camera={{ position: [0, -20, 60], fov: 50 }}>
+          <SceneCapture sceneRef={sceneRef} />
           <color attach="background" args={[environmentLight ? '#e8e8e8' : '#000000']} />
           
           {environmentLight && (
@@ -194,6 +241,7 @@ function App() {
         onSave={saveConfig}
         onLoad={loadConfig}
         onClear={clearConfig}
+        onExportGLB={exportGLB}
       />
     </div>
   )

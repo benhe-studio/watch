@@ -4,10 +4,11 @@ import TabContent from './ui/TabContent'
 import {
   ArrowDownTrayIcon,
   FolderOpenIcon,
-  TrashIcon
+  TrashIcon,
+  CubeIcon
 } from '@heroicons/react/24/outline'
 
-function ControlPanel({ config, updateConfig, schema, onSave, onLoad, onClear }) {
+function ControlPanel({ config, updateConfig, schema, onSave, onLoad, onClear, onExportGLB }) {
   const [activeTab, setActiveTab] = useState(Object.keys(schema)[0] || '')
   const [expandedItems, setExpandedItems] = useState({})
   const [typeSelectionDropdown, setTypeSelectionDropdown] = useState(null)
@@ -87,6 +88,10 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad, onClear })
           <button onClick={onLoad} className="config-button">
             <FolderOpenIcon className="icon" />
             <span>Load Config</span>
+          </button>
+          <button onClick={onExportGLB} className="config-button export-button">
+            <CubeIcon className="icon" />
+            <span>Export GLB</span>
           </button>
           <button onClick={onClear} className="config-button clear-button">
             <TrashIcon className="icon" />

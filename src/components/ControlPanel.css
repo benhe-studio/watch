@@ -61,6 +61,14 @@
   transform: translateY(1px);
 }
 
+.config-button.export-button {
+  background: #28a745;
+}
+
+.config-button.export-button:hover {
+  background: #218838;
+}
+
 .config-button.clear-button {
   background: #dc3545;
 }

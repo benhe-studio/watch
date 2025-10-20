@@ -9,7 +9,7 @@ import Primitives from './Primitives'
 
 function WatchFace({ config }) {
   return (
-    <group>
+    <group name="watch-face-group">
       {/* Watch face base */}
       <Face config={config.face} complicationWindows={config.complicationWindows} />
 
