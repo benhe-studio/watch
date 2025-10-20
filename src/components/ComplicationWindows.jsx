@@ -7,8 +7,7 @@ import * as THREE from 'three'
 function ComplicationWindow({ windowConfig, index }) {
   // Calculate position based on vector (0-12 like clock hours) and offset
   const {
-    vector,
-    offset,
+    position,
     type,
     radius,
     width,
@@ -21,6 +20,10 @@ function ComplicationWindow({ windowConfig, index }) {
     frameBevel
   } = windowConfig
   
+  // Extract position values
+  const vector = position?.vector !== undefined ? position.vector : 6
+  const offset = position?.offset !== undefined ? position.offset : 10
+  
   // Extract bevel settings with defaults
   const bevel = frameBevel || { enabled: true, thickness: 0.05, size: 0.05, segments: 3 }
   
@@ -30,11 +33,11 @@ function ComplicationWindow({ windowConfig, index }) {
   // Convert vector (0-12) to angle
   // vector=0 or 12 -> 0 rad (top), vector=3 -> π/2 rad (right), etc.
   // Each hour is π/6 radians (30 degrees)
-  const hourValue = vector !== undefined ? vector : 3
+  const hourValue = vector
   const angle = ((hourValue === 12 || hourValue === 0) ? 0 : hourValue) * Math.PI / 6
 
   // Calculate x, y coordinates (z is height above face)
-  const distance = offset || 15
+  const distance = offset
   const x = Math.sin(angle) * distance
   const y = Math.cos(angle) * distance
   // Position window background underneath the face (visible through cutout)

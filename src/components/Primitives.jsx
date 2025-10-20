@@ -73,14 +73,18 @@ function createHandGeometry(points) {
 }
 
 function Primitive({ primitiveConfig }) {
-  const { vector, offset, zOffset, rotation, type, fontSize, text, color, material, points, labels, spread, radialAlignment, markerCount, markerSkip, markerLength, markerWidth } = primitiveConfig
+  const { position, zOffset, rotation, type, fontSize, text, color, material, points, labels, spread, radialAlignment, markerCount, markerSkip, markerLength, markerWidth } = primitiveConfig
+  
+  // Extract position values
+  const vector = position?.vector !== undefined ? position.vector : 6
+  const offset = position?.offset !== undefined ? position.offset : 10
   
   // Convert vector (0-12) to angle
-  const hourValue = vector !== undefined ? vector : 6
+  const hourValue = vector
   const angle = ((hourValue === 12 || hourValue === 0) ? 0 : hourValue) * Math.PI / 6
 
   // Calculate x, y coordinates
-  const distance = offset || 10
+  const distance = offset
   const x = Math.sin(angle) * distance
   const y = Math.cos(angle) * distance
   const z = zOffset !== undefined ? zOffset : 0

@@ -1,4 +1,5 @@
 import { getMaterialOptions } from './helpers/materials'
+import { createPositionControl } from './helpers/positionConfig'
 
 export const primitivesConfig = {
   label: 'Primitives',
@@ -17,22 +18,12 @@ export const primitivesConfig = {
         { value: 'circularMarkers', label: 'Circular Markers' }
       ]
     },
-    vector: {
-      type: 'range',
-      label: 'Position Vector (Clock Hour)',
-      default: 6,
-      min: 0,
-      max: 12,
-      step: 0.1
-    },
-    offset: {
-      type: 'range',
-      label: 'Offset from Center',
-      default: 10,
-      min: 0,
-      max: 25,
-      step: 0.1
-    },
+    position: createPositionControl({
+      defaultVector: 6,
+      defaultOffset: 10,
+      minOffset: 0,
+      maxOffset: 25
+    }),
     zOffset: {
       type: 'range',
       label: 'Z Offset',

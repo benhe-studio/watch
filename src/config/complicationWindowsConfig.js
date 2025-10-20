@@ -1,5 +1,6 @@
 import { getMaterialOptions } from './helpers/materials'
 import { createBevelControl } from './helpers/bevelConfig'
+import { createPositionControl } from './helpers/positionConfig'
 
 export const complicationWindowsConfig = {
   label: 'Complication Windows',
@@ -17,22 +18,12 @@ export const complicationWindowsConfig = {
         { value: 'moonphase', label: 'Moon Phase' }
       ]
     },
-    vector: {
-      type: 'range',
-      label: 'Position Vector (Clock Hour)',
-      default: 6,
-      min: 0,
-      max: 12,
-      step: 0.1
-    },
-    offset: {
-      type: 'range',
-      label: 'Offset from Center',
-      default: 10,
-      min: 5,
-      max: 18,
-      step: 0.1
-    },
+    position: createPositionControl({
+      defaultVector: 6,
+      defaultOffset: 10,
+      minOffset: 5,
+      maxOffset: 18
+    }),
     radius: {
       type: 'range',
       label: 'Window Radius',

@@ -26,13 +26,17 @@ function Face({ config, complicationWindows }) {
 
     // Create holes for each complication window
     complicationWindows.forEach((window) => {
-      const { vector, offset, type, radius, width, height } = window
+      const { position, type, radius, width, height } = window
+      
+      // Extract position values
+      const vector = position?.vector !== undefined ? position.vector : 6
+      const offset = position?.offset !== undefined ? position.offset : 10
       
       // Convert vector (0-12) to angle
       // vector=0 or 12 -> 0 rad (top), vector=3 -> π/2 rad (right), etc.
-      const hourValue = vector !== undefined ? vector : 3
+      const hourValue = vector
       const angle = ((hourValue === 12 || hourValue === 0) ? 0 : hourValue) * Math.PI / 6
-      const distance = offset || 15
+      const distance = offset
 
       // Calculate x, y coordinates for the window (in XY plane)
       const x = Math.sin(angle) * distance

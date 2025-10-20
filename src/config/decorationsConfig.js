@@ -1,4 +1,5 @@
 import { getMaterialOptions } from './helpers/materials'
+import { createPositionControl } from './helpers/positionConfig'
 
 export const decorationsConfig = {
   label: 'Decorations',
@@ -15,22 +16,12 @@ export const decorationsConfig = {
         { value: 'line', label: 'Line' }
       ]
     },
-    vector: {
-      type: 'range',
-      label: 'Position Vector (Clock Hour)',
-      default: 0,
-      min: 0,
-      max: 12,
-      step: 0.1
-    },
-    offset: {
-      type: 'range',
-      label: 'Offset from Center',
-      default: 0,
-      min: 0,
-      max: 18,
-      step: 0.5
-    },
+    position: createPositionControl({
+      defaultVector: 0,
+      defaultOffset: 0,
+      minOffset: 0,
+      maxOffset: 18
+    }),
     material: {
       type: 'select',
       label: 'Material',

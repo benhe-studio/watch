@@ -20,9 +20,9 @@ function Decorations({ decorations }) {
           const depth = decorationConfig.depth || 0.5
           const material = getMaterialInstance(decorationConfig.material || 'polishedSilver')
           
-          // Calculate position based on vector (0-12 like clock hours) and offset
-          const vector = decorationConfig.vector !== undefined ? decorationConfig.vector : 0
-          const offset = decorationConfig.offset !== undefined ? decorationConfig.offset : 0
+          // Extract position values
+          const vector = decorationConfig.position?.vector !== undefined ? decorationConfig.position.vector : 0
+          const offset = decorationConfig.position?.offset !== undefined ? decorationConfig.position.offset : 0
           
           // Convert vector (0-12) to angle
           // vector=0 or 12 -> 0 rad (top), vector=3 -> π/2 rad (right), etc.
@@ -64,9 +64,9 @@ function Decorations({ decorations }) {
           const rotation = decorationConfig.rotation || 0
           const material = getMaterialInstance(decorationConfig.material || 'polishedSilver')
           
-          // Calculate position based on vector (0-12 like clock hours) and offset
-          const vector = decorationConfig.vector !== undefined ? decorationConfig.vector : 0
-          const offset = decorationConfig.offset !== undefined ? decorationConfig.offset : 0
+          // Extract position values
+          const vector = decorationConfig.position?.vector !== undefined ? decorationConfig.position.vector : 0
+          const offset = decorationConfig.position?.offset !== undefined ? decorationConfig.position.offset : 0
           
           // Convert vector (0-12) to angle
           // vector=0 or 12 -> 0 rad (top), vector=3 -> π/2 rad (right), etc.
