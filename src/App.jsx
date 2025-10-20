@@ -115,6 +115,17 @@ function App() {
           clearedConfig[sectionKey] = { ...config[sectionKey] }
         }
       })
+      
+      // Reset face material to polished silver
+      if (clearedConfig.face) {
+        clearedConfig.face.material = 'matteWhite'
+      }
+      
+      // Disable bezel
+      if (clearedConfig.bezel) {
+        clearedConfig.bezel.bezel = false
+      }
+      
       setConfig(clearedConfig)
     }
   }
@@ -124,21 +135,21 @@ function App() {
   }
 
   return (
-    <div style={{ display: 'flex', width: '100vw', height: '100vh' }}>
-      <div style={{ flex: 1, background: environmentLight ? '#e8e8e8' : '#000000' }}>
-        <Canvas shadows camera={{ position: [0, -30, 60], fov: 50 }}>
+    <div style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden' }}>
+      <div style={{ flex: 1, minWidth: 0, background: environmentLight ? '#e8e8e8' : '#000000' }}>
+        <Canvas shadows camera={{ position: [0, -20, 60], fov: 50 }}>
           <color attach="background" args={[environmentLight ? '#e8e8e8' : '#000000']} />
           
           {environmentLight && (
             <directionalLight
-              position={[50, 50, 50]}
+              position={[40, 40, 40]}
               intensity={2}
               castShadow
               shadow-mapSize={[2048, 2048]}
-              shadow-camera-left={-30}
-              shadow-camera-right={30}
-              shadow-camera-top={30}
-              shadow-camera-bottom={-30}
+              shadow-camera-left={-50}
+              shadow-camera-right={50}
+              shadow-camera-top={50}
+              shadow-camera-bottom={-50}
               shadow-camera-near={0.1}
               shadow-camera-far={100}
             />

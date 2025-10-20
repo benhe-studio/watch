@@ -5,7 +5,7 @@ import * as THREE from 'three'
 export const materialConfigs = {
   polishedSilver: {
     name: 'Polished Silver',
-    color: '#c0c0c0',
+    color: '#f0f0f0',
     roughness: 0.1,
     metalness: 1.0,
     clearcoat: 0.3,
