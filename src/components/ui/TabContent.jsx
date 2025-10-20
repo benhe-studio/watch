@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react'
 import './TabContent.css'
 import PointGraphEditor from './PointGraphEditor'
+import BevelControl from './BevelControl'
 import { EyeIcon, EyeSlashIcon, XMarkIcon, ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 
 function TabContent({ 
@@ -222,6 +223,17 @@ function TabContent({
             yLabel={controlConfig.yLabel || 'Y'}
             minPoints={controlConfig.minPoints ?? 2}
             description={controlConfig.description}
+          />
+        </div>
+      )
+
+    case 'bevel':
+      return (
+        <div key={controlKey} className="control-group">
+          <BevelControl
+            value={value}
+            onChange={onChange}
+            config={controlConfig}
           />
         </div>
       )

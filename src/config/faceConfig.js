@@ -1,4 +1,5 @@
 import { getMaterialOptions } from './materials'
+import { createBevelControl } from './bevelConfig'
 
 export const faceConfig = {
   label: 'Face',
@@ -39,35 +40,18 @@ export const faceConfig = {
       max: 256,
       step: 8
     },
-    bezelBevelEnabled: {
-      type: 'checkbox',
-      label: 'Enable Bevel',
-      default: false
-    },
-    bezelBevelThickness: {
-      type: 'range',
-      label: 'Bevel Thickness',
-      default: 0.1,
-      min: 0.01,
-      max: 2,
-      step: 0.01
-    },
-    bezelBevelSize: {
-      type: 'range',
-      label: 'Bevel Size',
-      default: 0.1,
-      min: 0.01,
-      max: 2,
-      step: 0.01
-    },
-    bezelBevelSegments: {
-      type: 'range',
-      label: 'Bevel Segments',
-      default: 3,
-      min: 1,
-      max: 10,
-      step: 1
-    },
+    bezelBevel: createBevelControl({
+      defaultEnabled: false,
+      defaultThickness: 0.1,
+      defaultSize: 0.1,
+      defaultSegments: 3,
+      minThickness: 0.01,
+      maxThickness: 2,
+      minSize: 0.01,
+      maxSize: 2,
+      minSegments: 1,
+      maxSegments: 10
+    }),
     bezelMaterial: {
       type: 'select',
       label: 'Bezel Material',

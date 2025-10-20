@@ -151,14 +151,13 @@ function Face({ config, complicationWindows }) {
     const bezelHeight = config.bezelHeight || 2
     const bezelThickness = config.bezelThickness || 1.5
     const bezelSegments = config.bezelSegments || 128
-    const bevelEnabled = config.bezelBevelEnabled || false
-    const bevelThickness = config.bezelBevelThickness || 0.1
-    const bevelSize = config.bezelBevelSize || 0.1
-    const bevelSegments = config.bezelBevelSegments || 3
+    
+    // Extract bevel settings with defaults
+    const bevel = config.bezelBevel || { enabled: false, thickness: 0.1, size: 0.1, segments: 3 }
     
     // Compensate for bevel size to maintain effective inner radius at faceRadius
     // When bevel is enabled, it shrinks the geometry inward, so we expand both radii
-    const bevelCompensation = bevelEnabled ? bevelSize : 0
+    const bevelCompensation = bevel.enabled ? bevel.size : 0
     
     // Create a doughnut shape using a ring shape and extrude it
     const bezelShape = new THREE.Shape()
@@ -176,10 +175,10 @@ function Face({ config, complicationWindows }) {
     // Extrude the shape to create the bezel height with configurable bevel
     const extrudeSettings = {
       depth: bezelHeight,
-      bevelEnabled: bevelEnabled,
-      bevelThickness: bevelThickness,
-      bevelSize: bevelSize,
-      bevelSegments: bevelSegments,
+      bevelEnabled: bevel.enabled,
+      bevelThickness: bevel.enabled ? bevel.thickness : 0,
+      bevelSize: bevel.enabled ? bevel.size : 0,
+      bevelSegments: bevel.enabled ? Math.round(bevel.segments) : 1,
       curveSegments: bezelSegments,
       steps: Math.max(1, Math.floor(bezelHeight * 10)) // More steps for smoother extrusion
     }
@@ -195,10 +194,7 @@ function Face({ config, complicationWindows }) {
     config.bezelHeight,
     config.bezelThickness,
     config.bezelSegments,
-    config.bezelBevelEnabled,
-    config.bezelBevelThickness,
-    config.bezelBevelSize,
-    config.bezelBevelSegments
+    config.bezelBevel
   ])
 
   return (

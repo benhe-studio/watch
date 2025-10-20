@@ -18,11 +18,11 @@ function ComplicationWindow({ windowConfig, index }) {
     frameThickness,
     frameDepth,
     frameMaterial,
-    frameBevelEnabled,
-    frameBevelThickness,
-    frameBevelSize,
-    frameBevelSegments
+    frameBevel
   } = windowConfig
+  
+  // Extract bevel settings with defaults
+  const bevel = frameBevel || { enabled: true, thickness: 0.05, size: 0.05, segments: 3 }
   
   // Skip frame rendering for moonphase type
   const shouldRenderFrame = frameEnabled && type !== 'moonphase'
@@ -61,10 +61,10 @@ function ComplicationWindow({ windowConfig, index }) {
 
       const extrudeSettings = {
         depth: frameThicknessValue,
-        bevelEnabled: frameBevelEnabled !== false,
-        bevelThickness: frameBevelThickness || 0.05,
-        bevelSize: frameBevelSize || 0.05,
-        bevelSegments: frameBevelSegments || 3,
+        bevelEnabled: bevel.enabled,
+        bevelThickness: bevel.enabled ? bevel.thickness : 0,
+        bevelSize: bevel.enabled ? bevel.size : 0,
+        bevelSegments: bevel.enabled ? Math.round(bevel.segments) : 1,
         curveSegments: 256
       }
 
@@ -93,16 +93,16 @@ function ComplicationWindow({ windowConfig, index }) {
 
       const extrudeSettings = {
         depth: frameThicknessValue,
-        bevelEnabled: frameBevelEnabled !== false,
-        bevelThickness: frameBevelThickness || 0.05,
-        bevelSize: frameBevelSize || 0.05,
-        bevelSegments: frameBevelSegments || 3,
+        bevelEnabled: bevel.enabled,
+        bevelThickness: bevel.enabled ? bevel.thickness : 0,
+        bevelSize: bevel.enabled ? bevel.size : 0,
+        bevelSegments: bevel.enabled ? Math.round(bevel.segments) : 1,
         curveSegments: 256
       }
 
       return new THREE.ExtrudeGeometry(outerShape, extrudeSettings)
     }
-  }, [type, radius, width, height, shouldRenderFrame, frameWidth, frameThickness, frameBevelEnabled, frameBevelThickness, frameBevelSize, frameBevelSegments])
+  }, [type, radius, width, height, shouldRenderFrame, frameWidth, frameThickness, bevel])
 
   const frameMaterialInstance = useMemo(() =>
     shouldRenderFrame ? getMaterialInstance(frameMaterial || 'polishedSilver') : null,

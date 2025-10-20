@@ -1,4 +1,5 @@
 import { getMaterialOptions } from './materials'
+import { createBevelControl } from './bevelConfig'
 
 export const markersConfig = {
   label: 'Markers',
@@ -123,38 +124,16 @@ export const markersConfig = {
       step: 0.05,
       condition: (item) => item.type === 'circle'
     },
-    bevelEnabled: {
-      type: 'checkbox',
-      label: 'Enable Bevel',
-      default: true
-    },
-    bevelThickness: {
-      type: 'range',
-      label: 'Bevel Thickness',
-      default: 0.1,
-      min: 0.05,
-      max: 0.3,
-      step: 0.05,
-      condition: (item) => item.bevelEnabled
-    },
-    bevelSize: {
-      type: 'range',
-      label: 'Bevel Size',
-      default: 0.1,
-      min: 0.05,
-      max: 0.3,
-      step: 0.05,
-      condition: (item) => item.bevelEnabled
-    },
-    bevelSegments: {
-      type: 'range',
-      label: 'Bevel Segments',
-      default: 3,
-      min: 1,
-      max: 8,
-      step: 1,
-      condition: (item) => item.bevelEnabled
-    },
+    bevel: createBevelControl({
+      defaultEnabled: true,
+      defaultThickness: 0.1,
+      defaultSize: 0.1,
+      defaultSegments: 3,
+      minThickness: 0.05,
+      maxThickness: 0.3,
+      minSize: 0.05,
+      maxSize: 0.3
+    }),
     visibleHours: {
       type: 'hourSelector',
       label: 'Visible Hours',

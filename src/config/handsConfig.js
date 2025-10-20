@@ -1,4 +1,5 @@
 import { getMaterialOptions } from './materials'
+import { createBevelControl } from './bevelConfig'
 
 export const handsConfig = {
   label: 'Hands',
@@ -49,39 +50,17 @@ export const handsConfig = {
       minPoints: 2,
       description: 'Define half of the hand shape. Y=0 is the pivot point, negative Y extends towards tail, positive Y towards tip'
     },
-    bevelEnabled: {
-      type: 'checkbox',
-      label: 'Enable Bevel',
-      default: true,
+    bevel: createBevelControl({
+      defaultEnabled: true,
+      defaultThickness: 0.05,
+      defaultSize: 0.05,
+      defaultSegments: 3,
+      minThickness: 0.01,
+      maxThickness: 0.2,
+      minSize: 0.01,
+      maxSize: 0.2,
       condition: (item) => item.type === 'parametricFlat'
-    },
-    bevelThickness: {
-      type: 'range',
-      label: 'Bevel Thickness',
-      default: 0.05,
-      min: 0.01,
-      max: 0.2,
-      step: 0.01,
-      condition: (item) => item.type === 'parametricFlat' && item.bevelEnabled
-    },
-    bevelSize: {
-      type: 'range',
-      label: 'Bevel Size',
-      default: 0.05,
-      min: 0.01,
-      max: 0.2,
-      step: 0.01,
-      condition: (item) => item.type === 'parametricFlat' && item.bevelEnabled
-    },
-    bevelSegments: {
-      type: 'range',
-      label: 'Bevel Segments',
-      default: 3,
-      min: 1,
-      max: 8,
-      step: 1,
-      condition: (item) => item.type === 'parametricFlat' && item.bevelEnabled
-    },
+    }),
     cutout: {
       type: 'range',
       label: 'Cutout',

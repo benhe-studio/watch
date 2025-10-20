@@ -49,10 +49,7 @@ function Markers({ markers }) {
                 const depth = markerConfig.depth || 0.5
                 const cutout = markerConfig.blocksCutout !== undefined ? markerConfig.blocksCutout : 0
                 const material = getMaterialInstance(markerConfig.material || 'polishedSilver')
-                const bevelEnabled = markerConfig.bevelEnabled !== undefined ? markerConfig.bevelEnabled : true
-                const bevelThickness = markerConfig.bevelThickness || 0.01
-                const bevelSize = markerConfig.bevelSize || 0.01
-                const bevelSegments = markerConfig.bevelSegments || 3
+                const bevel = markerConfig.bevel || { enabled: true, thickness: 0.1, size: 0.1, segments: 3 }
                 const doubleBlock = markerConfig.doubleBlock || false
                 const separation = markerConfig.separation || 1.5
                 
@@ -103,10 +100,10 @@ function Markers({ markers }) {
                 
                 const extrudeSettings = {
                   depth: depth,
-                  bevelEnabled: bevelEnabled,
-                  bevelThickness: bevelEnabled ? bevelThickness : 0,
-                  bevelSize: bevelEnabled ? bevelSize : 0,
-                  bevelSegments: bevelEnabled ? Math.round(bevelSegments) : 1
+                  bevelEnabled: bevel.enabled,
+                  bevelThickness: bevel.enabled ? bevel.thickness : 0,
+                  bevelSize: bevel.enabled ? bevel.size : 0,
+                  bevelSegments: bevel.enabled ? Math.round(bevel.segments) : 1
                 }
                 
                 const blockMesh = (
@@ -135,10 +132,7 @@ function Markers({ markers }) {
                 const fontSize = markerConfig.fontSize || 2.5
                 const depth = markerConfig.depth || 0.5
                 const material = getMaterialInstance(markerConfig.material || 'polishedSilver')
-                const bevelEnabled = markerConfig.bevelEnabled !== undefined ? markerConfig.bevelEnabled : true
-                const bevelThickness = markerConfig.bevelThickness || 0.1
-                const bevelSize = markerConfig.bevelSize || 0.1
-                const bevelSegments = markerConfig.bevelSegments || 3
+                const bevel = markerConfig.bevel || { enabled: true, thickness: 0.1, size: 0.1, segments: 3 }
                 
                 // Adjust horizontal offset based on number of digits
                 const isTwoDigit = number >= 10
@@ -151,10 +145,10 @@ function Markers({ markers }) {
                     size={fontSize}
                     height={depth}
                     curveSegments={12}
-                    bevelEnabled={bevelEnabled}
-                    bevelThickness={bevelEnabled ? bevelThickness : 0}
-                    bevelSize={bevelEnabled ? bevelSize : 0}
-                    bevelSegments={bevelEnabled ? Math.round(bevelSegments) : 1}
+                    bevelEnabled={bevel.enabled}
+                    bevelThickness={bevel.enabled ? bevel.thickness : 0}
+                    bevelSize={bevel.enabled ? bevel.size : 0}
+                    bevelSegments={bevel.enabled ? Math.round(bevel.segments) : 1}
                     position={[xOffset, yOffset, 0]}
                     material={material}
                     castShadow
@@ -169,10 +163,7 @@ function Markers({ markers }) {
                 const depth = markerConfig.depth || 0.5
                 const cutout = markerConfig.circleCutout !== undefined ? markerConfig.circleCutout : 0
                 const material = getMaterialInstance(markerConfig.material || 'polishedSilver')
-                const bevelEnabled = markerConfig.bevelEnabled !== undefined ? markerConfig.bevelEnabled : true
-                const bevelThickness = markerConfig.bevelThickness || 0.01
-                const bevelSize = markerConfig.bevelSize || 0.01
-                const bevelSegments = markerConfig.bevelSegments || 3
+                const bevel = markerConfig.bevel || { enabled: true, thickness: 0.1, size: 0.1, segments: 3 }
                 
                 // Create circular shape with high fidelity
                 const shape = new THREE.Shape()
@@ -209,10 +200,10 @@ function Markers({ markers }) {
                 
                 const extrudeSettings = {
                   depth: depth,
-                  bevelEnabled: bevelEnabled,
-                  bevelThickness: bevelEnabled ? bevelThickness : 0,
-                  bevelSize: bevelEnabled ? bevelSize : 0,
-                  bevelSegments: bevelEnabled ? Math.round(bevelSegments) : 1,
+                  bevelEnabled: bevel.enabled,
+                  bevelThickness: bevel.enabled ? bevel.thickness : 0,
+                  bevelSize: bevel.enabled ? bevel.size : 0,
+                  bevelSegments: bevel.enabled ? Math.round(bevel.segments) : 1,
                   steps: 1,
                   curveSegments: 64 // Smooth extrusion curves
                 }

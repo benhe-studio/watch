@@ -1,4 +1,5 @@
 import { getMaterialOptions } from './materials'
+import { createBevelControl } from './bevelConfig'
 
 export const complicationWindowsConfig = {
   label: 'Complication Windows',
@@ -99,38 +100,16 @@ export const complicationWindowsConfig = {
       options: getMaterialOptions(),
       condition: (item) => item.frameEnabled
     },
-    frameBevelEnabled: {
-      type: 'checkbox',
-      label: 'Enable Frame Bevel',
-      default: true,
+    frameBevel: createBevelControl({
+      defaultEnabled: true,
+      defaultThickness: 0.05,
+      defaultSize: 0.05,
+      defaultSegments: 3,
+      minThickness: 0.01,
+      maxThickness: 1.0,
+      minSize: 0.01,
+      maxSize: 1.0,
       condition: (item) => item.frameEnabled
-    },
-    frameBevelThickness: {
-      type: 'range',
-      label: 'Frame Bevel Thickness',
-      default: 0.05,
-      min: 0.01,
-      max: 1.0,
-      step: 0.01,
-      condition: (item) => item.frameEnabled && item.frameBevelEnabled
-    },
-    frameBevelSize: {
-      type: 'range',
-      label: 'Frame Bevel Size',
-      default: 0.05,
-      min: 0.01,
-      max: 1.0,
-      step: 0.01,
-      condition: (item) => item.frameEnabled && item.frameBevelEnabled
-    },
-    frameBevelSegments: {
-      type: 'range',
-      label: 'Frame Bevel Segments',
-      default: 3,
-      min: 1,
-      max: 8,
-      step: 1,
-      condition: (item) => item.frameEnabled && item.frameBevelEnabled
-    }
+    })
   }
 }

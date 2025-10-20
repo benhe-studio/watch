@@ -12,7 +12,7 @@ const geometryGenerators = {
     return null
   },
   
-  parametricFlat: ({ points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints }) => {
+  parametricFlat: ({ points, bevel, cutout, cutoutPoints }) => {
     // Helper function to ensure points start and end at x=0
     const ensurePointsAtCenterLine = (pointsList) => {
       if (!pointsList || pointsList.length === 0) return pointsList
@@ -112,13 +112,13 @@ const geometryGenerators = {
     
     // Extrude settings for depth - fixed at 0.3 for parametric flat hands
     const depth = 0.3
-    const shouldBevel = bevelEnabled !== undefined ? bevelEnabled : true
+    const bevelSettings = bevel || { enabled: true, thickness: 0.05, size: 0.05, segments: 3 }
     const extrudeSettings = {
       depth: depth,
-      bevelEnabled: shouldBevel,
-      bevelThickness: shouldBevel ? (bevelThickness !== undefined ? bevelThickness : depth * 0.1) : 0,
-      bevelSize: shouldBevel ? (bevelSize !== undefined ? bevelSize : depth * 0.1) : 0,
-      bevelSegments: shouldBevel ? (bevelSegments !== undefined ? Math.round(bevelSegments) : 3) : 1
+      bevelEnabled: bevelSettings.enabled,
+      bevelThickness: bevelSettings.enabled ? bevelSettings.thickness : 0,
+      bevelSize: bevelSettings.enabled ? bevelSettings.size : 0,
+      bevelSegments: bevelSettings.enabled ? Math.round(bevelSettings.segments) : 1
     }
     
     const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings)
@@ -340,7 +340,7 @@ const handMovementConfig = {
 }
 
 // Single hand component
-function Hand({ type, movement, width, material, length: customLength, offset, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, zOffset, radius, spread, circleShape }) {
+function Hand({ type, movement, width, material, length: customLength, offset, points, bevel, cutout, cutoutPoints, zOffset, radius, spread, circleShape }) {
   const handRef = useRef()
   const movementConfig = handMovementConfig[movement] || handMovementConfig.seconds
   const length = customLength || movementConfig.defaultLength
@@ -353,8 +353,8 @@ function Hand({ type, movement, width, material, length: customLength, offset, p
   
   const geometry = useMemo(() => {
     const generator = geometryGenerators[type] || geometryGenerators.parametricFlat
-    return generator({ points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, radius, spread, circleShape })
-  }, [type, points, bevelEnabled, bevelThickness, bevelSize, bevelSegments, cutout, cutoutPoints, radius, spread, circleShape])
+    return generator({ points, bevel, cutout, cutoutPoints, radius, spread, circleShape })
+  }, [type, points, bevel, cutout, cutoutPoints, radius, spread, circleShape])
   
   // Calculate final Z position with optional offset
   const finalZOffset = movementConfig.zOffset + (zOffset || 0)
@@ -484,10 +484,7 @@ function Hands({ hands = [] }) {
           length={handConfig.length}
           offset={handConfig.offset}
           points={handConfig.points}
-          bevelEnabled={handConfig.bevelEnabled}
-          bevelThickness={handConfig.bevelThickness}
-          bevelSize={handConfig.bevelSize}
-          bevelSegments={handConfig.bevelSegments}
+          bevel={handConfig.bevel}
           cutout={handConfig.cutout}
           cutoutPoints={handConfig.cutoutPoints}
           zOffset={handConfig.zOffset}
