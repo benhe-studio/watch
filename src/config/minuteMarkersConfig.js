@@ -47,14 +47,14 @@ export const minuteMarkersConfig = {
       type: 'range',
       label: 'Width',
       default: 0.2,
-      min: 0.1,
+      min: 0.01,
       max: 1,
-      step: 0.1,
+      step: 0.01,
       condition: (item) => item.type === 'line' || item.type === 'subminute'
     },
-    height: {
+    length: {
       type: 'range',
-      label: 'Height',
+      label: 'Length',
       default: 1,
       min: 0.5,
       max: 3,
@@ -65,9 +65,9 @@ export const minuteMarkersConfig = {
       type: 'range',
       label: 'Depth',
       default: 0.2,
-      min: 0.1,
+      min: 0.01,
       max: 1,
-      step: 0.1,
+      step: 0.01,
       condition: (item) => item.type === 'line' || item.type === 'subminute'
     },
     ticks: {

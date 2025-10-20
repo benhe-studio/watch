@@ -14,7 +14,7 @@
       "segments": 1
     },
     "bezelHeight": 1.1,
-    "bezelMaterial": "polishedSilver"
+    "bezelMaterial": "matteSilver"
   },
   "markers": [
     {
@@ -81,7 +81,7 @@
       "rotate": true,
       "fontSize": 2.5,
       "color": "#000000",
-      "material": "polishedSilver",
+      "material": "matteWhite",
       "spread": 18.4,
       "topWidth": 0.3,
       "bottomWidth": 0.3,
@@ -211,11 +211,11 @@
       "type": "line",
       "rotate": true,
       "hideHourMarks": true,
-      "material": "polishedSilver",
+      "material": "matteWhite",
       "spread": 18.5,
       "width": 0.1,
-      "height": 1,
-      "depth": 0.2,
+      "length": 1,
+      "depth": 0.1,
       "radius": 0.3,
       "fontSize": 1.5,
       "color": "#000000",
@@ -227,10 +227,10 @@
       "type": "ring",
       "vector": 0,
       "offset": 0,
-      "material": "polishedSilver",
+      "material": "matteWhite",
       "spread": 19,
-      "thickness": 0.1,
-      "depth": 0.2,
+      "thickness": 0.05,
+      "depth": 0.05,
       "length": 5,
       "rotation": 0
     }

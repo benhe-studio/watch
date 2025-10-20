@@ -41,18 +41,17 @@ export const decorationsConfig = {
       type: 'range',
       label: 'Thickness',
       default: 1,
-      min: 0.1,
-      max: 5,
-      step: 0.1,
-      condition: (item) => item.type === 'ring'
+      min: 0.01,
+      max: 2,
+      step: 0.01
     },
     depth: {
       type: 'range',
       label: 'Depth',
       default: 0.5,
-      min: 0.1,
+      min: 0.01,
       max: 2,
-      step: 0.1,
+      step: 0.01,
       condition: (item) => item.type === 'ring'
     },
     length: {

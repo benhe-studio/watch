@@ -44,7 +44,7 @@ function MinuteMarkers({ minuteMarkers }) {
                 <mesh castShadow receiveShadow>
                   <boxGeometry args={[
                     markerConfig.width || 0.2,
-                    markerConfig.height || 1,
+                    markerConfig.length || 1,
                     markerConfig.depth || 0.2
                   ]} />
                   <meshStandardMaterial color={markerConfig.color || '#000000'} />
@@ -87,13 +87,13 @@ function MinuteMarkers({ minuteMarkers }) {
             >
               {markerConfig.type === 'line' && (() => {
                 const width = markerConfig.width || 0.02
-                const height = markerConfig.height || 0.1
+                const length = markerConfig.length || 0.1
                 const depth = markerConfig.depth || 0.02
                 const material = getMaterialInstance(markerConfig.material || 'polishedSilver')
                 
                 return (
                   <mesh material={material} castShadow receiveShadow>
-                    <boxGeometry args={[width, height, depth]} />
+                    <boxGeometry args={[width, length, depth]} />
                   </mesh>
                 )
               })()}

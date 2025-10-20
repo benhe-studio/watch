@@ -62,6 +62,7 @@ function Decorations({ decorations }) {
         if (decorationConfig.type === 'line') {
           const length = decorationConfig.length || 5
           const rotation = decorationConfig.rotation || 0
+          const thickness = decorationConfig.thickness || 1
           const material = getMaterialInstance(decorationConfig.material || 'polishedSilver')
           
           // Extract position values
@@ -80,9 +81,9 @@ function Decorations({ decorations }) {
           // Convert rotation from degrees to radians
           const rotationRad = (rotation * Math.PI) / 180
           
-          // Create a thin box geometry for the line
-          const lineWidth = 0.2 // Fixed width for the line
-          const lineDepth = 0.3 // Fixed depth for the line
+          // Use thickness for both width and depth of the line
+          const lineWidth = thickness * 0.2 // Scale thickness for width
+          const lineDepth = thickness * 0.3 // Scale thickness for depth
           
           return (
             <mesh
