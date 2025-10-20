@@ -73,7 +73,7 @@ function createHandGeometry(points) {
 }
 
 function Primitive({ primitiveConfig }) {
-  const { vector, offset, zOffset, rotation, type, fontSize, text, color, material, points, labels, spread, markerCount, markerSkip, markerLength, markerWidth } = primitiveConfig
+  const { vector, offset, zOffset, rotation, type, fontSize, text, color, material, points, labels, spread, radialAlignment, markerCount, markerSkip, markerLength, markerWidth } = primitiveConfig
   
   // Convert vector (0-12) to angle
   const hourValue = vector !== undefined ? vector : 6
@@ -137,10 +137,26 @@ function Primitive({ primitiveConfig }) {
         const labelX = Math.sin(labelAngle) * radius
         const labelY = Math.cos(labelAngle) * radius
         
+        // Calculate rotation for radial alignment
+        let textRotation = 0
+        if (radialAlignment) {
+          // Rotate text to align radially (perpendicular to the circle)
+          // The text should point toward the center
+          textRotation = -labelAngle
+          
+          // For labels below the midline (between 3 and 9 o'clock), flip them
+          // This is when labelAngle is between π/2 and 3π/2 (90° to 270°)
+          const normalizedAngle = labelAngle % (Math.PI * 2)
+          if (normalizedAngle > Math.PI / 2 && normalizedAngle < (3 * Math.PI) / 2) {
+            textRotation += Math.PI // Flip 180 degrees
+          }
+        }
+        
         return (
           <Text
             key={index}
             position={[labelX, labelY, 0]}
+            rotation={[0, 0, textRotation]}
             fontSize={fontSize || 2}
             color={color || '#000000'}
             anchorX="center"

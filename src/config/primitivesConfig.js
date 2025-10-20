@@ -98,6 +98,13 @@ export const primitivesConfig = {
       description: 'Comma-separated list of text labels',
       condition: (item) => item.type === 'circularLabel'
     },
+    radialAlignment: {
+      type: 'checkbox',
+      label: 'Radial Alignment',
+      default: false,
+      description: 'Rotate labels to align radially toward center',
+      condition: (item) => item.type === 'circularLabel'
+    },
     spread: {
       type: 'range',
       label: 'Spread',

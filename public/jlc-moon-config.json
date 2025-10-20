@@ -317,7 +317,8 @@
       "markerCount": 12,
       "markerSkip": 0,
       "markerLength": 1,
-      "markerWidth": 0.1
+      "markerWidth": 0.1,
+      "radialAlignment": true
     },
     {
       "type": "hand",
