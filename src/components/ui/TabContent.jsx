@@ -1,14 +1,12 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import './TabContent.css'
-import PointGraphEditor from './PointGraphEditor'
-import BevelControl from './BevelControl'
-import PositionControl from './PositionControl'
-import { EyeIcon, EyeSlashIcon, XMarkIcon, ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
+import { renderControl as renderControlHelper } from './ControlRenderer'
+import { EyeIcon, EyeSlashIcon, XMarkIcon, ChevronRightIcon, ChevronDownIcon, PencilIcon } from '@heroicons/react/24/outline'
 
-function TabContent({ 
-  sectionKey, 
-  section, 
-  config, 
+function TabContent({
+  sectionKey,
+  section,
+  config,
   updateConfig,
   expandedItems,
   toggleItem,
@@ -20,6 +18,9 @@ function TabContent({
   toggleItemVisibility
 }) {
   const dropdownRef = useRef(null)
+  const [editingName, setEditingName] = useState(null)
+  const [editNameValue, setEditNameValue] = useState('')
+  const nameInputRef = useRef(null)
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -37,6 +38,40 @@ function TabContent({
     }
   }, [typeSelectionDropdown, sectionKey, setTypeSelectionDropdown])
 
+  // Focus name input when editing starts
+  useEffect(() => {
+    if (editingName !== null && nameInputRef.current) {
+      nameInputRef.current.focus()
+      nameInputRef.current.select()
+    }
+  }, [editingName])
+
+  const startEditingName = (index, currentName) => {
+    setEditingName(index)
+    setEditNameValue(currentName || '')
+  }
+
+  const saveNameEdit = (index) => {
+    if (editingName === index) {
+      updateArrayItem(sectionKey, index, 'name', editNameValue.trim() || undefined)
+      setEditingName(null)
+      setEditNameValue('')
+    }
+  }
+
+  const cancelNameEdit = () => {
+    setEditingName(null)
+    setEditNameValue('')
+  }
+
+  const handleNameKeyDown = (e, index) => {
+    if (e.key === 'Enter') {
+      saveNameEdit(index)
+    } else if (e.key === 'Escape') {
+      cancelNameEdit()
+    }
+  }
+
   const toggleTypeSelection = () => {
     if (typeSelectionDropdown === sectionKey) {
       setTypeSelectionDropdown(null)
@@ -53,260 +88,22 @@ function TabContent({
   }
 
   const renderControl = (controlKey, controlConfig, itemData = null, itemIndex = null) => {
-    // For array items, check condition against the item data
-    // For regular sections, check condition against the full config
-    const conditionData = itemData || config
-    
-    if (controlConfig.condition && !controlConfig.condition(conditionData)) {
-      return null
-    }
-
-    // Hide type field for array items since it's locked after creation
-    if (itemData && controlKey === 'type' && controlConfig.type === 'buttons') {
-      return null
-    }
-
     const value = itemData ? itemData[controlKey] : config[sectionKey][controlKey]
     const onChange = itemData
       ? (newValue) => updateArrayItem(sectionKey, itemIndex, controlKey, newValue)
       : (newValue) => updateConfig(sectionKey, controlKey, newValue)
 
-    switch (controlConfig.type) {
-      case 'color':
-        return (
-          <div key={controlKey} className="control-group">
-            <label>{controlConfig.label}</label>
-            <input
-              type="color"
-              value={value}
-              onChange={(e) => onChange(e.target.value)}
-            />
-          </div>
-        )
-
-      case 'range':
-        const displayValue = value ?? controlConfig.default ?? 0
-        return (
-          <div key={controlKey} className="control-group">
-            <label>{controlConfig.label}: {displayValue.toFixed(2)}</label>
-            <input
-              type="range"
-              min={controlConfig.min}
-              max={controlConfig.max}
-              step={controlConfig.step}
-              value={displayValue}
-              onChange={(e) => onChange(parseFloat(e.target.value))}
-            />
-          </div>
-        )
-
-      case 'buttons':
-        return (
-          <div key={controlKey} className="control-group">
-            <label>{controlConfig.label}</label>
-            <div className="button-group">
-              {controlConfig.options.map(option => (
-                <button
-                  key={option.value}
-                  className={value === option.value ? 'active' : ''}
-                  onClick={() => onChange(option.value)}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )
-
-      case 'checkbox':
-        return (
-          <div key={controlKey} className="control-group">
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                checked={value}
-                onChange={(e) => onChange(e.target.checked)}
-              />
-              <span>{controlConfig.label}</span>
-            </label>
-          </div>
-        )
-
-      case 'select':
-        return (
-          <div key={controlKey} className="control-group">
-            <label>{controlConfig.label}</label>
-            <select
-              value={value}
-              onChange={(e) => onChange(e.target.value)}
-            >
-              {controlConfig.options.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        )
-
-      case 'hourSelector':
-        const hours = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-        return (
-          <div key={controlKey} className="control-group">
-            <label>{controlConfig.label}</label>
-            <div className="hour-selector">
-              {hours.map(hour => (
-                <button
-                  key={hour}
-                  className={value.includes(hour) ? 'active' : ''}
-                  onClick={() => {
-                    const newValue = value.includes(hour)
-                      ? value.filter(h => h !== hour)
-                      : [...value, hour].sort((a, b) => {
-                          // Sort with 12 first, then 1-11
-                          if (a === 12) return -1
-                          if (b === 12) return 1
-                          return a - b
-                        })
-                    onChange(newValue)
-                  }}
-                >
-                  {hour}
-                </button>
-              ))}
-            </div>
-          </div>
-        )
-
-    case 'text':
-      return (
-        <div key={controlKey} className="control-group">
-          <label>{controlConfig.label}</label>
-          {controlConfig.description && (
-            <div className="control-description">{controlConfig.description}</div>
-          )}
-          <input
-            type="text"
-            value={value || ''}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={controlConfig.placeholder || ''}
-          />
-        </div>
-      )
-
-    case 'pointArray':
-      const points = value || controlConfig.default || []
-      
-      // Check if this is the 'points' control and if there's a corresponding 'cutoutPoints' control
-      let cutoutPoints = []
-      let onCutoutChange = null
-      
-      if (controlKey === 'points' && itemData && itemData.cutoutPoints !== undefined) {
-        cutoutPoints = itemData.cutoutPoints || []
-        onCutoutChange = (newCutoutPoints) => {
-          updateArrayItem(sectionKey, itemIndex, 'cutoutPoints', newCutoutPoints)
-        }
-      }
-      
-      return (
-        <div key={controlKey} className="control-group point-array-control">
-          <label>{controlConfig.label}</label>
-          <PointGraphEditor
-            points={points}
-            onChange={onChange}
-            cutoutPoints={cutoutPoints}
-            onCutoutChange={onCutoutChange}
-            xMin={controlConfig.xMin ?? 0}
-            xMax={controlConfig.xMax ?? 10}
-            yMin={controlConfig.yMin ?? 0}
-            yMax={controlConfig.yMax ?? 10}
-            xLabel={controlConfig.xLabel || 'X'}
-            yLabel={controlConfig.yLabel || 'Y'}
-            minPoints={controlConfig.minPoints ?? 2}
-            description={controlConfig.description}
-          />
-        </div>
-      )
-
-    case 'bevel':
-      return (
-        <div key={controlKey} className="control-group">
-          <BevelControl
-            value={value}
-            onChange={onChange}
-            config={controlConfig}
-          />
-        </div>
-      )
-
-    case 'position':
-      return (
-        <div key={controlKey} className="control-group">
-          <PositionControl
-            value={value}
-            onChange={onChange}
-            config={controlConfig}
-          />
-        </div>
-      )
-
-    case 'image':
-      return (
-        <div key={controlKey} className="control-group">
-          <label>{controlConfig.label}</label>
-          {controlConfig.description && (
-            <div className="control-description">{controlConfig.description}</div>
-          )}
-          <div className="image-upload-container">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0]
-                if (file) {
-                  const reader = new FileReader()
-                  reader.onload = (event) => {
-                    onChange(event.target.result)
-                  }
-                  reader.readAsDataURL(file)
-                }
-              }}
-              style={{ display: 'block', marginBottom: '8px' }}
-            />
-            {value && (
-              <div className="image-preview">
-                <img
-                  src={value}
-                  alt="Texture preview"
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '150px',
-                    objectFit: 'contain',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px'
-                  }}
-                />
-                <button
-                  onClick={() => onChange(null)}
-                  className="clear-image-button"
-                  style={{
-                    marginTop: '8px',
-                    padding: '4px 8px',
-                    fontSize: '12px'
-                  }}
-                >
-                  Clear Image
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )
-
-    default:
-      return null
+    return renderControlHelper(
+      controlKey,
+      controlConfig,
+      value,
+      onChange,
+      itemData,
+      sectionKey,
+      itemIndex,
+      updateArrayItem
+    )
   }
-}
 
   if (section.isArray) {
     const items = config[sectionKey] || []
@@ -343,22 +140,54 @@ function TabContent({
           const index = items.length - 1 - reverseIndex
           const itemKey = `${sectionKey}-${index}`
           const isExpanded = expandedItems[itemKey]
+          const isEditingThisName = editingName === index
+          
+          // Determine display name
+          const displayName = (() => {
+            if (item.name) {
+              return item.name
+            }
+            const typeControl = section.controls.type
+            if (typeControl && typeControl.options) {
+              const typeOption = typeControl.options.find(opt => opt.value === item.type)
+              return typeOption ? typeOption.label : item.type
+            }
+            return section.itemLabel || 'Item'
+          })()
           
           return (
             <div key={index} className="array-item">
-              <div className="array-item-header" onClick={() => toggleItem(sectionKey, index)}>
-                <span>
-                  {(() => {
-                    const typeControl = section.controls.type
-                    if (typeControl && typeControl.options) {
-                      const typeOption = typeControl.options.find(opt => opt.value === item.type)
-                      return typeOption ? typeOption.label : item.type
-                    }
-                    return section.itemLabel || 'Item'
-                  })()}
-                  {item.hidden ? ' (Hidden)' : ''}
-                </span>
+              <div className="array-item-header" onClick={() => !isEditingThisName && toggleItem(sectionKey, index)}>
+                {isEditingThisName ? (
+                  <input
+                    ref={nameInputRef}
+                    type="text"
+                    className="name-edit-input"
+                    value={editNameValue}
+                    onChange={(e) => setEditNameValue(e.target.value)}
+                    onKeyDown={(e) => handleNameKeyDown(e, index)}
+                    onBlur={() => saveNameEdit(index)}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                ) : (
+                  <span>
+                    {displayName}
+                    {item.hidden ? ' (Hidden)' : ''}
+                  </span>
+                )}
                 <div className="array-item-actions">
+                  {!isEditingThisName && (
+                    <button
+                      className="edit-name-button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        startEditingName(index, item.name || displayName)
+                      }}
+                      title="Edit name"
+                    >
+                      <PencilIcon className="icon" />
+                    </button>
+                  )}
                   <button
                     className="hide-item-button"
                     onClick={(e) => {

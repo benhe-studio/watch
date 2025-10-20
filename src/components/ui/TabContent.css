@@ -222,6 +222,46 @@
   gap: 10px;
 }
 
+.name-edit-input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 2px solid #4a9eff;
+  border-radius: 4px;
+  background: #222;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  outline: none;
+}
+
+.name-edit-input:focus {
+  border-color: #6bb3ff;
+}
+
+.edit-name-button {
+  padding: 6px;
+  border: 1px solid #4a9eff;
+  border-radius: 3px;
+  background: transparent;
+  color: #4a9eff;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-name-button .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.edit-name-button:hover {
+  background: #4a9eff;
+  color: #ffffff;
+}
+
 .hide-item-button {
   padding: 6px;
   border: 1px solid #ffa500;
