@@ -250,6 +250,59 @@ function TabContent({
         </div>
       )
 
+    case 'image':
+      return (
+        <div key={controlKey} className="control-group">
+          <label>{controlConfig.label}</label>
+          {controlConfig.description && (
+            <div className="control-description">{controlConfig.description}</div>
+          )}
+          <div className="image-upload-container">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) {
+                  const reader = new FileReader()
+                  reader.onload = (event) => {
+                    onChange(event.target.result)
+                  }
+                  reader.readAsDataURL(file)
+                }
+              }}
+              style={{ display: 'block', marginBottom: '8px' }}
+            />
+            {value && (
+              <div className="image-preview">
+                <img
+                  src={value}
+                  alt="Texture preview"
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '150px',
+                    objectFit: 'contain',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px'
+                  }}
+                />
+                <button
+                  onClick={() => onChange(null)}
+                  className="clear-image-button"
+                  style={{
+                    marginTop: '8px',
+                    padding: '4px 8px',
+                    fontSize: '12px'
+                  }}
+                >
+                  Clear Image
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )
+
     default:
       return null
   }

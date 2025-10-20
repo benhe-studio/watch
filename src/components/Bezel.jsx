@@ -12,7 +12,7 @@ function Bezel({ config }) {
     const faceRadius = 20
     const bezelHeight = config.bezelHeight || 2
     const bezelThickness = config.bezelThickness || 1.5
-    const bezelSegments = config.bezelSegments || 128
+    const bezelSegments = 256 // Always use 256 segments for smooth curves
     
     // Extract bevel settings with defaults
     const bevel = config.bezelBevel || { enabled: false, thickness: 0.1, size: 0.1, segments: 3 }
@@ -55,7 +55,6 @@ function Bezel({ config }) {
     config.bezel,
     config.bezelHeight,
     config.bezelThickness,
-    config.bezelSegments,
     config.bezelBevel
   ])
 

@@ -1,10 +1,36 @@
 import { useMemo } from 'react'
+import { useTexture } from '@react-three/drei'
 import { getMaterialInstance } from '../config/helpers/materials'
 import { FACE_THICKNESS } from '../config/constants'
 import * as THREE from 'three'
 
 function Face({ config, complicationWindows }) {
-  const material = useMemo(() => getMaterialInstance(config.material), [config.material])
+  // Load texture if provided
+  const textureDataUrl = config.textureImage
+  
+  // Create material with texture support
+  const material = useMemo(() => {
+    if (textureDataUrl) {
+      // Create texture from data URL
+      const loader = new THREE.TextureLoader()
+      const texture = loader.load(textureDataUrl)
+      texture.colorSpace = THREE.SRGBColorSpace
+      
+      // Rotate texture counterclockwise by 90 degrees
+      texture.center.set(0.5, 0.5)
+      texture.rotation = Math.PI / 2 // 90 degrees in radians
+      
+      // Create a material with the texture
+      return new THREE.MeshStandardMaterial({
+        map: texture,
+        metalness: 0.1,
+        roughness: 0.5
+      })
+    }
+    
+    // Use default material if no texture
+    return getMaterialInstance(config.material)
+  }, [config.material, textureDataUrl])
   
   // Calculate window positions for all complication windows
   const faceGeometry = useMemo(() => {

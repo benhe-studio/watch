@@ -28,15 +28,6 @@ export const bezelConfig = {
       step: 0.1,
       condition: (config) => config.bezel
     },
-    bezelSegments: {
-      type: 'range',
-      label: 'Bezel Curve Segments',
-      default: 128,
-      min: 32,
-      max: 256,
-      step: 8,
-      condition: (config) => config.bezel
-    },
     bezelBevel: createBevelControl({
       defaultEnabled: false,
       defaultThickness: 0.1,
