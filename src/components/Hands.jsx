@@ -2,7 +2,7 @@ import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-import { getMaterialInstance } from '../config/materials'
+import { getMaterialInstance } from '../config/helpers/materials'
 
 // Geometry generator functions - return THREE.BufferGeometry
 const geometryGenerators = {

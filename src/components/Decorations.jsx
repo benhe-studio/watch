@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { getMaterialInstance } from '../config/materials'
+import { getMaterialInstance } from '../config/helpers/materials'
 
 function Decorations({ decorations }) {
   if (!decorations || decorations.length === 0) {

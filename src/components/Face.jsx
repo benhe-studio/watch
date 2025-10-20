@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { getMaterialInstance } from '../config/materials'
+import { getMaterialInstance } from '../config/helpers/materials'
 import { FACE_THICKNESS } from '../config/constants'
 import * as THREE from 'three'
 

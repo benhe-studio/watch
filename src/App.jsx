@@ -5,7 +5,7 @@ import * as THREE from 'three'
 import WatchFace from './components/WatchFace'
 import ControlPanel from './components/ControlPanel'
 import { watchConfig, generateInitialState } from './config/watchConfig'
-import { updateMaterialProperties } from './config/materials'
+import { updateMaterialProperties } from './config/helpers/materials'
 import './App.css'
 
 function App() {

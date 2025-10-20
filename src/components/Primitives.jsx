@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Text } from '@react-three/drei'
 import * as THREE from 'three'
-import { getMaterialInstance } from '../config/materials'
+import { getMaterialInstance } from '../config/helpers/materials'
 
 // Helper function to create beveled cylinder geometry
 function createBeveledCylinder(radius, height) {

@@ -1,6 +1,6 @@
 import { Text } from '@react-three/drei'
 import * as THREE from 'three'
-import { getMaterialInstance } from '../config/materials'
+import { getMaterialInstance } from '../config/helpers/materials'
 
 function MinuteMarkers({ minuteMarkers }) {
   if (!minuteMarkers || minuteMarkers.length === 0) {

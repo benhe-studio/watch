@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { getMaterialInstance } from '../config/materials'
+import { getMaterialInstance } from '../config/helpers/materials'
 import * as THREE from 'three'
 
 function Bezel({ config }) {

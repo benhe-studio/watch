@@ -1,6 +1,6 @@
 import { Text3D } from '@react-three/drei'
 import * as THREE from 'three'
-import { getMaterialInstance } from '../config/materials'
+import { getMaterialInstance } from '../config/helpers/materials'
 
 function Markers({ markers }) {
   if (!markers || markers.length === 0) {

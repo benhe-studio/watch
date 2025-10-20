@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { FACE_THICKNESS } from '../config/constants'
-import { getMaterialInstance } from '../config/materials'
+import { getMaterialInstance } from '../config/helpers/materials'
 import * as THREE from 'three'
 
 // Extract window rendering logic into a separate component to avoid hooks in map

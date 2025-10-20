@@ -1,4 +1,4 @@
-import { getMaterialOptions } from './materials'
+import { getMaterialOptions } from './helpers/materials'
 
 export const decorationsConfig = {
   label: 'Decorations',
