@@ -51,6 +51,13 @@ export const complicationWindowsConfig = {
       step: 0.1,
       condition: (item) => item.type === 'rectangle'
     },
+    backgroundMaterial: {
+      type: 'select',
+      label: 'Background Material',
+      default: 'white',
+      options: getMaterialOptions(),
+      condition: (item) => item.type !== 'moonphase'
+    },
     frameEnabled: {
       type: 'checkbox',
       label: 'Enable Frame',

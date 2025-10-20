@@ -16,8 +16,7 @@ export const bezelConfig = {
       default: 2,
       min: 0.5,
       max: 5,
-      step: 0.1,
-      condition: (config) => config.bezel
+      step: 0.1
     },
     bezelThickness: {
       type: 'range',
@@ -25,8 +24,7 @@ export const bezelConfig = {
       default: 1.5,
       min: 0.5,
       max: 4,
-      step: 0.1,
-      condition: (config) => config.bezel
+      step: 0.1
     },
     bezelBevel: createBevelControl({
       defaultEnabled: false,
@@ -38,15 +36,13 @@ export const bezelConfig = {
       minSize: 0.01,
       maxSize: 2,
       minSegments: 1,
-      maxSegments: 10,
-      condition: (config) => config.bezel
+      maxSegments: 10
     }),
     bezelMaterial: {
       type: 'select',
       label: 'Bezel Material',
       default: 'brushedSteel',
-      options: getMaterialOptions(),
-      condition: (config) => config.bezel
+      options: getMaterialOptions()
     }
   }
 }

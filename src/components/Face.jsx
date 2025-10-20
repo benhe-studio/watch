@@ -8,6 +8,11 @@ function Face({ config, complicationWindows }) {
   // Load texture if provided
   const textureDataUrl = config.textureImage
   
+  // Extract pinion settings
+  const pinionRadius = config.pinionRadius !== undefined ? config.pinionRadius : 1.5
+  const pinionHeight = config.pinionHeight !== undefined ? config.pinionHeight : 2
+  const pinionMaterial = config.pinionMaterial || 'polishedSilver'
+  
   // Create material with texture support
   const material = useMemo(() => {
     if (textureDataUrl) {
@@ -172,10 +177,30 @@ function Face({ config, complicationWindows }) {
     return geometry
   }, [complicationWindows])
 
+  // Create pinion material instance
+  const pinionMaterialInstance = useMemo(() =>
+    getMaterialInstance(pinionMaterial),
+    [pinionMaterial]
+  )
+
   return (
-    <mesh castShadow receiveShadow material={material}>
-      <primitive object={faceGeometry} attach="geometry" />
-    </mesh>
+    <>
+      {/* Main face */}
+      <mesh castShadow receiveShadow material={material}>
+        <primitive object={faceGeometry} attach="geometry" />
+      </mesh>
+      
+      {/* Pinion cylinder in center - rotated 90 degrees to align with Z-axis */}
+      <mesh
+        position={[0, 0, pinionHeight / 2]}
+        rotation={[Math.PI / 2, 0, 0]}
+        castShadow
+        receiveShadow
+        material={pinionMaterialInstance}
+      >
+        <cylinderGeometry args={[pinionRadius, pinionRadius, pinionHeight, 32, 1, false]} />
+      </mesh>
+    </>
   )
 }
 

@@ -1,7 +1,9 @@
 {
   "face": {
     "material": "matteBlack",
-    "textureImage": null
+    "textureImage": null,
+    "pinionRadius": 0.5,
+    "pinionHeight": 1.7
   },
   "bezel": {
     "bezel": true,
@@ -11,7 +13,8 @@
       "size": 0.42,
       "segments": 1
     },
-    "bezelHeight": 1.1
+    "bezelHeight": 1.1,
+    "bezelMaterial": "polishedSilver"
   },
   "markers": [
     {

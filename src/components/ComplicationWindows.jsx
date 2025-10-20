@@ -12,6 +12,7 @@ function ComplicationWindow({ windowConfig, index }) {
     radius,
     width,
     height,
+    backgroundMaterial,
     frameEnabled,
     frameWidth,
     frameThickness,
@@ -112,6 +113,12 @@ function ComplicationWindow({ windowConfig, index }) {
     [shouldRenderFrame, frameMaterial]
   )
 
+  // Get background material instance (not for moonphase)
+  const backgroundMaterialInstance = useMemo(() => {
+    if (type === 'moonphase') return null
+    return getMaterialInstance(backgroundMaterial || 'white')
+  }, [type, backgroundMaterial])
+
   // Position frame on top of face (frameDepth is Z offset, frameThickness is extrusion depth)
   const frameDepthValue = frameDepth !== undefined ? frameDepth : 0.25
   const frameThicknessValue = frameThickness || 0.5
@@ -126,10 +133,21 @@ function ComplicationWindow({ windowConfig, index }) {
         ) : (
           <planeGeometry args={[width || 4, height || 3]} />
         )}
-        <meshStandardMaterial
-          color={type === 'moonphase' ? "#1a2a4a" : "#ffffff"}
-          side={THREE.DoubleSide}
-        />
+        {type === 'moonphase' ? (
+          <meshStandardMaterial
+            color="#1a2a4a"
+            side={THREE.DoubleSide}
+          />
+        ) : (
+          backgroundMaterialInstance ? (
+            <primitive object={backgroundMaterialInstance} attach="material" />
+          ) : (
+            <meshStandardMaterial
+              color="#ffffff"
+              side={THREE.DoubleSide}
+            />
+          )
+        )}
       </mesh>
 
       {/* Moonphase gold circle at 2 o'clock position */}

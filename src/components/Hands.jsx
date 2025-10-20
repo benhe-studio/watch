@@ -494,12 +494,6 @@ function Hands({ hands = [] }) {
         />
         )
       })}
-      
-      {/* Center cap */}
-      <mesh position={[0, 0, 0.5]} rotation={[0, 0, 0]} castShadow receiveShadow>
-        <circleGeometry args={[1, 32]} />
-        <meshStandardMaterial color="#000000" />
-      </mesh>
     </group>
   )
 }

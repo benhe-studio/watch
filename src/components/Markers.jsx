@@ -36,11 +36,20 @@ function Markers({ markers }) {
           const x = Math.sin(angle) * spread
           const y = Math.cos(angle) * spread
           
+          // Determine if this marker is on the bottom half (hours 4-8)
+          // For numerals with radial alignment, rotate an additional 180 degrees
+          const isBottomHalf = number >= 4 && number <= 8
+          const needsAdditionalRotation = markerConfig.type === 'numeral' && markerConfig.radialAlignment && isBottomHalf
+          
           markerElements.push(
             <group
               key={`${markerIndex}-${i}`}
               position={[x, y, 0]}
-              rotation={[0, 0, markerConfig.radialAlignment ? -angle : 0]}
+              rotation={[
+                0,
+                0,
+                markerConfig.radialAlignment ? -angle + (needsAdditionalRotation ? Math.PI : 0) : 0
+              ]}
             >
               {markerConfig.type === 'blocks' && (() => {
                 const topWidth = markerConfig.topWidth !== undefined ? markerConfig.topWidth : 0.1
