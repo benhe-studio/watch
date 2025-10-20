@@ -10,6 +10,7 @@
     "bezelBevelSegments": 1,
     "bezelThickness": 1.1
   },
+  "bezel": [],
   "markers": [
     {
       "type": "circle",

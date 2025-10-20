@@ -8,6 +8,7 @@ import { decorationsConfig } from './decorationsConfig'
 import { handsConfig } from './handsConfig'
 import { complicationWindowsConfig } from './complicationWindowsConfig'
 import { primitivesConfig } from './primitivesConfig'
+import { bezelConfig } from './bezelConfig'
 
 export const watchConfig = {
   face: faceConfig,
@@ -16,7 +17,8 @@ export const watchConfig = {
   minuteMarkers: minuteMarkersConfig,
   decorations: decorationsConfig,
   complicationWindows: complicationWindowsConfig,
-  primitives: primitivesConfig
+  primitives: primitivesConfig,
+  bezel: bezelConfig
 }
 
 // Generate initial state from config

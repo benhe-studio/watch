@@ -1,4 +1,5 @@
 import Face from './Face'
+import Bezel from './Bezel'
 import Markers from './Markers'
 import MinuteMarkers from './MinuteMarkers'
 import Decorations from './Decorations'
@@ -11,6 +12,9 @@ function WatchFace({ config }) {
     <group>
       {/* Watch face base */}
       <Face config={config.face} complicationWindows={config.complicationWindows} />
+
+      {/* Bezel */}
+      {config.bezel && <Bezel config={config.bezel} />}
 
       {/* Markers */}
       {config.markers && <Markers markers={config.markers} />}
