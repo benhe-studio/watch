@@ -31,7 +31,7 @@ export const primitivesConfig = {
       default: 10,
       min: 0,
       max: 25,
-      step: 0.5
+      step: 0.1
     },
     zOffset: {
       type: 'range',

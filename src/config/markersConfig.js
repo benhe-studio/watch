@@ -60,7 +60,7 @@ export const markersConfig = {
       default: 1,
       min: 0.1,
       max: 5,
-      step: 0.1,
+      step: 0.02,
       condition: (item) => item.type === 'blocks'
     },
     bottomWidth: {
@@ -69,7 +69,7 @@ export const markersConfig = {
       default: 1,
       min: 0,
       max: 5,
-      step: 0.1,
+      step: 0.02,
       condition: (item) => item.type === 'blocks'
     },
     length: {

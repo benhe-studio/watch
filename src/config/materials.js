@@ -94,6 +94,46 @@ export const materialConfigs = {
     ior: 1.5,
     emissive: '#7ddfb9',
     emissiveIntensity: 20.0
+  },
+  polishedRoseGold: {
+    name: 'Polished Rose Gold',
+    color: '#ffd2ad',
+    roughness: 0.15,
+    metalness: 1.0,
+    clearcoat: 0.4,
+    clearcoatRoughness: 0.1,
+    reflectivity: 1.0,
+    ior: 1.5
+  },
+  polishedNavyBlue: {
+    name: 'Polished Navy Blue',
+    color: '#001f3f',
+    roughness: 0.1,
+    metalness: 1.0,
+    clearcoat: 0.5,
+    clearcoatRoughness: 0.1,
+    reflectivity: 1.0,
+    ior: 1.5
+  },
+  polishedForestGreen: {
+    name: 'Polished Forest Green',
+    color: '#228b22',
+    roughness: 0.1,
+    metalness: 1.0,
+    clearcoat: 0.5,
+    clearcoatRoughness: 0.1,
+    reflectivity: 1.0,
+    ior: 1.5
+  },
+  matteOffWhite: {
+    name: 'Matte Off White',
+    color: '#f5ece6',
+    roughness: 0.85,
+    metalness: 0.0,
+    clearcoat: 0.0,
+    clearcoatRoughness: 0.0,
+    reflectivity: 0.25,
+    ior: 1.5
   }
 }
 

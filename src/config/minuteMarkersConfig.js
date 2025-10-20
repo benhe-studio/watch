@@ -84,7 +84,7 @@ export const minuteMarkersConfig = {
       default: 0.3,
       min: 0.1,
       max: 1,
-      step: 0.1,
+      step: 0.05,
       condition: (item) => item.type === 'dot'
     },
     fontSize: {
