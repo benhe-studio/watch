@@ -39,7 +39,7 @@ function MinuteMarkers({ minuteMarkers }) {
               <group
                 key={`${markerIndex}-${i}`}
                 position={[x, y, 0]}
-                rotation={[0, 0, markerConfig.rotate ? -angle : 0]}
+                rotation={[0, 0, markerConfig.radialAlignment ? -angle : 0]}
               >
                 <mesh castShadow receiveShadow>
                   <boxGeometry args={[
@@ -83,7 +83,7 @@ function MinuteMarkers({ minuteMarkers }) {
             <group
               key={`${markerIndex}-${i}`}
               position={[x, y, 0]}
-              rotation={[0, 0, markerConfig.rotate ? -angle : 0]}
+              rotation={[0, 0, markerConfig.radialAlignment ? -angle : 0]}
             >
               {markerConfig.type === 'line' && (() => {
                 const width = markerConfig.width || 0.02
@@ -114,7 +114,7 @@ function MinuteMarkers({ minuteMarkers }) {
                 // Rotate bottom half numbers (20, 25, 30, 35, 40) by 180 degrees
                 // These correspond to i values of 20, 25, 30, 35, 40
                 // Only apply flip if rotation is enabled
-                const needsFlip = markerConfig.rotate && i >= 20 && i <= 40
+                const needsFlip = markerConfig.radialAlignment && i >= 20 && i <= 40
                 const additionalRotation = needsFlip ? Math.PI : 0
                 
                 return (

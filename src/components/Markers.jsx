@@ -40,7 +40,7 @@ function Markers({ markers }) {
             <group
               key={`${markerIndex}-${i}`}
               position={[x, y, 0]}
-              rotation={[0, 0, markerConfig.rotate ? -angle : 0]}
+              rotation={[0, 0, markerConfig.radialAlignment ? -angle : 0]}
             >
               {markerConfig.type === 'blocks' && (() => {
                 const topWidth = markerConfig.topWidth !== undefined ? markerConfig.topWidth : 0.1

@@ -17,11 +17,12 @@ export const markersConfig = {
         { value: 'circle', label: 'Circle' }
       ]
     },
-    rotate: {
+    radialAlignment: {
       type: 'checkbox',
-      label: 'Rotate',
+      label: 'Radial Alignment',
       default: false,
       getDefault: (item) => item.type === 'blocks' ? true : false,
+      description: 'Rotate markers to align radially toward center',
       condition: (item) => item.type !== 'circle'
     },
     fontSize: {

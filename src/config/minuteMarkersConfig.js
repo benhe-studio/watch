@@ -17,10 +17,11 @@ export const minuteMarkersConfig = {
         { value: 'subminute', label: 'Sub Minute' }
       ]
     },
-    rotate: {
+    radialAlignment: {
       type: 'checkbox',
-      label: 'Rotate',
-      default: true
+      label: 'Radial Alignment',
+      default: true,
+      description: 'Rotate markers to align radially toward center'
     },
     hideHourMarks: {
       type: 'checkbox',
