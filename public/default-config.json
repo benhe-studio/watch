@@ -1,6 +1,14 @@
 {
   "face": {
-    "material": "matteBlackPlastic"
+    "material": "matteBlackPlastic",
+    "bezel": true,
+    "bezelHeight": 0.6,
+    "bezelMaterial": "brushedSteel",
+    "bezelBevelEnabled": true,
+    "bezelBevelThickness": 0.31,
+    "bezelBevelSize": 0.38,
+    "bezelBevelSegments": 1,
+    "bezelThickness": 1.1
   },
   "markers": [
     {

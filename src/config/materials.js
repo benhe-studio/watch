@@ -127,7 +127,7 @@ export const materialConfigs = {
   },
   matteOffWhite: {
     name: 'Matte Off White',
-    color: '#f5ece6',
+    color: '#fffaf8',
     roughness: 0.85,
     metalness: 0.0,
     clearcoat: 0.0,

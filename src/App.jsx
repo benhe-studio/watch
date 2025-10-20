@@ -145,7 +145,7 @@ function App() {
           )}
           
           {/* Environment for realistic metallic reflections */}
-          {environmentLight && <Environment preset="studio" environmentIntensity={0.2}/>}
+          {environmentLight && <Environment preset="apartment" environmentIntensity={0.2}/>}
           
           {/* Axis helper to show X (red), Y (green), Z (blue) - only visible in debug mode */}
           {debugView && <primitive object={new THREE.AxesHelper(30)} />}

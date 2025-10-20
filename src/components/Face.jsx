@@ -5,6 +5,7 @@ import * as THREE from 'three'
 
 function Face({ config, complicationWindows }) {
   const material = useMemo(() => getMaterialInstance(config.material), [config.material])
+  const bezelMaterial = useMemo(() => getMaterialInstance(config.bezelMaterial || config.material), [config.bezelMaterial, config.material])
   
   // Calculate window positions for all complication windows
   const faceGeometry = useMemo(() => {
@@ -142,10 +143,75 @@ function Face({ config, complicationWindows }) {
     return geometry
   }, [complicationWindows])
 
+  // Create bezel geometry if enabled
+  const bezelGeometry = useMemo(() => {
+    if (!config.bezel) return null
+    
+    const faceRadius = 20
+    const bezelHeight = config.bezelHeight || 2
+    const bezelThickness = config.bezelThickness || 1.5
+    const bezelSegments = config.bezelSegments || 128
+    const bevelEnabled = config.bezelBevelEnabled || false
+    const bevelThickness = config.bezelBevelThickness || 0.1
+    const bevelSize = config.bezelBevelSize || 0.1
+    const bevelSegments = config.bezelBevelSegments || 3
+    
+    // Compensate for bevel size to maintain effective inner radius at faceRadius
+    // When bevel is enabled, it shrinks the geometry inward, so we expand both radii
+    const bevelCompensation = bevelEnabled ? bevelSize : 0
+    
+    // Create a doughnut shape using a ring shape and extrude it
+    const bezelShape = new THREE.Shape()
+    const outerRadius = faceRadius + bezelThickness + bevelCompensation
+    const innerRadius = faceRadius + bevelCompensation
+    
+    // Outer circle
+    bezelShape.absarc(0, 0, outerRadius, 0, Math.PI * 2, false)
+    
+    // Inner circle (hole)
+    const hole = new THREE.Path()
+    hole.absarc(0, 0, innerRadius, 0, Math.PI * 2, true)
+    bezelShape.holes.push(hole)
+    
+    // Extrude the shape to create the bezel height with configurable bevel
+    const extrudeSettings = {
+      depth: bezelHeight,
+      bevelEnabled: bevelEnabled,
+      bevelThickness: bevelThickness,
+      bevelSize: bevelSize,
+      bevelSegments: bevelSegments,
+      curveSegments: bezelSegments,
+      steps: Math.max(1, Math.floor(bezelHeight * 10)) // More steps for smoother extrusion
+    }
+    
+    const geometry = new THREE.ExtrudeGeometry(bezelShape, extrudeSettings)
+    
+    // Position the bezel so it sits on top of the face (at z=0 and extends upward)
+    geometry.translate(0, 0, 0)
+    
+    return geometry
+  }, [
+    config.bezel,
+    config.bezelHeight,
+    config.bezelThickness,
+    config.bezelSegments,
+    config.bezelBevelEnabled,
+    config.bezelBevelThickness,
+    config.bezelBevelSize,
+    config.bezelBevelSegments
+  ])
+
   return (
-    <mesh castShadow receiveShadow material={material}>
-      <primitive object={faceGeometry} attach="geometry" />
-    </mesh>
+    <>
+      <mesh castShadow receiveShadow material={material}>
+        <primitive object={faceGeometry} attach="geometry" />
+      </mesh>
+      {config.bezel && bezelGeometry && (
+        <mesh castShadow receiveShadow material={bezelMaterial}>
+          <primitive object={bezelGeometry} attach="geometry" />
+        </mesh>
+      )}
+    </>
   )
 }
 
