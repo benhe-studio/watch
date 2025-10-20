@@ -93,7 +93,7 @@
 }
 
 .tabs-header::-webkit-scrollbar {
-  height: 4px;
+  height: 6px;
 }
 
 .tabs-header::-webkit-scrollbar-track {
@@ -108,7 +108,7 @@
 .tab-button {
   padding: 12px 20px;
   border: none;
-  border-bottom: 3px solid transparent;
+  border-top: 3px solid transparent;
   background: transparent;
   color: #888;
   font-size: 14px;
@@ -126,7 +126,7 @@
 
 .tab-button.active {
   color: #4a9eff;
-  border-bottom-color: #4a9eff;
+  border-top-color: #4a9eff;
   background: rgba(74, 144, 226, 0.15);
 }
 
