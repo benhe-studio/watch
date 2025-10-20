@@ -1,16 +1,17 @@
 {
   "face": {
-    "material": "matteBlackPlastic",
-    "bezel": true,
-    "bezelHeight": 0.6,
-    "bezelMaterial": "brushedSteel",
-    "bezelBevelEnabled": true,
-    "bezelBevelThickness": 0.31,
-    "bezelBevelSize": 0.38,
-    "bezelBevelSegments": 1,
-    "bezelThickness": 1.1
+    "material": "matteBlackPlastic"
   },
-  "bezel": [],
+  "bezel": {
+    "bezel": true,
+    "bezelBevel": {
+      "enabled": true,
+      "thickness": 0.1,
+      "size": 0.42,
+      "segments": 1
+    },
+    "bezelHeight": 1.1
+  },
   "markers": [
     {
       "type": "circle",
@@ -26,10 +27,6 @@
       "blocksCutout": 0,
       "doubleBlock": false,
       "separation": 1.5,
-      "bevelEnabled": true,
-      "bevelThickness": 0.1,
-      "bevelSize": 0.1,
-      "bevelSegments": 3,
       "circleRadius": 1.6,
       "circleDepth": 0.6,
       "circleCutout": 0.95,
@@ -58,10 +55,6 @@
       "blocksCutout": 0,
       "doubleBlock": false,
       "separation": 1.5,
-      "bevelEnabled": true,
-      "bevelThickness": 0.1,
-      "bevelSize": 0.1,
-      "bevelSegments": 3,
       "circleRadius": 1.5,
       "circleDepth": 0.5,
       "circleCutout": 0,
@@ -90,10 +83,6 @@
       "blocksCutout": 0,
       "doubleBlock": false,
       "separation": 1.5,
-      "bevelEnabled": true,
-      "bevelThickness": 0.1,
-      "bevelSize": 0.1,
-      "bevelSegments": 3,
       "circleRadius": 1.5,
       "circleDepth": 0.5,
       "circleCutout": 0,
@@ -127,10 +116,6 @@
       "blocksCutout": 0.95,
       "doubleBlock": false,
       "separation": 1.5,
-      "bevelEnabled": true,
-      "bevelThickness": 0.1,
-      "bevelSize": 0.1,
-      "bevelSegments": 3,
       "circleRadius": 1.5,
       "circleDepth": 0.5,
       "circleCutout": 0,
@@ -153,10 +138,6 @@
       "blocksCutout": 0,
       "doubleBlock": false,
       "separation": 1.5,
-      "bevelEnabled": true,
-      "bevelThickness": 0.1,
-      "bevelSize": 0.1,
-      "bevelSegments": 3,
       "circleRadius": 1.5,
       "circleDepth": 0.5,
       "circleCutout": 0,
@@ -181,10 +162,6 @@
       "separation": 1.5,
       "circleRadius": 1.5,
       "circleCutout": 0,
-      "bevelEnabled": true,
-      "bevelThickness": 0.1,
-      "bevelSize": 0.1,
-      "bevelSegments": 3,
       "visibleHours": [
         12
       ],
@@ -205,10 +182,6 @@
       "separation": 1.5,
       "circleRadius": 1.5,
       "circleCutout": 0,
-      "bevelEnabled": true,
-      "bevelThickness": 0.1,
-      "bevelSize": 0.1,
-      "bevelSegments": 3,
       "visibleHours": [
         12
       ],
@@ -255,11 +228,7 @@
       "frameWidth": 0.3,
       "frameThickness": 0.5,
       "frameDepth": -0.85,
-      "frameMaterial": "matteBlackPlastic",
-      "frameBevelEnabled": true,
-      "frameBevelThickness": 0.09,
-      "frameBevelSize": 0.23,
-      "frameBevelSegments": 1
+      "frameMaterial": "matteBlackPlastic"
     }
   ],
   "complications": [],
@@ -323,10 +292,6 @@
           12.5
         ]
       ],
-      "bevelEnabled": true,
-      "bevelThickness": 0.05,
-      "bevelSize": 0.05,
-      "bevelSegments": 3,
       "cutout": 0,
       "cutoutPoints": [
         [
@@ -381,10 +346,6 @@
           12.2
         ]
       ],
-      "bevelEnabled": true,
-      "bevelThickness": 0.05,
-      "bevelSize": 0.05,
-      "bevelSegments": 3,
       "cutout": 0,
       "cutoutPoints": [],
       "radius": 1,
@@ -415,10 +376,6 @@
           18.557692307692307
         ]
       ],
-      "bevelEnabled": true,
-      "bevelThickness": 0.05,
-      "bevelSize": 0.05,
-      "bevelSegments": 3,
       "cutout": 0,
       "cutoutPoints": [
         [
@@ -458,10 +415,6 @@
           18.37
         ]
       ],
-      "bevelEnabled": true,
-      "bevelThickness": 0.05,
-      "bevelSize": 0.05,
-      "bevelSegments": 3,
       "cutout": 0,
       "cutoutPoints": [],
       "radius": 1,
@@ -483,10 +436,6 @@
           10
         ]
       ],
-      "bevelEnabled": true,
-      "bevelThickness": 0.05,
-      "bevelSize": 0.05,
-      "bevelSegments": 3,
       "cutout": 0,
       "cutoutPoints": [],
       "radius": 1,
@@ -512,10 +461,6 @@
           14
         ]
       ],
-      "bevelEnabled": true,
-      "bevelThickness": 0.05,
-      "bevelSize": 0.05,
-      "bevelSegments": 3,
       "cutout": 0.9,
       "cutoutPoints": [],
       "radius": 1,
@@ -541,10 +486,6 @@
           18.60576923076923
         ]
       ],
-      "bevelEnabled": true,
-      "bevelThickness": 0.05,
-      "bevelSize": 0.05,
-      "bevelSegments": 3,
       "cutout": 0,
       "cutoutPoints": [],
       "radius": 1,
@@ -570,10 +511,6 @@
           14
         ]
       ],
-      "bevelEnabled": true,
-      "bevelThickness": 0.05,
-      "bevelSize": 0.05,
-      "bevelSegments": 3,
       "cutout": 0,
       "cutoutPoints": [],
       "radius": 0.8,
@@ -599,10 +536,6 @@
           14
         ]
       ],
-      "bevelEnabled": true,
-      "bevelThickness": 0.05,
-      "bevelSize": 0.05,
-      "bevelSegments": 3,
       "cutout": 0,
       "cutoutPoints": [],
       "radius": 0.6,
@@ -628,10 +561,6 @@
           14
         ]
       ],
-      "bevelEnabled": true,
-      "bevelThickness": 0.05,
-      "bevelSize": 0.05,
-      "bevelSegments": 3,
       "cutout": 0,
       "cutoutPoints": [],
       "radius": 1,
@@ -657,10 +586,6 @@
           14
         ]
       ],
-      "bevelEnabled": true,
-      "bevelThickness": 0.05,
-      "bevelSize": 0.05,
-      "bevelSegments": 3,
       "cutout": 0,
       "cutoutPoints": [],
       "radius": 0.2,
