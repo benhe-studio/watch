@@ -2,15 +2,12 @@ import { useState } from 'react'
 import './ControlPanel.css'
 import TabContent from './ui/TabContent'
 import {
-  SunIcon,
-  MoonIcon,
-  BugAntIcon,
   ArrowDownTrayIcon,
   FolderOpenIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
 
-function ControlPanel({ config, updateConfig, schema, onSave, onLoad, onClear, environmentLight, onToggleEnvironmentLight, debugView, onToggleDebugView }) {
+function ControlPanel({ config, updateConfig, schema, onSave, onLoad, onClear }) {
   const [activeTab, setActiveTab] = useState(Object.keys(schema)[0] || '')
   const [expandedItems, setExpandedItems] = useState({})
   const [typeSelectionDropdown, setTypeSelectionDropdown] = useState(null)
@@ -81,25 +78,7 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad, onClear, e
   return (
     <div className="control-panel">
       <div className="control-panel-header">
-        <div className="header-title-row">
-          <h2>Watch Face Designer</h2>
-          <div className="header-controls">
-            <button
-              onClick={onToggleEnvironmentLight}
-              className="config-button icon-button"
-              title={environmentLight ? "Turn off environment light" : "Turn on environment light"}
-            >
-              {environmentLight ? <SunIcon className="icon" /> : <MoonIcon className="icon" />}
-            </button>
-            <button
-              onClick={onToggleDebugView}
-              className="config-button icon-button"
-              title={debugView ? "Hide debug view (axes & stats)" : "Show debug view (axes & stats)"}
-            >
-              <BugAntIcon className="icon" />
-            </button>
-          </div>
-        </div>
+        <h2>Watch Face Designer</h2>
         <div className="config-actions">
           <button onClick={onSave} className="config-button">
             <ArrowDownTrayIcon className="icon" />

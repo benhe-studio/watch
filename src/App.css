@@ -12,3 +12,52 @@ body {
   width: 100vw;
   height: 100vh;
 }
+
+.canvas-overlay-buttons {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10;
+}
+
+.overlay-button {
+  width: 48px;
+  height: 48px;
+  padding: 12px;
+  background: rgba(60, 60, 60, 0.8);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.overlay-button .icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.overlay-button:hover {
+  background: rgba(80, 80, 80, 0.9);
+}
+
+.overlay-button:active {
+  background: rgba(50, 50, 50, 0.9);
+}
+
+.overlay-button.light-on .icon {
+  color: #ffb700;
+}
+
+.overlay-button.light-off .icon {
+  color: #1E90FF;
+}

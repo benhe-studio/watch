@@ -12,18 +12,12 @@
   margin-bottom: 30px;
 }
 
-.header-title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
+.control-panel-header h2 {
+  margin: 0 0 15px 0;
   padding-bottom: 15px;
   border-bottom: 2px solid #444;
-}
-
-.header-controls {
-  display: flex;
-  gap: 8px;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .config-actions {
@@ -73,12 +67,6 @@
 
 .config-button.clear-button:hover {
   background: #c82333;
-}
-
-.control-panel h2 {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 600;
 }
 
 .tabs-container {

@@ -6,6 +6,7 @@ import WatchFace from './components/WatchFace'
 import ControlPanel from './components/ControlPanel'
 import { watchConfig, generateInitialState } from './config/watchConfig'
 import { updateMaterialProperties } from './config/helpers/materials'
+import { SunIcon, MoonIcon, BugAntIcon } from '@heroicons/react/24/outline'
 import './App.css'
 
 function App() {
@@ -136,7 +137,7 @@ function App() {
 
   return (
     <div style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden' }}>
-      <div style={{ flex: 1, minWidth: 0, background: environmentLight ? '#e8e8e8' : '#000000' }}>
+      <div style={{ flex: 1, minWidth: 0, background: environmentLight ? '#e8e8e8' : '#000000', position: 'relative' }}>
         <Canvas shadows camera={{ position: [0, -20, 60], fov: 50 }}>
           <color attach="background" args={[environmentLight ? '#e8e8e8' : '#000000']} />
           
@@ -165,6 +166,26 @@ function App() {
           <OrbitControls enablePan={false} />
           {debugView && <Stats />}
         </Canvas>
+        
+        {/* Overlay buttons in bottom right corner */}
+        <div className="canvas-overlay-buttons">
+          <button
+            onClick={() => setEnvironmentLight(!environmentLight)}
+            className={`overlay-button ${environmentLight ? 'light-on' : 'light-off'}`}
+            title={environmentLight ? "Turn off environment light" : "Turn on environment light"}
+          >
+            {environmentLight ? <SunIcon className="icon" /> : <MoonIcon className="icon" />}
+          </button>
+          {/* 
+          <button
+            onClick={() => setDebugView(!debugView)}
+            className="overlay-button"
+            title={debugView ? "Hide debug view (axes & stats)" : "Show debug view (axes & stats)"}
+          >
+            <BugAntIcon className="icon" />
+          </button>
+          */}
+        </div>
       </div>
       <ControlPanel
         config={config}
@@ -173,10 +194,6 @@ function App() {
         onSave={saveConfig}
         onLoad={loadConfig}
         onClear={clearConfig}
-        environmentLight={environmentLight}
-        onToggleEnvironmentLight={() => setEnvironmentLight(!environmentLight)}
-        debugView={debugView}
-        onToggleDebugView={() => setDebugView(!debugView)}
       />
     </div>
   )
