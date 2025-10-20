@@ -20,17 +20,17 @@ export const faceConfig = {
     pinionRadius: {
       type: 'range',
       label: 'Pinion Radius',
-      default: 1.5,
-      min: 0.5,
-      max: 5,
+      default: 0.5,
+      min: 0.1,
+      max: 2,
       step: 0.1
     },
     pinionHeight: {
       type: 'range',
       label: 'Pinion Height',
       default: 2,
-      min: 0.5,
-      max: 10,
+      min: 0.1,
+      max: 4,
       step: 0.1
     },
     pinionMaterial: {

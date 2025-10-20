@@ -438,14 +438,6 @@ function PointGraphEditor({
         </div>
       )}
       
-      <div className="graph-instructions">
-        <strong>Instructions:</strong>
-        <ul>
-          <li>Click a point to select and edit it</li>
-          <li>Drag points to move them</li>
-          <li>Use the buttons above to add new points</li>
-        </ul>
-      </div>
     </div>
   )
 }

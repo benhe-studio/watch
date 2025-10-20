@@ -79,7 +79,6 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad, onClear, o
   return (
     <div className="control-panel">
       <div className="control-panel-header">
-        <h2>Watch Face Designer</h2>
         <div className="config-actions">
           <button onClick={onSave} className="config-button">
             <ArrowDownTrayIcon className="icon" />
