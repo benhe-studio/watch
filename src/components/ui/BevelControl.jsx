@@ -1,4 +1,5 @@
 import './BevelControl.css'
+import './PrimitiveControls.css'
 
 /**
  * BevelControl - A grouped UI component for controlling bevel settings
@@ -23,12 +24,12 @@ function BevelControl({ value, onChange, config }) {
     <div className="bevel-control">
       <div className="bevel-control-header">
         <label className="checkbox-label">
+          <span>{config.label}</span>
           <input
             type="checkbox"
             checked={bevelValue.enabled}
             onChange={(e) => handleChange('enabled', e.target.checked)}
           />
-          <span>{config.label}</span>
         </label>
         <div className="bevel-control-description">
           Enable this to add a chamfer or a roundover to the edges of this element
@@ -38,9 +39,10 @@ function BevelControl({ value, onChange, config }) {
       {bevelValue.enabled && (
         <div className="bevel-control-body">
           <div className="bevel-control-item">
-            <label>
-              Thickness: {bevelValue.thickness.toFixed(2)}
-            </label>
+            <div className="range-label-row">
+              <label>Thickness</label>
+              <span className="range-value">{bevelValue.thickness.toFixed(2)}</span>
+            </div>
             <input
               type="range"
               min={config.config.thickness.min}
@@ -52,9 +54,10 @@ function BevelControl({ value, onChange, config }) {
           </div>
           
           <div className="bevel-control-item">
-            <label>
-              Size: {bevelValue.size.toFixed(2)}
-            </label>
+            <div className="range-label-row">
+              <label>Size</label>
+              <span className="range-value">{bevelValue.size.toFixed(2)}</span>
+            </div>
             <input
               type="range"
               min={config.config.size.min}
@@ -66,9 +69,10 @@ function BevelControl({ value, onChange, config }) {
           </div>
           
           <div className="bevel-control-item">
-            <label>
-              Segments: {bevelValue.segments}
-            </label>
+            <div className="range-label-row">
+              <label>Segments</label>
+              <span className="range-value">{bevelValue.segments}</span>
+            </div>
             <input
               type="range"
               min={config.config.segments.min}

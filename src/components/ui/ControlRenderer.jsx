@@ -1,3 +1,4 @@
+import './PrimitiveControls.css'
 import PointGraphEditor from './PointGraphEditor'
 import BevelControl from './BevelControl'
 import PositionControl from './PositionControl'
@@ -42,7 +43,10 @@ export function renderControl(
       const displayValue = value ?? controlConfig.default ?? 0
       return (
         <div key={controlKey} className="control-group">
-          <label>{controlConfig.label}: {displayValue.toFixed(2)}</label>
+          <div className="range-label-row">
+            <label>{controlConfig.label}</label>
+            <span className="range-value">{displayValue.toFixed(2)}</span>
+          </div>
           <input
             type="range"
             min={controlConfig.min}
@@ -76,12 +80,12 @@ export function renderControl(
       return (
         <div key={controlKey} className="control-group">
           <label className="checkbox-label">
+            <span>{controlConfig.label}</span>
             <input
               type="checkbox"
               checked={value}
               onChange={(e) => onChange(e.target.checked)}
             />
-            <span>{controlConfig.label}</span>
           </label>
         </div>
       )
@@ -89,17 +93,19 @@ export function renderControl(
     case 'select':
       return (
         <div key={controlKey} className="control-group">
-          <label>{controlConfig.label}</label>
-          <select
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          >
-            {controlConfig.options.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          <div className="select-label-row">
+            <label>{controlConfig.label}</label>
+            <select
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+            >
+              {controlConfig.options.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       )
 

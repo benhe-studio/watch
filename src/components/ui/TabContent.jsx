@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 import './TabContent.css'
+import './PrimitiveControls.css'
 import { renderControl as renderControlHelper } from './ControlRenderer'
 import { EyeIcon, EyeSlashIcon, XMarkIcon, ChevronRightIcon, ChevronDownIcon, PencilIcon } from '@heroicons/react/24/outline'
 

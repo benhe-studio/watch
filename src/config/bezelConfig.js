@@ -10,6 +10,12 @@ export const bezelConfig = {
       label: 'Enable Bezel',
       default: false
     },
+    bezelMaterial: {
+      type: 'select',
+      label: 'Bezel Material',
+      default: 'brushedSteel',
+      options: getMaterialOptions()
+    },
     bezelHeight: {
       type: 'range',
       label: 'Bezel Height',
@@ -37,12 +43,6 @@ export const bezelConfig = {
       maxSize: 2,
       minSegments: 1,
       maxSegments: 10
-    }),
-    bezelMaterial: {
-      type: 'select',
-      label: 'Bezel Material',
-      default: 'brushedSteel',
-      options: getMaterialOptions()
-    }
+    })
   }
 }
