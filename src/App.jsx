@@ -224,7 +224,7 @@ function App() {
         </div>
         <div className="small-screen-title">Screen Too Small</div>
         <div className="small-screen-message">
-          Please rotate your device to landscape mode or use a larger display (minimum 600px width) for the best experience with the watch configurator.
+          Please rotate your device to landscape mode or use a larger display for the best experience with the watch configurator.
         </div>
       </div>
 
