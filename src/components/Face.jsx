@@ -110,24 +110,24 @@ function Face({ config, complicationWindows }) {
         // Second bezier curve: from (R*0.7, 0) to (R/5, R/8)
         const cp1x = x + R * 0.82
         const cp1y = y + R * 0.4
-        const cp2x = x + R / 2.4
-        const cp2y = y + R * 0.5
+        const cp2x = x + R / 2.8
+        const cp2y = y + R * 0.4
         const end1x = x + R / 6
-        const end1y = y + R/8
+        const end1y = y + R/10
         moonHole.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, end1x, end1y)
         
         // Third bezier curve: from (R/5, R/8) to (-R/5, R/8) (center top)
-        const cp3x = x + R / 8
-        const cp3y = y + R * 0.3
-        const cp4x = x - R / 8
-        const cp4y = y + R * 0.3
+        const cp3x = x + R / 10
+        const cp3y = y + R * 0.25
+        const cp4x = x - R / 10
+        const cp4y = y + R * 0.25
         const end2x = x - R / 6
-        const end2y = y + R/8
+        const end2y = y + R/10
         moonHole.bezierCurveTo(cp3x, cp3y, cp4x, cp4y, end2x, end2y)
         
         // Fourth bezier curve: from (-R/5, R/8) to (-R*0.7, 0)
-        const cp5x = x - R / 2.4
-        const cp5y = y + R * 0.5
+        const cp5x = x - R / 2.8
+        const cp5y = y + R * 0.4
         const cp6x = x - R * 0.82
         const cp6y = y + R * 0.4
         const end3x = x - R * 0.95

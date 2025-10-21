@@ -216,10 +216,10 @@ function Primitive({ primitiveConfig }) {
           </mesh>
           
           {/* Pivot cylinder and sphere at origin */}
-          <mesh position={[0, 0, 0.15]} material={handMaterial} castShadow>
+          <mesh position={[0, 0, 0]} material={handMaterial} castShadow>
             <primitive object={cylinderGeometry} attach="geometry" />
           </mesh>
-          <mesh position={[0, 0, 0.25]} material={handMaterial} castShadow>
+          <mesh position={[0, 0, 0.1]} material={handMaterial} castShadow>
             <sphereGeometry args={[0.25, 16, 16]} />
           </mesh>
         </>
