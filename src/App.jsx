@@ -14,7 +14,8 @@ import {
   ArrowDownTrayIcon,
   FolderOpenIcon,
   TrashIcon,
-  CubeIcon
+  CubeIcon,
+  DevicePhoneMobileIcon
 } from '@heroicons/react/24/outline'
 import './App.css'
 
@@ -32,7 +33,20 @@ function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [environmentLight, setEnvironmentLight] = useState(true)
   const [debugView, setDebugView] = useState(false)
+  const [isSmallScreen, setIsSmallScreen] = useState(false)
   const sceneRef = useRef(null)
+
+  // Check screen size
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsSmallScreen(window.innerWidth < 800)
+    }
+    
+    checkScreenSize()
+    window.addEventListener('resize', checkScreenSize)
+    
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
 
   // Load default config on mount
   useEffect(() => {
@@ -186,11 +200,35 @@ function App() {
   }
 
   if (isLoading) {
-    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100vw', height: '100vh' }}>Loading...</div>
+    return (
+      <div className="loading-container">
+        <div className="loading-watch">
+          <div className="loading-watch-circle">
+            <div className="loading-watch-hand hour"></div>
+            <div className="loading-watch-hand minute"></div>
+            <div className="loading-watch-center"></div>
+          </div>
+        </div>
+        <div className="loading-text">Loading Watch</div>
+        <div className="loading-subtext">Preparing your timepiece...</div>
+      </div>
+    )
   }
 
   return (
-    <div style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden' }}>
+    <>
+      {/* Small Screen Overlay */}
+      <div className={`small-screen-overlay ${isSmallScreen ? 'visible' : ''}`}>
+        <div className="rotate-icon">
+          <DevicePhoneMobileIcon />
+        </div>
+        <div className="small-screen-title">Screen Too Small</div>
+        <div className="small-screen-message">
+          Please rotate your device to landscape mode or use a larger display (minimum 800px width) for the best experience with the watch configurator.
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <div style={{ flex: 1, minWidth: 0, background: environmentLight ? '#e8e8e8' : '#000000', position: 'relative' }}>
         <Canvas shadows camera={{ position: [0, -20, 60], fov: 50 }}>
           <SceneCapture sceneRef={sceneRef} />
@@ -284,6 +322,7 @@ function App() {
         schema={watchConfig}
       />
     </div>
+    </>
   )
 }
 
