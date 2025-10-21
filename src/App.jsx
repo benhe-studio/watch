@@ -200,19 +200,7 @@ function App() {
   }
 
   if (isLoading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-watch">
-          <div className="loading-watch-circle">
-            <div className="loading-watch-hand hour"></div>
-            <div className="loading-watch-hand minute"></div>
-            <div className="loading-watch-center"></div>
-          </div>
-        </div>
-        <div className="loading-text">Loading Watch</div>
-        <div className="loading-subtext">Preparing your timepiece...</div>
-      </div>
-    )
+    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100vw', height: '100vh' }}>Loading...</div>
   }
 
   return (
