@@ -1,14 +1,8 @@
 import { useState } from 'react'
 import './ControlPanel.css'
 import TabContent from './ui/TabContent'
-import {
-  ArrowDownTrayIcon,
-  FolderOpenIcon,
-  TrashIcon,
-  CubeIcon
-} from '@heroicons/react/24/outline'
 
-function ControlPanel({ config, updateConfig, schema, onSave, onLoad, onClear, onExportGLB }) {
+function ControlPanel({ config, updateConfig, schema }) {
   const [activeTab, setActiveTab] = useState(Object.keys(schema)[0] || '')
   const [expandedItems, setExpandedItems] = useState({})
   const [typeSelectionDropdown, setTypeSelectionDropdown] = useState(null)
@@ -78,27 +72,6 @@ function ControlPanel({ config, updateConfig, schema, onSave, onLoad, onClear, o
 
   return (
     <div className="control-panel">
-      <div className="control-panel-header">
-        <div className="config-actions">
-          <button onClick={onSave} className="config-button">
-            <ArrowDownTrayIcon className="icon" />
-            <span>Save Config</span>
-          </button>
-          <button onClick={onLoad} className="config-button">
-            <FolderOpenIcon className="icon" />
-            <span>Load Config</span>
-          </button>
-          <button onClick={onExportGLB} className="config-button export-button">
-            <CubeIcon className="icon" />
-            <span>Export GLB</span>
-          </button>
-          <button onClick={onClear} className="config-button clear-button">
-            <TrashIcon className="icon" />
-            <span>Clear All</span>
-          </button>
-        </div>
-      </div>
-
       <div className="tabs-container">
         <div className="tabs-header">
           {Object.keys(schema).map(sectionKey => {

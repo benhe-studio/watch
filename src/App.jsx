@@ -7,7 +7,15 @@ import WatchFace from './components/WatchFace'
 import ControlPanel from './components/ControlPanel'
 import { watchConfig, generateInitialState } from './config/watchConfig'
 import { updateMaterialProperties } from './config/helpers/materials'
-import { SunIcon, MoonIcon, BugAntIcon } from '@heroicons/react/24/outline'
+import {
+  SunIcon,
+  MoonIcon,
+  BugAntIcon,
+  ArrowDownTrayIcon,
+  FolderOpenIcon,
+  TrashIcon,
+  CubeIcon
+} from '@heroicons/react/24/outline'
 import './App.css'
 
 // Component to capture the scene reference
@@ -214,7 +222,7 @@ function App() {
           {debugView && <Stats />}
         </Canvas>
         
-        {/* Overlay buttons in bottom right corner */}
+        {/* Overlay buttons in top right corner */}
         <div className="canvas-overlay-buttons">
           <button
             onClick={() => setEnvironmentLight(!environmentLight)}
@@ -222,8 +230,9 @@ function App() {
             title={environmentLight ? "Turn off environment light" : "Turn on environment light"}
           >
             {environmentLight ? <SunIcon className="icon" /> : <MoonIcon className="icon" />}
+            <span className="button-label">Toggle Light</span>
           </button>
-          {/* 
+          {/*
           <button
             onClick={() => setDebugView(!debugView)}
             className="overlay-button"
@@ -231,17 +240,48 @@ function App() {
           >
             <BugAntIcon className="icon" />
           </button>
+          
+          <div className="config-actions-divider"></div>
+          <button
+            onClick={saveConfig}
+            className="overlay-button config-action-button"
+            title="Save Config"
+          >
+            <ArrowDownTrayIcon className="icon" />
+            <span className="button-label">Save Config</span>
+          </button>
+          <button
+            onClick={loadConfig}
+            className="overlay-button config-action-button"
+            title="Load Config"
+          >
+            <FolderOpenIcon className="icon" />
+            <span className="button-label">Load Config</span>
+          </button>
+
           */}
+          <button
+            onClick={exportGLB}
+            className="overlay-button config-action-button export-button"
+            title="Export GLB"
+          >
+            <CubeIcon className="icon" />
+            <span className="button-label">Export GLB</span>
+          </button>
+          <button
+            onClick={clearConfig}
+            className="overlay-button config-action-button clear-button"
+            title="Clear All"
+          >
+            <TrashIcon className="icon" />
+            <span className="button-label">Clear All</span>
+          </button>
         </div>
       </div>
       <ControlPanel
         config={config}
         updateConfig={updateConfig}
         schema={watchConfig}
-        onSave={saveConfig}
-        onLoad={loadConfig}
-        onClear={clearConfig}
-        onExportGLB={exportGLB}
       />
     </div>
   )

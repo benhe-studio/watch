@@ -8,79 +8,10 @@
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.control-panel-header {
-  margin-bottom: 30px;
-}
-
-.control-panel-header h2 {
-  margin: 0 0 15px 0;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #444;
-  font-size: 24px;
-  font-weight: 600;
-}
-
-.config-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.config-button {
-  flex: 1;
-  padding: 10px 15px;
-  background: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: background 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.config-button .icon {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
-.config-button.icon-button {
-  padding: 10px;
-  min-width: 44px;
-}
-
-.config-button:hover {
-  background: #357abd;
-}
-
-.config-button:active {
-  transform: translateY(1px);
-}
-
-.config-button.export-button {
-  background: #28a745;
-}
-
-.config-button.export-button:hover {
-  background: #218838;
-}
-
-.config-button.clear-button {
-  background: #dc3545;
-}
-
-.config-button.clear-button:hover {
-  background: #c82333;
-}
-
 .tabs-container {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 140px);
+  height: 100%;
 }
 
 .tabs-header {
@@ -111,8 +42,8 @@
   border-top: 3px solid transparent;
   background: transparent;
   color: #888;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;

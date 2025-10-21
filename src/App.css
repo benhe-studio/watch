@@ -19,35 +19,63 @@ body {
   right: 20px;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: 10px;
   z-index: 10;
 }
 
 .overlay-button {
+  min-width: 48px;
   width: 48px;
   height: 48px;
-  padding: 12px;
+  padding: 0;
   background: rgba(60, 60, 60, 0.8);
   color: white;
   border: none;
-  border-radius: 50%;
+  border-radius: 24px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: width 0.3s ease, background 0.2s ease, padding 0.3s ease;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
+  overflow: hidden;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .overlay-button .icon {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
+  margin: 12px 12px 12px 12px;
+}
+
+.overlay-button .button-label {
+  opacity: 0;
+  max-width: 0;
+  margin-right: 0;
+  font-size: 14px;
+  font-weight: 500;
+  transition: opacity 0.5s ease, max-width 0.5s ease, margin 0.5s ease;
+  overflow: hidden;
 }
 
 .overlay-button:hover {
+  width: auto;
+  padding-left: 12px;
   background: rgba(80, 80, 80, 0.9);
+}
+
+.overlay-button:hover .icon {
+  margin-left: 0;
+}
+
+.overlay-button:hover .button-label {
+  opacity: 1;
+  max-width: 200px;
+  margin-right: 12px;
 }
 
 .overlay-button:active {
@@ -60,4 +88,30 @@ body {
 
 .overlay-button.light-off .icon {
   color: #1E90FF;
+}
+
+.config-actions-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 5px 0;
+}
+
+.overlay-button.config-action-button {
+  background: rgba(60, 60, 60, 0.8);
+}
+
+.overlay-button.config-action-button:hover {
+  background: rgba(80, 80, 80, 0.9);
+}
+
+.overlay-button.config-action-button .icon {
+  color: #4a90e2;
+}
+
+.overlay-button.config-action-button.export-button .icon {
+  color: #28a745;
+}
+
+.overlay-button.config-action-button.clear-button .icon {
+  color: #dc3545;
 }
