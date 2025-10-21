@@ -30,12 +30,14 @@ export function renderControl(
     case 'color':
       return (
         <div key={controlKey} className="control-group">
-          <label>{controlConfig.label}</label>
-          <input
-            type="color"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          />
+          <div className="color-label-row">
+            <label>{controlConfig.label}</label>
+            <input
+              type="color"
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+            />
+          </div>
         </div>
       )
 

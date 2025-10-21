@@ -18,7 +18,7 @@ export const handsConfig = {
       ]
     },
     movement: {
-      type: 'buttons',
+      type: 'select',
       label: 'Movement',
       default: 'seconds',
       options: [
@@ -61,6 +61,16 @@ export const handsConfig = {
       maxSize: 0.2,
       condition: (item) => item.type === 'parametricFlat'
     }),
+    circleShape: {
+      type: 'select',
+      label: 'Shape',
+      default: 'flat',
+      options: [
+        { value: 'flat', label: 'Flat' },
+        { value: 'dome', label: 'Dome' }
+      ],
+      condition: (item) => item.type === 'circle'
+    },
     cutout: {
       type: 'range',
       label: 'Cutout',
@@ -104,16 +114,6 @@ export const handsConfig = {
       step: 0.5,
       condition: (item) => item.type === 'circle',
       description: 'Distance from center (0,0) where the circle is positioned'
-    },
-    circleShape: {
-      type: 'buttons',
-      label: 'Shape',
-      default: 'flat',
-      options: [
-        { value: 'flat', label: 'Flat' },
-        { value: 'dome', label: 'Dome' }
-      ],
-      condition: (item) => item.type === 'circle'
     },
     zOffset: {
       type: 'range',

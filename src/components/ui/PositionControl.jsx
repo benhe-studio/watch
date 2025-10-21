@@ -1,4 +1,5 @@
 import './PositionControl.css'
+import './PrimitiveControls.css'
 
 /**
  * PositionControl - A grouped UI component for controlling position settings
@@ -20,7 +21,7 @@ function PositionControl({ value, onChange, config }) {
   return (
     <div className="position-control">
       <div className="position-control-header">
-        <label className="position-control-label">{config.label}</label>
+        <label>{config.label}</label>
         <div className="position-control-description">
           Configure the element's position using clock hour direction and distance from center
         </div>
@@ -28,9 +29,10 @@ function PositionControl({ value, onChange, config }) {
       
       <div className="position-control-body">
         <div className="position-control-item">
-          <label>
-            Position Vector (Clock Hour): {positionValue.vector.toFixed(1)}
-          </label>
+          <div className="range-label-row">
+            <label>Position Vector (Clock Hour)</label>
+            <span className="range-value">{positionValue.vector.toFixed(1)}</span>
+          </div>
           <input
             type="range"
             min={config.config.vector.min}
@@ -42,9 +44,10 @@ function PositionControl({ value, onChange, config }) {
         </div>
         
         <div className="position-control-item">
-          <label>
-            Offset from Center: {positionValue.offset.toFixed(1)}
-          </label>
+          <div className="range-label-row">
+            <label>Offset from Center</label>
+            <span className="range-value">{positionValue.offset.toFixed(1)}</span>
+          </div>
           <input
             type="range"
             min={config.config.offset.min}
