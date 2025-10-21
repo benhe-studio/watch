@@ -292,7 +292,7 @@ body {
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 600px) {
   .small-screen-overlay {
     display: flex;
   }
