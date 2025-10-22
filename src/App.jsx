@@ -133,6 +133,11 @@ function App() {
   }
 
   const loadConfig = async (presetName) => {
+    if (!confirm('Loading a preset will clear the current configuration and any changes will be lost. Continue?')) {
+      setShowPresetMenu(false)
+      return
+    }
+    
     try {
       const response = await fetch(`/${presetName}.json`)
       if (response.ok) {
