@@ -38,7 +38,7 @@ function App() {
   const sceneRef = useRef(null)
 
   // Available presets
-  const presets = ['diver', 'dress']
+  const presets = ['diver', 'dress', 'chrono']
 
   // Check screen size
   useEffect(() => {

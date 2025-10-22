@@ -1,0 +1,992 @@
+{
+  "face": {
+    "material": "matteWhite",
+    "textureImage": null,
+    "pinionRadius": 0.5,
+    "pinionHeight": 1.5,
+    "pinionMaterial": "polishedSilver"
+  },
+  "markers": [
+    {
+      "type": "circle",
+      "radialAlignment": false,
+      "fontSize": 2.5,
+      "material": "matteBlack",
+      "depth": 0.1,
+      "spread": 16.8,
+      "topWidth": 1,
+      "bottomWidth": 1,
+      "length": 3,
+      "blocksCutout": 0,
+      "doubleBlock": false,
+      "separation": 1.5,
+      "circleRadius": 0.39,
+      "circleCutout": 0.9,
+      "bevel": {
+        "enabled": false,
+        "thickness": 0.1,
+        "size": 0.1,
+        "segments": 3
+      },
+      "visibleHours": [
+        12,
+        3,
+        6,
+        9
+      ]
+    },
+    {
+      "type": "blocks",
+      "radialAlignment": true,
+      "fontSize": 2.5,
+      "material": "matteBlack",
+      "depth": 0.1,
+      "spread": 16,
+      "topWidth": 0.09,
+      "bottomWidth": 0.09,
+      "length": 3,
+      "blocksCutout": 0,
+      "doubleBlock": false,
+      "separation": 1.5,
+      "circleRadius": 1.5,
+      "circleCutout": 0,
+      "bevel": {
+        "enabled": false,
+        "thickness": 0.08,
+        "size": 0.1,
+        "segments": 3
+      },
+      "visibleHours": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8,
+        10,
+        11
+      ]
+    },
+    {
+      "type": "circle",
+      "radialAlignment": false,
+      "fontSize": 2.5,
+      "material": "lume",
+      "depth": 0.1,
+      "spread": 16.8,
+      "topWidth": 1,
+      "bottomWidth": 1,
+      "length": 3,
+      "blocksCutout": 0,
+      "doubleBlock": false,
+      "separation": 1.5,
+      "circleRadius": 0.34,
+      "circleCutout": 0,
+      "bevel": {
+        "enabled": false,
+        "thickness": 0.1,
+        "size": 0.1,
+        "segments": 3
+      },
+      "visibleHours": [
+        12,
+        3,
+        6,
+        9
+      ]
+    },
+    {
+      "type": "numeral",
+      "radialAlignment": false,
+      "fontSize": 1.5,
+      "material": "matteBlack",
+      "depth": 0.1,
+      "spread": 13.1,
+      "topWidth": 1,
+      "bottomWidth": 1,
+      "length": 3,
+      "blocksCutout": 0,
+      "doubleBlock": false,
+      "separation": 1.5,
+      "circleRadius": 1.5,
+      "circleCutout": 0,
+      "bevel": {
+        "enabled": false,
+        "thickness": 0.1,
+        "size": 0.1,
+        "segments": 3
+      },
+      "visibleHours": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "type": "blocks",
+      "radialAlignment": true,
+      "fontSize": 2.5,
+      "material": "matteBlack",
+      "depth": 0.1,
+      "spread": 15.1,
+      "topWidth": 0.09,
+      "bottomWidth": 0.09,
+      "length": 1.7,
+      "blocksCutout": 0,
+      "doubleBlock": false,
+      "separation": 1.5,
+      "circleRadius": 1.5,
+      "circleCutout": 0,
+      "bevel": {
+        "enabled": false,
+        "thickness": 0.1,
+        "size": 0.1,
+        "segments": 3
+      },
+      "visibleHours": [
+        12,
+        3,
+        6,
+        9
+      ]
+    }
+  ],
+  "hands": [
+    {
+      "type": "parametricFlat",
+      "movement": "hours",
+      "material": "matteBlackPlastic",
+      "points": [
+        [
+          0.4,
+          0
+        ],
+        [
+          0.4,
+          9
+        ],
+        [
+          0,
+          10.35
+        ]
+      ],
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "flat",
+      "cutout": 0,
+      "cutoutPoints": [
+        [
+          0.25,
+          1.3
+        ],
+        [
+          0.25,
+          8.8
+        ]
+      ],
+      "radius": 1,
+      "spread": 0,
+      "zOffset": 0,
+      "name": "Hour Hand"
+    },
+    {
+      "type": "parametricFlat",
+      "movement": "hours",
+      "material": "lume",
+      "points": [
+        [
+          0.25,
+          1.3
+        ],
+        [
+          0.25,
+          8.8
+        ]
+      ],
+      "bevel": {
+        "enabled": false,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "flat",
+      "cutout": 0,
+      "cutoutPoints": [],
+      "radius": 1,
+      "spread": 0,
+      "zOffset": -0.08,
+      "name": "Hour Lume"
+    },
+    {
+      "type": "parametricFlat",
+      "movement": "minutes",
+      "material": "matteBlackPlastic",
+      "points": [
+        [
+          0.4,
+          0
+        ],
+        [
+          0.4,
+          14.55
+        ],
+        [
+          0,
+          16.2
+        ]
+      ],
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "flat",
+      "cutout": 0,
+      "cutoutPoints": [
+        [
+          0.25,
+          1.3
+        ],
+        [
+          0.25,
+          14.3
+        ]
+      ],
+      "radius": 1,
+      "spread": 0,
+      "zOffset": 0,
+      "name": "Minute Hand"
+    },
+    {
+      "type": "parametricFlat",
+      "movement": "minutes",
+      "material": "lume",
+      "points": [
+        [
+          0.25,
+          1.3
+        ],
+        [
+          0.25,
+          14.3
+        ]
+      ],
+      "bevel": {
+        "enabled": false,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "flat",
+      "cutout": 0,
+      "cutoutPoints": [],
+      "radius": 1,
+      "spread": 0,
+      "zOffset": -0.08,
+      "hidden": false,
+      "name": "Minute Lume"
+    },
+    {
+      "type": "parametricFlat",
+      "movement": "seconds",
+      "material": "matteBlackPlastic",
+      "points": [
+        [
+          0.2,
+          -3.9
+        ],
+        [
+          0.1,
+          0
+        ],
+        [
+          0.05,
+          17.35
+        ]
+      ],
+      "bevel": {
+        "enabled": false,
+        "thickness": 0.01,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "flat",
+      "cutout": 0,
+      "cutoutPoints": [],
+      "radius": 1,
+      "spread": 0,
+      "zOffset": 0,
+      "name": "Second Hand"
+    },
+    {
+      "type": "circle",
+      "movement": "fixed",
+      "material": "matteBlackPlastic",
+      "points": [
+        [
+          0,
+          -4
+        ],
+        [
+          1.2,
+          0
+        ],
+        [
+          0,
+          14
+        ]
+      ],
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "flat",
+      "cutout": 0,
+      "cutoutPoints": [],
+      "radius": 0.64,
+      "spread": 0,
+      "zOffset": 0.84,
+      "name": "Second Pivot"
+    },
+    {
+      "type": "circle",
+      "movement": "seconds",
+      "material": "matteBlackPlastic",
+      "points": [
+        [
+          0,
+          -4
+        ],
+        [
+          1.2,
+          0
+        ],
+        [
+          0,
+          14
+        ]
+      ],
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "flat",
+      "cutout": 0,
+      "cutoutPoints": [],
+      "radius": 1,
+      "spread": 0,
+      "zOffset": -0.98,
+      "hidden": false,
+      "name": "Hour Pivot"
+    },
+    {
+      "type": "circle",
+      "movement": "seconds",
+      "material": "matteBlackPlastic",
+      "points": [
+        [
+          0,
+          -4
+        ],
+        [
+          1.2,
+          0
+        ],
+        [
+          0,
+          14
+        ]
+      ],
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "flat",
+      "cutout": 0,
+      "cutoutPoints": [],
+      "radius": 0.8,
+      "spread": 0,
+      "zOffset": -0.46,
+      "hidden": false,
+      "name": "Minute Pivot"
+    },
+    {
+      "type": "circle",
+      "movement": "seconds",
+      "material": "matteBlackPlastic",
+      "points": [
+        [
+          0,
+          -4
+        ],
+        [
+          1.2,
+          0
+        ],
+        [
+          0,
+          14
+        ]
+      ],
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "dome",
+      "cutout": 0,
+      "cutoutPoints": [],
+      "radius": 0.3,
+      "spread": 0,
+      "zOffset": 0,
+      "hidden": false,
+      "name": "Pinion Cap"
+    }
+  ],
+  "minuteMarkers": [
+    {
+      "type": "numeral",
+      "radialAlignment": false,
+      "hideHourMarks": false,
+      "material": "polishedSilver",
+      "spread": 18.5,
+      "width": 0.2,
+      "length": 1,
+      "depth": 0.2,
+      "ticks": 2,
+      "radius": 0.3,
+      "fontSize": 0.9,
+      "color": "#000000"
+    },
+    {
+      "type": "line",
+      "radialAlignment": true,
+      "hideHourMarks": true,
+      "material": "matteBlack",
+      "spread": 16.7,
+      "width": 0.08,
+      "length": 1,
+      "depth": 0.2,
+      "ticks": 2,
+      "radius": 0.3,
+      "fontSize": 1.5,
+      "color": "#000000"
+    }
+  ],
+  "decorations": [],
+  "complicationWindows": [
+    {
+      "type": "rectangle",
+      "position": {
+        "vector": 3,
+        "offset": 12.2
+      },
+      "radius": 4,
+      "width": 3,
+      "height": 2.2,
+      "backgroundMaterial": "matteOffWhite",
+      "frameEnabled": false,
+      "frameWidth": 0.3,
+      "frameThickness": 0.5,
+      "frameDepth": 0.25,
+      "frameMaterial": "polishedSilver",
+      "frameBevel": {
+        "enabled": true,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      }
+    }
+  ],
+  "primitives": [
+    {
+      "type": "circularMarkers",
+      "position": {
+        "vector": 0,
+        "offset": 8
+      },
+      "zOffset": 0,
+      "rotation": 0,
+      "text": "12",
+      "fontSize": 2,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 30,
+      "markerSkip": 0,
+      "markerLength": 0.8,
+      "markerWidth": 0.08,
+      "name": "Circular Markers Upper"
+    },
+    {
+      "type": "circularMarkers",
+      "position": {
+        "vector": 0,
+        "offset": 8
+      },
+      "zOffset": 0,
+      "rotation": 0,
+      "text": "12",
+      "fontSize": 2,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 4.9,
+      "markerCount": 6,
+      "markerSkip": 0,
+      "markerLength": 1.1,
+      "markerWidth": 0.1,
+      "name": "Circular Markers Upper"
+    },
+    {
+      "type": "circularLabel",
+      "position": {
+        "vector": 0,
+        "offset": 8
+      },
+      "zOffset": 0.1,
+      "rotation": 0,
+      "text": "12",
+      "fontSize": 0.8,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "30,5,10,M,20,25",
+      "radialAlignment": false,
+      "spread": 3.6,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1,
+      "name": "Circular Label Upper"
+    },
+    {
+      "type": "hand",
+      "position": {
+        "vector": 0,
+        "offset": 8
+      },
+      "zOffset": 0.2,
+      "rotation": 0,
+      "text": "12",
+      "fontSize": 2,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.04,
+          0
+        ],
+        [
+          0.04,
+          4.5
+        ],
+        [
+          0,
+          4.7
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1,
+      "name": "Hand Upper"
+    },
+    {
+      "type": "circularMarkers",
+      "position": {
+        "vector": 6,
+        "offset": 8
+      },
+      "zOffset": 0,
+      "rotation": 0,
+      "text": "12",
+      "fontSize": 2,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 24,
+      "markerSkip": 0,
+      "markerLength": 0.8,
+      "markerWidth": 0.08,
+      "name": "Circular Markers Lower"
+    },
+    {
+      "type": "circularMarkers",
+      "position": {
+        "vector": 6,
+        "offset": 8
+      },
+      "zOffset": 0,
+      "rotation": 0,
+      "text": "12",
+      "fontSize": 2,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 4.7,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1.1,
+      "markerWidth": 0.1,
+      "name": "Circular Markers Lower"
+    },
+    {
+      "type": "circularLabel",
+      "position": {
+        "vector": 6,
+        "offset": 8
+      },
+      "zOffset": 0.1,
+      "rotation": 0,
+      "text": "12",
+      "fontSize": 0.8,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,2,4,H,8,10",
+      "radialAlignment": false,
+      "spread": 3.6,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1,
+      "hidden": false,
+      "name": "Circular Label Lower"
+    },
+    {
+      "type": "hand",
+      "position": {
+        "vector": 6,
+        "offset": 8
+      },
+      "zOffset": 0.2,
+      "rotation": 0,
+      "text": "12",
+      "fontSize": 2,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.04,
+          0
+        ],
+        [
+          0.04,
+          4.5
+        ],
+        [
+          0,
+          4.7
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1,
+      "hidden": false,
+      "name": "Hand Lower"
+    },
+    {
+      "type": "label",
+      "position": {
+        "vector": 3,
+        "offset": 11.9
+      },
+      "zOffset": -0.1,
+      "rotation": 0,
+      "text": "12",
+      "fontSize": 2,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1,
+      "hidden": false,
+      "name": "Date"
+    },
+    {
+      "type": "label",
+      "position": {
+        "vector": 9.1,
+        "offset": 7.2
+      },
+      "zOffset": 0.1,
+      "rotation": 0,
+      "text": "L O R E M I P S U M",
+      "fontSize": 0.9,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1,
+      "name": "LOREMIPSUM"
+    },
+    {
+      "type": "label",
+      "position": {
+        "vector": 8.8,
+        "offset": 7.3
+      },
+      "zOffset": 0.1,
+      "rotation": 0,
+      "text": "CHRONOMETER",
+      "fontSize": 0.7,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1,
+      "hidden": false,
+      "name": "Chronometer"
+    },
+    {
+      "type": "label",
+      "position": {
+        "vector": 6.3,
+        "offset": 18.6
+      },
+      "zOffset": 0.1,
+      "rotation": 8,
+      "text": "MADE IN",
+      "fontSize": 0.6,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1,
+      "name": "MADE IN"
+    },
+    {
+      "type": "label",
+      "position": {
+        "vector": 5.7,
+        "offset": 18.6
+      },
+      "zOffset": 0.1,
+      "rotation": -8,
+      "text": "GERMANY",
+      "fontSize": 0.6,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1,
+      "name": "GERMANY"
+    }
+  ],
+  "bezel": {
+    "bezel": true,
+    "bezelBevel": {
+      "enabled": true,
+      "thickness": 0.06,
+      "size": 0.23,
+      "segments": 10
+    },
+    "bezelHeight": 0.7,
+    "bezelMaterial": "polishedSilver",
+    "bezelThickness": 0.5
+  }
+}

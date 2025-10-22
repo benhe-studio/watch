@@ -44,7 +44,7 @@ export const markersConfig = {
       type: 'range',
       label: 'Depth',
       default: 0.5,
-      min: 0.2,
+      min: 0.1,
       max: 1,
       step: 0.1
     },
@@ -60,9 +60,9 @@ export const markersConfig = {
       type: 'range',
       label: 'Top Width',
       default: 1,
-      min: 0.1,
+      min: 0.01,
       max: 5,
-      step: 0.02,
+      step: 0.01,
       condition: (item) => item.type === 'blocks'
     },
     bottomWidth: {
@@ -71,7 +71,7 @@ export const markersConfig = {
       default: 1,
       min: 0,
       max: 5,
-      step: 0.02,
+      step: 0.01,
       condition: (item) => item.type === 'blocks'
     },
     length: {
@@ -111,9 +111,9 @@ export const markersConfig = {
       type: 'range',
       label: 'Radius',
       default: 1.5,
-      min: 0.5,
+      min: 0.1,
       max: 3,
-      step: 0.1,
+      step: 0.01,
       condition: (item) => item.type === 'circle'
     },
     circleCutout: {
@@ -121,8 +121,8 @@ export const markersConfig = {
       label: 'Cutout',
       default: 0,
       min: 0,
-      max: 0.95,
-      step: 0.05,
+      max: 0.98,
+      step: 0.01,
       condition: (item) => item.type === 'circle'
     },
     bevel: createBevelControl({
