@@ -100,9 +100,9 @@ export const handsConfig = {
       type: 'range',
       label: 'Radius',
       default: 1,
-      min: 0.1,
+      min: 0.01,
       max: 5,
-      step: 0.1,
+      step: 0.01,
       condition: (item) => item.type === 'circle'
     },
     spread: {
@@ -121,7 +121,7 @@ export const handsConfig = {
       default: 0,
       min: -2,
       max: 2,
-      step: 0.1,
+      step: 0.01,
       condition: (item) => item.type === 'parametricFlat' || item.type === 'parametricFaceted' || item.type === 'circle',
       description: 'Additional Z-axis offset for fine-tuning hand height'
     }

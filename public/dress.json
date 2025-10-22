@@ -1,0 +1,517 @@
+{
+  "face": {
+    "material": "matteWhite",
+    "textureImage": null,
+    "pinionRadius": 0.5,
+    "pinionHeight": 1.5,
+    "pinionMaterial": "polishedRoseGold"
+  },
+  "markers": [
+    {
+      "type": "blocks",
+      "radialAlignment": true,
+      "fontSize": 2.5,
+      "material": "polishedRoseGold",
+      "depth": 0.2,
+      "spread": 18,
+      "topWidth": 0.1,
+      "bottomWidth": 0.1,
+      "length": 2.5,
+      "blocksCutout": 0,
+      "doubleBlock": false,
+      "separation": 1.5,
+      "circleRadius": 1.5,
+      "circleCutout": 0,
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.1,
+        "size": 0.2,
+        "segments": 1
+      },
+      "visibleHours": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "name": "Outer Blocks"
+    },
+    {
+      "type": "blocks",
+      "radialAlignment": true,
+      "fontSize": 2.5,
+      "material": "polishedRoseGold",
+      "depth": 0.2,
+      "spread": 13.8,
+      "topWidth": 0.1,
+      "bottomWidth": 0.1,
+      "length": 2.5,
+      "blocksCutout": 0,
+      "doubleBlock": false,
+      "separation": 1.5,
+      "circleRadius": 1.5,
+      "circleCutout": 0,
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.1,
+        "size": 0.2,
+        "segments": 1
+      },
+      "visibleHours": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "name": "Inner Blocks",
+      "hidden": false
+    },
+    {
+      "type": "blocks",
+      "radialAlignment": true,
+      "fontSize": 2.5,
+      "material": "polishedRoseGold",
+      "depth": 0.2,
+      "spread": 16.6,
+      "topWidth": 0.1,
+      "bottomWidth": 0.1,
+      "length": 5.5,
+      "blocksCutout": 0,
+      "doubleBlock": true,
+      "separation": 0.6,
+      "circleRadius": 1.5,
+      "circleCutout": 0,
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.1,
+        "size": 0.2,
+        "segments": 1
+      },
+      "visibleHours": [
+        12
+      ],
+      "name": "Noon Blocks",
+      "hidden": false
+    },
+    {
+      "type": "blocks",
+      "radialAlignment": true,
+      "fontSize": 2.5,
+      "material": "polishedRoseGold",
+      "depth": 0.2,
+      "spread": 10.7,
+      "topWidth": 1.8,
+      "bottomWidth": 0.28,
+      "length": 2.5,
+      "blocksCutout": 0.95,
+      "doubleBlock": true,
+      "separation": 0.9,
+      "circleRadius": 1.5,
+      "circleCutout": 0,
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.1,
+        "size": 0.1,
+        "segments": 3
+      },
+      "visibleHours": [
+        12
+      ],
+      "name": "Logo"
+    }
+  ],
+  "hands": [
+    {
+      "type": "parametricFaceted",
+      "movement": "hours",
+      "material": "polishedRoseGold",
+      "points": [
+        [
+          0.2,
+          0
+        ],
+        [
+          1.05,
+          1.7000000000000002
+        ],
+        [
+          0.08,
+          11.650000000000002
+        ]
+      ],
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "flat",
+      "cutout": 0,
+      "cutoutPoints": [],
+      "radius": 1,
+      "spread": 0,
+      "zOffset": 0,
+      "name": "Hours"
+    },
+    {
+      "type": "parametricFaceted",
+      "movement": "minutes",
+      "material": "polishedRoseGold",
+      "points": [
+        [
+          0.2,
+          0
+        ],
+        [
+          1.05,
+          1.7
+        ],
+        [
+          0.08,
+          15.95
+        ]
+      ],
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "flat",
+      "cutout": 0,
+      "cutoutPoints": [],
+      "radius": 1,
+      "spread": 0,
+      "zOffset": 0,
+      "name": "Minutes",
+      "hidden": false
+    },
+    {
+      "type": "parametricFlat",
+      "movement": "seconds",
+      "material": "polishedRoseGold",
+      "points": [
+        [
+          0.2,
+          -5.2
+        ],
+        [
+          0.08,
+          -0.09999999999999964
+        ],
+        [
+          0.02,
+          15.6
+        ]
+      ],
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "flat",
+      "cutout": 0,
+      "cutoutPoints": [],
+      "radius": 1,
+      "spread": 0,
+      "zOffset": 0,
+      "name": "Seconds"
+    },
+    {
+      "type": "circle",
+      "movement": "fixed",
+      "material": "polishedRoseGold",
+      "points": [
+        [
+          0,
+          -4
+        ],
+        [
+          1.2,
+          0
+        ],
+        [
+          0,
+          14
+        ]
+      ],
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "flat",
+      "cutout": 0,
+      "cutoutPoints": [],
+      "radius": 0.67,
+      "spread": 0,
+      "zOffset": 0.9,
+      "name": "Seconds Pivot"
+    },
+    {
+      "type": "circle",
+      "movement": "fixed",
+      "material": "polishedRoseGold",
+      "points": [
+        [
+          0,
+          -4
+        ],
+        [
+          1.2,
+          0
+        ],
+        [
+          0,
+          14
+        ]
+      ],
+      "bevel": {
+        "enabled": true,
+        "thickness": 0.05,
+        "size": 0.05,
+        "segments": 3
+      },
+      "circleShape": "dome",
+      "cutout": 0,
+      "cutoutPoints": [],
+      "radius": 0.4,
+      "spread": 0,
+      "zOffset": 0.65,
+      "name": "Pinion Cap"
+    }
+  ],
+  "minuteMarkers": [
+    {
+      "type": "line",
+      "radialAlignment": true,
+      "hideHourMarks": true,
+      "material": "matteBlack",
+      "spread": 16,
+      "width": 0.14,
+      "length": 0.7,
+      "depth": 0.04,
+      "ticks": 2,
+      "radius": 0.3,
+      "fontSize": 1.5,
+      "color": "#000000"
+    },
+    {
+      "type": "numeral",
+      "radialAlignment": true,
+      "hideHourMarks": false,
+      "material": "polishedSilver",
+      "spread": 16,
+      "width": 0.2,
+      "length": 1,
+      "depth": 0.2,
+      "ticks": 2,
+      "radius": 0.3,
+      "fontSize": 0.9,
+      "color": "#000000"
+    }
+  ],
+  "decorations": [],
+  "complicationWindows": [],
+  "primitives": [
+    {
+      "type": "label",
+      "position": {
+        "vector": 0,
+        "offset": 7.8
+      },
+      "zOffset": 0.1,
+      "rotation": 0,
+      "text": "LOREM",
+      "fontSize": 1.7,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1
+    },
+    {
+      "type": "label",
+      "position": {
+        "vector": 0,
+        "offset": 6.2
+      },
+      "zOffset": 0.1,
+      "rotation": 0,
+      "text": "IPSUM",
+      "fontSize": 1.2,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1
+    },
+    {
+      "type": "label",
+      "position": {
+        "vector": 6.2,
+        "offset": 18.5
+      },
+      "zOffset": 0.1,
+      "rotation": 7,
+      "text": "SWISS",
+      "fontSize": 0.7,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1
+    },
+    {
+      "type": "label",
+      "position": {
+        "vector": 5.8,
+        "offset": 18.5
+      },
+      "zOffset": 0.1,
+      "rotation": -7,
+      "text": "MADE ",
+      "fontSize": 0.7,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1
+    },
+    {
+      "type": "label",
+      "position": {
+        "vector": 6,
+        "offset": 7.3
+      },
+      "zOffset": 0.1,
+      "rotation": 0,
+      "text": "Celine",
+      "fontSize": 2,
+      "color": "#000000",
+      "material": "polishedSilver",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.5
+        ],
+        [
+          0,
+          3.8
+        ]
+      ],
+      "labels": "12,1,2,3,4,5,6,7,8,9,10,11",
+      "radialAlignment": false,
+      "spread": 5,
+      "markerCount": 12,
+      "markerSkip": 0,
+      "markerLength": 1,
+      "markerWidth": 0.1,
+      "hidden": false
+    }
+  ],
+  "bezel": {
+    "bezel": true,
+    "bezelBevel": {
+      "enabled": true,
+      "thickness": 1,
+      "size": 1.1,
+      "segments": 10
+    },
+    "bezelHeight": 0.5,
+    "bezelMaterial": "polishedRoseGold",
+    "bezelThickness": 0.5
+  }
+}

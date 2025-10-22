@@ -34,7 +34,11 @@ function App() {
   const [environmentLight, setEnvironmentLight] = useState(true)
   const [debugView, setDebugView] = useState(false)
   const [isSmallScreen, setIsSmallScreen] = useState(false)
+  const [showPresetMenu, setShowPresetMenu] = useState(false)
   const sceneRef = useRef(null)
+
+  // Available presets
+  const presets = ['diver', 'dress']
 
   // Check screen size
   useEffect(() => {
@@ -48,11 +52,23 @@ function App() {
     return () => window.removeEventListener('resize', checkScreenSize)
   }, [])
 
+  // Close preset menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showPresetMenu && !event.target.closest('.preset-menu-container')) {
+        setShowPresetMenu(false)
+      }
+    }
+    
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showPresetMenu])
+
   // Load default config on mount
   useEffect(() => {
     const loadDefaultConfig = async () => {
       try {
-        const response = await fetch('/default-config.json')
+        const response = await fetch('/diver.json')
         if (response.ok) {
           const defaultConfig = await response.json()
           setConfig(defaultConfig)
@@ -116,26 +132,23 @@ function App() {
     URL.revokeObjectURL(url)
   }
 
-  const loadConfig = () => {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = '.json'
-    input.onchange = (e) => {
-      const file = e.target.files[0]
-      if (file) {
-        const reader = new FileReader()
-        reader.onload = (event) => {
-          try {
-            const loadedConfig = JSON.parse(event.target.result)
-            setConfig(loadedConfig)
-          } catch (error) {
-            alert('Error loading config: ' + error.message)
-          }
-        }
-        reader.readAsText(file)
+  const loadConfig = async (presetName) => {
+    try {
+      const response = await fetch(`/${presetName}.json`)
+      if (response.ok) {
+        const loadedConfig = await response.json()
+        setConfig(loadedConfig)
+        setShowPresetMenu(false)
+      } else {
+        alert(`Error loading preset: ${presetName}`)
       }
+    } catch (error) {
+      alert('Error loading preset: ' + error.message)
     }
-    input.click()
+  }
+
+  const togglePresetMenu = () => {
+    setShowPresetMenu(!showPresetMenu)
   }
 
   const clearConfig = () => {
@@ -258,6 +271,7 @@ function App() {
             {environmentLight ? <SunIcon className="icon" /> : <MoonIcon className="icon" />}
             <span className="button-label">Toggle Light</span>
           </button>
+          <div className="config-actions-divider"></div>
           {/*
           <button
             onClick={() => setDebugView(!debugView)}
@@ -267,7 +281,6 @@ function App() {
             <BugAntIcon className="icon" />
           </button>
           
-          <div className="config-actions-divider"></div>
           <button
             onClick={saveConfig}
             className="overlay-button config-action-button"
@@ -276,16 +289,56 @@ function App() {
             <ArrowDownTrayIcon className="icon" />
             <span className="button-label">Save Config</span>
           </button>
-          <button
-            onClick={loadConfig}
-            className="overlay-button config-action-button"
-            title="Load Config"
-          >
-            <FolderOpenIcon className="icon" />
-            <span className="button-label">Load Config</span>
-          </button>
-
           */}
+          <div className="preset-menu-container" style={{ position: 'relative' }}>
+            <button
+              onClick={togglePresetMenu}
+              className="overlay-button config-action-button"
+              title="Load Preset"
+            >
+              <FolderOpenIcon className="icon" />
+              <span className="button-label">Load Preset</span>
+            </button>
+            {showPresetMenu && (
+              <div style={{
+                position: 'absolute',
+                top: '100%',
+                right: 0,
+                marginTop: '4px',
+                backgroundColor: 'rgba(30, 30, 30, 0.95)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '4px',
+                minWidth: '180px',
+                zIndex: 1000,
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)'
+              }}>
+                {presets.map(preset => (
+                  <button
+                    key={preset}
+                    onClick={() => loadConfig(preset)}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      padding: '10px 16px',
+                      textAlign: 'left',
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'white',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      transition: 'background-color 0.2s'
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                  >
+                    {preset.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          
           <button
             onClick={exportGLB}
             className="overlay-button config-action-button export-button"
