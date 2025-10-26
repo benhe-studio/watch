@@ -34,6 +34,7 @@
   border-bottom: 2px solid #444;
   overflow-x: auto;
   flex-shrink: 0;
+  padding: 4px 0px;
 }
 
 .tabs-header::-webkit-scrollbar {
@@ -52,7 +53,7 @@
 .tab-button {
   padding: 12px 20px;
   border: none;
-  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
   background: transparent;
   color: #888;
   font-size: 18px;
@@ -70,7 +71,7 @@
 
 .tab-button.active {
   color: #4a9eff;
-  border-top-color: #4a9eff;
+  border-color: #4a9eff;
   background: rgba(74, 144, 226, 0.15);
 }
 
