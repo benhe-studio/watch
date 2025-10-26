@@ -60,9 +60,9 @@ export const handsConfig = {
     },
     lumeCutout: {
       type: 'checkbox',
-      label: 'Lume Cutout',
+      label: 'Lume',
       default: false,
-      description: 'Fill cutout areas with luminescent material'
+      description: 'Fill cutout region with luminescent material'
     },
     cutoutPoints: {
       type: 'pointArray',

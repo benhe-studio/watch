@@ -221,42 +221,8 @@
       "spread": 0,
       "circleShape": "flat",
       "zOffset": 0,
-      "name": "Hours Frame"
-    },
-    {
-      "type": "parametricFlat",
-      "movement": "hours",
-      "material": "lume",
-      "points": [
-        [
-          0.7,
-          2
-        ],
-        [
-          0.7090909090909091,
-          6.346153846153847
-        ],
-        [
-          3.1,
-          8.461538461538462
-        ],
-        [
-          0.7,
-          10.96153846153846
-        ],
-        [
-          0.7,
-          12.2
-        ]
-      ],
-      "cutout": 0,
-      "cutoutPoints": [],
-      "radius": 1,
-      "spread": 0,
-      "circleShape": "flat",
-      "zOffset": -0.1,
-      "hidden": false,
-      "name": "Hours Lume"
+      "name": "Hours",
+      "lumeCutout": true
     },
     {
       "type": "parametricFlat",
@@ -300,34 +266,8 @@
       "circleShape": "flat",
       "zOffset": 0,
       "hidden": false,
-      "name": "Minutes Frame"
-    },
-    {
-      "type": "parametricFlat",
-      "movement": "minutes",
-      "material": "lume",
-      "points": [
-        [
-          0.45,
-          1.14
-        ],
-        [
-          0.45,
-          17.5
-        ],
-        [
-          0,
-          18.37
-        ]
-      ],
-      "cutout": 0,
-      "cutoutPoints": [],
-      "radius": 1,
-      "spread": 0,
-      "circleShape": "flat",
-      "zOffset": -0.1,
-      "hidden": false,
-      "name": "Minutes Lume"
+      "name": "Minutes",
+      "lumeCutout": true
     },
     {
       "type": "parametricFlat",
@@ -377,7 +317,8 @@
       "circleShape": "flat",
       "zOffset": 0,
       "hidden": false,
-      "name": "Second Lume Frame"
+      "name": "Second Lume Frame",
+      "lumeCutout": true
     },
     {
       "type": "parametricFlat",
@@ -409,33 +350,6 @@
     {
       "type": "circle",
       "movement": "seconds",
-      "material": "lume",
-      "points": [
-        [
-          0,
-          -4
-        ],
-        [
-          1.2,
-          0
-        ],
-        [
-          0,
-          14
-        ]
-      ],
-      "cutout": 0,
-      "cutoutPoints": [],
-      "radius": 0.8,
-      "spread": 11,
-      "circleShape": "flat",
-      "zOffset": 0.1,
-      "hidden": false,
-      "name": "Second Lume"
-    },
-    {
-      "type": "circle",
-      "movement": "seconds",
       "material": "polishedSilver",
       "points": [
         [
@@ -456,36 +370,9 @@
       "radius": 0.6,
       "spread": -5.5,
       "circleShape": "flat",
-      "zOffset": 0.2,
+      "zOffset": 0,
       "hidden": false,
       "name": "Second Tail"
-    },
-    {
-      "type": "circle",
-      "movement": "fixed",
-      "material": "polishedSilver",
-      "points": [
-        [
-          0,
-          -4
-        ],
-        [
-          1.2,
-          0
-        ],
-        [
-          0,
-          14
-        ]
-      ],
-      "cutout": 0,
-      "cutoutPoints": [],
-      "radius": 1,
-      "spread": 0,
-      "circleShape": "flat",
-      "zOffset": 0.9,
-      "hidden": false,
-      "name": "Second Pivot"
     },
     {
       "type": "circle",
@@ -507,12 +394,12 @@
       ],
       "cutout": 0,
       "cutoutPoints": [],
-      "radius": 0.2,
+      "radius": 1,
       "spread": 0,
-      "circleShape": "dome",
-      "zOffset": 0.2,
+      "circleShape": "flat",
+      "zOffset": 0,
       "hidden": false,
-      "name": "Pivot Cap"
+      "name": "Second Pivot"
     }
   ]
 }

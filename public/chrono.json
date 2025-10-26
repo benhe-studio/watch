@@ -169,35 +169,8 @@
       "radius": 1,
       "spread": 0,
       "zOffset": 0,
-      "name": "Hour Hand"
-    },
-    {
-      "type": "parametricFlat",
-      "movement": "hours",
-      "material": "lume",
-      "points": [
-        [
-          0.25,
-          1.3
-        ],
-        [
-          0.25,
-          8.8
-        ]
-      ],
-      "bevel": {
-        "enabled": false,
-        "thickness": 0.05,
-        "size": 0.05,
-        "segments": 3
-      },
-      "circleShape": "flat",
-      "cutout": 0,
-      "cutoutPoints": [],
-      "radius": 1,
-      "spread": 0,
-      "zOffset": -0.08,
-      "name": "Hour Lume"
+      "name": "Hour Hand",
+      "lumeCutout": true
     },
     {
       "type": "parametricFlat",
@@ -238,36 +211,8 @@
       "radius": 1,
       "spread": 0,
       "zOffset": 0,
-      "name": "Minute Hand"
-    },
-    {
-      "type": "parametricFlat",
-      "movement": "minutes",
-      "material": "lume",
-      "points": [
-        [
-          0.25,
-          1.3
-        ],
-        [
-          0.25,
-          14.3
-        ]
-      ],
-      "bevel": {
-        "enabled": false,
-        "thickness": 0.05,
-        "size": 0.05,
-        "segments": 3
-      },
-      "circleShape": "flat",
-      "cutout": 0,
-      "cutoutPoints": [],
-      "radius": 1,
-      "spread": 0,
-      "zOffset": -0.08,
-      "hidden": false,
-      "name": "Minute Lume"
+      "name": "Minute Hand",
+      "lumeCutout": true
     },
     {
       "type": "parametricFlat",
@@ -303,7 +248,7 @@
     },
     {
       "type": "circle",
-      "movement": "fixed",
+      "movement": "seconds",
       "material": "matteBlackPlastic",
       "points": [
         [
@@ -330,12 +275,12 @@
       "cutoutPoints": [],
       "radius": 0.64,
       "spread": 0,
-      "zOffset": 0.84,
+      "zOffset": 0,
       "name": "Second Pivot"
     },
     {
       "type": "circle",
-      "movement": "seconds",
+      "movement": "hours",
       "material": "matteBlackPlastic",
       "points": [
         [
@@ -362,13 +307,13 @@
       "cutoutPoints": [],
       "radius": 1,
       "spread": 0,
-      "zOffset": -0.98,
+      "zOffset": 0,
       "hidden": false,
       "name": "Hour Pivot"
     },
     {
       "type": "circle",
-      "movement": "seconds",
+      "movement": "minutes",
       "material": "matteBlackPlastic",
       "points": [
         [
@@ -395,7 +340,7 @@
       "cutoutPoints": [],
       "radius": 0.8,
       "spread": 0,
-      "zOffset": -0.46,
+      "zOffset": 0,
       "hidden": false,
       "name": "Minute Pivot"
     },
