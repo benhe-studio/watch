@@ -14,8 +14,7 @@ import {
   ArrowDownTrayIcon,
   FolderOpenIcon,
   TrashIcon,
-  CubeIcon,
-  DevicePhoneMobileIcon
+  CubeIcon
 } from '@heroicons/react/24/outline'
 import './App.css'
 
@@ -33,24 +32,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [environmentLight, setEnvironmentLight] = useState(true)
   const [debugView, setDebugView] = useState(false)
-  const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [showPresetMenu, setShowPresetMenu] = useState(false)
   const sceneRef = useRef(null)
 
   // Available presets
   const presets = ['diver', 'dress', 'chrono']
-
-  // Check screen size
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsSmallScreen(window.innerWidth < 600)
-    }
-    
-    checkScreenSize()
-    window.addEventListener('resize', checkScreenSize)
-    
-    return () => window.removeEventListener('resize', checkScreenSize)
-  }, [])
 
   // Close preset menu when clicking outside
   useEffect(() => {
@@ -223,19 +209,8 @@ function App() {
 
   return (
     <>
-      {/* Small Screen Overlay */}
-      <div className={`small-screen-overlay ${isSmallScreen ? 'visible' : ''}`}>
-        <div className="rotate-icon">
-          <DevicePhoneMobileIcon />
-        </div>
-        <div className="small-screen-title">Screen Too Small</div>
-        <div className="small-screen-message">
-          Please rotate your device to landscape mode or use a larger display for the best experience with the watch configurator.
-        </div>
-      </div>
-
-      <div style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden' }}>
-      <div style={{ flex: 1, minWidth: 0, background: environmentLight ? '#e8e8e8' : '#000000', position: 'relative' }}>
+      <div className="app-container" style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden' }}>
+      <div className="canvas-container" style={{ flex: 1, minWidth: 0, background: environmentLight ? '#e8e8e8' : '#000000', position: 'relative' }}>
         <Canvas shadows camera={{ position: [0, -20, 60], fov: 50 }}>
           <SceneCapture sceneRef={sceneRef} />
           <color attach="background" args={[environmentLight ? '#e8e8e8' : '#000000']} />
