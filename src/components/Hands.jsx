@@ -4,15 +4,25 @@ import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { getMaterialInstance } from '../config/helpers/materials'
 
+// Static extrude settings shared by parametric flat and circle hand types
+const HAND_DEPTH = 0.2
+const HAND_BEVEL_SETTINGS = {
+  enabled: true,
+  thickness: 0.05,
+  size: 0.05,
+  segments: 4
+}
+const HAND_EXTRUDE_SETTINGS = {
+  depth: HAND_DEPTH,
+  bevelEnabled: HAND_BEVEL_SETTINGS.enabled,
+  bevelThickness: HAND_BEVEL_SETTINGS.thickness,
+  bevelSize: HAND_BEVEL_SETTINGS.size,
+  bevelSegments: HAND_BEVEL_SETTINGS.segments
+}
+
 // Geometry generator functions - return THREE.BufferGeometry
 const geometryGenerators = {
-  circle: ({ radius, circleShape }) => {
-    // For circle profile, we return null and handle geometry in the component
-    // This is because we need to render different geometries (cylinder vs sphere)
-    return null
-  },
-  
-  parametricFlat: ({ points, bevel, cutout, cutoutPoints }) => {
+  parametricFlat: ({ points, cutout, cutoutPoints }) => {
     // Helper function to ensure points start and end at x=0
     const ensurePointsAtCenterLine = (pointsList) => {
       if (!pointsList || pointsList.length === 0) return pointsList
@@ -110,21 +120,10 @@ const geometryGenerators = {
       }
     }
     
-    // Extrude settings for depth - fixed at 0.3 for parametric flat hands
-    const depth = 0.3
-    const bevelSettings = bevel || { enabled: true, thickness: 0.05, size: 0.05, segments: 3 }
-    const extrudeSettings = {
-      depth: depth,
-      bevelEnabled: bevelSettings.enabled,
-      bevelThickness: bevelSettings.enabled ? bevelSettings.thickness : 0,
-      bevelSize: bevelSettings.enabled ? bevelSettings.size : 0,
-      bevelSegments: bevelSettings.enabled ? Math.round(bevelSettings.segments) : 1
-    }
-    
-    const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings)
+    const geometry = new THREE.ExtrudeGeometry(shape, HAND_EXTRUDE_SETTINGS)
     
     // Center the geometry on the z-axis (depth axis)
-    geometry.translate(0, 0, -depth / 2)
+    geometry.translate(0, 0, -HAND_DEPTH / 2)
     
     return geometry
   },
@@ -340,7 +339,7 @@ const handMovementConfig = {
 }
 
 // Single hand component
-function Hand({ type, movement, width, material, length: customLength, offset, points, bevel, cutout, cutoutPoints, zOffset, radius, spread, circleShape }) {
+function Hand({ type, movement, width, material, length: customLength, offset, points, cutout, cutoutPoints, zOffset, radius, spread }) {
   const handRef = useRef()
   const movementConfig = handMovementConfig[movement] || handMovementConfig.seconds
   const length = customLength || movementConfig.defaultLength
@@ -353,8 +352,8 @@ function Hand({ type, movement, width, material, length: customLength, offset, p
   
   const geometry = useMemo(() => {
     const generator = geometryGenerators[type] || geometryGenerators.parametricFlat
-    return generator({ points, bevel, cutout, cutoutPoints, radius, spread, circleShape })
-  }, [type, points, bevel, cutout, cutoutPoints, radius, spread, circleShape])
+    return generator({ points, cutout, cutoutPoints, radius, spread })
+  }, [type, points, cutout, cutoutPoints, radius, spread])
   
   // Calculate final Z position with optional offset
   const finalZOffset = movementConfig.zOffset + (zOffset || 0)
@@ -392,57 +391,60 @@ function Hand({ type, movement, width, material, length: customLength, offset, p
   }
   
   // Circle profile - positioned at spread distance from center
+  // All circles are rendered as flat extruded shapes
   if (isCircle) {
-    const shape = circleShape || 'flat'
+    const outerRadius = radius || 1
+    const depth = outerRadius * 0.3
+    const cutoutValue = cutout || 0
+    const segments = 128 // High segment count for smooth circle
     
-    if (shape === 'dome') {
-      // Render a sphere
-      return (
-        <group ref={handRef} rotation={[0, 0, 0]}>
-          <mesh
-            position={[0, spread || 0, finalZOffset]}
-            material={materialInstance}
-            castShadow
-            receiveShadow
-          >
-            <sphereGeometry args={[radius || 1, 32, 32]} />
-          </mesh>
-        </group>
-      )
-    } else {
-      // Render a flat cylinder
-      const outerRadius = radius || 1
-      const depth = outerRadius * 0.3
-      const cutoutValue = cutout || 0
-      const innerRadius = outerRadius * cutoutValue
-      
-      return (
-        <group ref={handRef} rotation={[0, 0, 0]}>
-          <mesh
-            position={[0, spread || 0, finalZOffset]}
-            rotation={[Math.PI / 2, 0, 0]}
-            material={materialInstance}
-            castShadow
-            receiveShadow
-          >
-            <cylinderGeometry args={[outerRadius, outerRadius, depth, 32]} />
-          </mesh>
-          
-          {/* Inner cutout cylinder if cutout > 0 */}
-          {cutoutValue > 0 && (
-            <mesh
-              position={[0, spread || 0, finalZOffset]}
-              rotation={[Math.PI / 2, 0, 0]}
-              material={materialInstance}
-              castShadow
-              receiveShadow
-            >
-              <cylinderGeometry args={[innerRadius, innerRadius, depth * 1.1, 32]} />
-            </mesh>
-          )}
-        </group>
-      )
+    // Create circular shape
+    const shape = new THREE.Shape()
+    
+    // Outer circle
+    for (let i = 0; i <= segments; i++) {
+      const angle = (i / segments) * Math.PI * 2
+      const x = Math.cos(angle) * outerRadius
+      const y = Math.sin(angle) * outerRadius
+      if (i === 0) {
+        shape.moveTo(x, y)
+      } else {
+        shape.lineTo(x, y)
+      }
     }
+    
+    // Inner circle (hole) if cutout > 0
+    if (cutoutValue > 0) {
+      const innerRadius = outerRadius * cutoutValue
+      const hole = new THREE.Path()
+      for (let i = 0; i <= segments; i++) {
+        const angle = (i / segments) * Math.PI * 2
+        const x = Math.cos(angle) * innerRadius
+        const y = Math.sin(angle) * innerRadius
+        if (i === 0) {
+          hole.moveTo(x, y)
+        } else {
+          hole.lineTo(x, y)
+        }
+      }
+      shape.holes.push(hole)
+    }
+    
+    const circleGeometry = new THREE.ExtrudeGeometry(shape, HAND_EXTRUDE_SETTINGS)
+    // Center the geometry on the z-axis (depth axis)
+    circleGeometry.translate(0, 0, -HAND_DEPTH / 2)
+    
+    return (
+      <group ref={handRef} rotation={[0, 0, 0]}>
+        <mesh
+          position={[0, spread || 0, finalZOffset]}
+          geometry={circleGeometry}
+          material={materialInstance}
+          castShadow
+          receiveShadow
+        />
+      </group>
+    )
   }
   
   // Fallback for any other profiles
@@ -484,13 +486,11 @@ function Hands({ hands = [] }) {
           length={handConfig.length}
           offset={handConfig.offset}
           points={handConfig.points}
-          bevel={handConfig.bevel}
           cutout={handConfig.cutout}
           cutoutPoints={handConfig.cutoutPoints}
           zOffset={handConfig.zOffset}
           radius={handConfig.radius}
           spread={handConfig.spread}
-          circleShape={handConfig.circleShape}
         />
         )
       })}
