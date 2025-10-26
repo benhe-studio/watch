@@ -17,7 +17,6 @@
 
 .point-graph-canvas {
   width: 100%;
-  max-width: 300px;
   height: 600px;
   border: 2px solid #333;
   border-radius: 4px;

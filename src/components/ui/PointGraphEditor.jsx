@@ -16,6 +16,7 @@ function PointGraphEditor({
   description = ''
 }) {
   const canvasRef = useRef(null)
+  const containerRef = useRef(null)
   const [draggingIndex, setDraggingIndex] = useState(null)
   const [draggingType, setDraggingType] = useState(null) // 'points' or 'cutout'
   const [hoveredIndex, setHoveredIndex] = useState(null)
@@ -27,6 +28,28 @@ function PointGraphEditor({
   const padding = 40
   const pointRadius = 6
   const hoverRadius = 10
+
+  // Update canvas size based on container width
+  useEffect(() => {
+    const updateCanvasSize = () => {
+      if (containerRef.current) {
+        // Account for container padding (12px * 2 = 24px)
+        const width = containerRef.current.clientWidth - 24
+        setCanvasSize({ width, height: 600 })
+      }
+    }
+
+    updateCanvasSize()
+
+    const resizeObserver = new ResizeObserver(updateCanvasSize)
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current)
+    }
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [])
 
   // Convert point coordinates to canvas coordinates
   const pointToCanvas = (point) => {
@@ -322,17 +345,38 @@ function PointGraphEditor({
   }
 
   const addPoint = () => {
-    // Add point at center
-    const centerX = (xMin + xMax) / 2
-    const centerY = (yMin + yMax) / 2
-    onChange([...points, [centerX, centerY]])
+    let newX, newY
+    
+    if (points.length > 0) {
+      // Use previous point's X and add 4 to Y (clamped to max)
+      const lastPoint = points[points.length - 1]
+      newX = lastPoint[0]
+      newY = Math.min(lastPoint[1] + 4, yMax)
+    } else {
+      // First point: use center
+      newX = (xMin + xMax) / 2
+      newY = (yMin + yMax) / 2
+    }
+    
+    onChange([...points, [newX, newY]])
   }
 
   const addCutoutPoint = () => {
     if (onCutoutChange) {
-      const centerX = (xMin + xMax) / 2
-      const centerY = (yMin + yMax) / 2
-      onCutoutChange([...cutoutPoints, [centerX, centerY]])
+      let newX, newY
+      
+      if (cutoutPoints.length > 0) {
+        // Use previous cutout point's X and add 4 to Y (clamped to max)
+        const lastPoint = cutoutPoints[cutoutPoints.length - 1]
+        newX = lastPoint[0]
+        newY = Math.min(lastPoint[1] + 4, yMax)
+      } else {
+        // First cutout point: use center
+        newX = (xMin + xMax) / 2
+        newY = (yMin + yMax) / 2
+      }
+      
+      onCutoutChange([...cutoutPoints, [newX, newY]])
     }
   }
 
@@ -374,7 +418,7 @@ function PointGraphEditor({
     : null
 
   return (
-    <div className="point-graph-editor">
+    <div className="point-graph-editor" ref={containerRef}>
       {description && <p className="graph-description">{description}</p>}
       
       <div className="graph-controls">
