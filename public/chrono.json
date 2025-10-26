@@ -275,7 +275,7 @@
       "cutoutPoints": [],
       "radius": 0.64,
       "spread": 0,
-      "zOffset": 0,
+      "zOffset": 0.1,
       "name": "Second Pivot"
     },
     {

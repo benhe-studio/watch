@@ -43,6 +43,14 @@ function ControlPanel({ config, updateConfig, schema }) {
     const newArray = [...config[section], defaultItem]
     updateConfig(section, null, newArray)
     
+    // Expand the newly created item (it will be at the last index)
+    const newIndex = newArray.length - 1
+    const key = `${section}-${newIndex}`
+    setExpandedItems(prev => ({
+      ...prev,
+      [key]: true
+    }))
+    
     // Close dropdown
     setTypeSelectionDropdown(null)
   }
