@@ -49,21 +49,6 @@ export const handsConfig = {
       minPoints: 2,
       description: 'Define half of the hand shape. Y=0 is the pivot point, negative Y extends towards tail, positive Y towards tip'
     },
-    cutout: {
-      type: 'range',
-      label: 'Cutout',
-      default: 0,
-      min: 0,
-      max: 0.95,
-      step: 0.05,
-      condition: (item) => item.type === 'circle'
-    },
-    lumeCutout: {
-      type: 'checkbox',
-      label: 'Lume',
-      default: false,
-      description: 'Fill cutout region with luminescent material'
-    },
     cutoutPoints: {
       type: 'pointArray',
       label: 'Cutout Points',
@@ -98,6 +83,21 @@ export const handsConfig = {
       step: 0.5,
       condition: (item) => item.type === 'circle',
       description: 'Distance from center (0,0) where the circle is positioned'
+    },
+    cutout: {
+      type: 'range',
+      label: 'Cutout',
+      default: 0,
+      min: 0,
+      max: 0.95,
+      step: 0.05,
+      condition: (item) => item.type === 'circle'
+    },
+    lumeCutout: {
+      type: 'checkbox',
+      label: 'Lume',
+      default: false,
+      description: 'Fill cutout region with luminescent material'
     },
     zOffset: {
       type: 'range',

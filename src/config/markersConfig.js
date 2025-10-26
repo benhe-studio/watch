@@ -17,6 +17,11 @@ export const markersConfig = {
         { value: 'circle', label: 'Circle' }
       ]
     },
+    visibleHours: {
+      type: 'hourSelector',
+      label: 'Visible Hours',
+      default: [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    },
     material: {
       type: 'select',
       label: 'Material',
@@ -31,6 +36,23 @@ export const markersConfig = {
       description: 'Rotate markers to align radially toward center',
       condition: (item) => item.type !== 'circle'
     },
+    spread: {
+      type: 'range',
+      label: 'Spread',
+      default: 17,
+      min: 10,
+      max: 25,
+      step: 0.1
+    },
+    circleRadius: {
+      type: 'range',
+      label: 'Radius',
+      default: 1.5,
+      min: 0.1,
+      max: 3,
+      step: 0.01,
+      condition: (item) => item.type === 'circle'
+    },
     fontSize: {
       type: 'range',
       label: 'Font Size',
@@ -39,22 +61,6 @@ export const markersConfig = {
       max: 5,
       step: 0.1,
       condition: (item) => item.type === 'numeral'
-    },
-    depth: {
-      type: 'range',
-      label: 'Depth',
-      default: 0.5,
-      min: 0.1,
-      max: 1,
-      step: 0.1
-    },
-    spread: {
-      type: 'range',
-      label: 'Spread',
-      default: 17,
-      min: 10,
-      max: 25,
-      step: 0.1
     },
     topWidth: {
       type: 'range',
@@ -82,6 +88,14 @@ export const markersConfig = {
       max: 6,
       step: 0.1,
       condition: (item) => item.type === 'blocks'
+    },
+    depth: {
+      type: 'range',
+      label: 'Depth',
+      default: 0.5,
+      min: 0.1,
+      max: 1,
+      step: 0.1
     },
     cutout: {
       type: 'range',
@@ -114,15 +128,6 @@ export const markersConfig = {
       step: 0.1,
       condition: (item) => item.type === 'blocks' && item.doubleBlock
     },
-    circleRadius: {
-      type: 'range',
-      label: 'Radius',
-      default: 1.5,
-      min: 0.1,
-      max: 3,
-      step: 0.01,
-      condition: (item) => item.type === 'circle'
-    },
     bevel: createBevelControl({
       defaultEnabled: true,
       defaultThickness: 0.1,
@@ -132,11 +137,6 @@ export const markersConfig = {
       maxThickness: 0.3,
       minSize: 0.05,
       maxSize: 0.3
-    }),
-    visibleHours: {
-      type: 'hourSelector',
-      label: 'Visible Hours',
-      default: [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-    }
+    })
   }
 }
