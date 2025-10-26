@@ -56,8 +56,10 @@ function Markers({ markers }) {
                 const bottomWidth = markerConfig.bottomWidth !== undefined ? markerConfig.bottomWidth : 0.1
                 const length = markerConfig.length || 0.3
                 const depth = markerConfig.depth || 0.5
-                const cutout = markerConfig.blocksCutout !== undefined ? markerConfig.blocksCutout : 0
+                const cutout = markerConfig.cutout !== undefined ? markerConfig.cutout : 0
+                const lumeCutout = markerConfig.lumeCutout || false
                 const material = getMaterialInstance(markerConfig.material || 'polishedSilver')
+                const lumeMaterial = getMaterialInstance('lume')
                 const bevel = markerConfig.bevel || { enabled: true, thickness: 0.1, size: 0.1, segments: 3 }
                 const doubleBlock = markerConfig.doubleBlock || false
                 const separation = markerConfig.separation || 1.5
@@ -115,10 +117,47 @@ function Markers({ markers }) {
                   bevelSegments: bevel.enabled ? Math.round(bevel.segments) : 1
                 }
                 
+                // Create lume fill geometry if enabled
+                const lumeFillMesh = lumeCutout && cutout > 0 ? (() => {
+                  const lumeShape = new THREE.Shape()
+                  const innerHalfTopWidth = halfTopWidth * cutout
+                  const innerHalfBottomWidth = halfBottomWidth * cutout
+                  const innerHalfLength = halfLength * cutout
+                  
+                  if (bottomWidth === 0) {
+                    // Create triangle shape for lume fill
+                    lumeShape.moveTo(0, -innerHalfLength)
+                    lumeShape.lineTo(innerHalfTopWidth, innerHalfLength)
+                    lumeShape.lineTo(-innerHalfTopWidth, innerHalfLength)
+                    lumeShape.lineTo(0, -innerHalfLength)
+                  } else {
+                    // Create trapezoid shape for lume fill
+                    lumeShape.moveTo(-innerHalfBottomWidth, -innerHalfLength)
+                    lumeShape.lineTo(innerHalfBottomWidth, -innerHalfLength)
+                    lumeShape.lineTo(innerHalfTopWidth, innerHalfLength)
+                    lumeShape.lineTo(-innerHalfTopWidth, innerHalfLength)
+                    lumeShape.lineTo(-innerHalfBottomWidth, -innerHalfLength)
+                  }
+                  
+                  const lumeExtrudeSettings = {
+                    depth: depth * 0.95,
+                    bevelEnabled: false
+                  }
+                  
+                  return (
+                    <mesh material={lumeMaterial} castShadow receiveShadow>
+                      <extrudeGeometry args={[lumeShape, lumeExtrudeSettings]} />
+                    </mesh>
+                  )
+                })() : null
+                
                 const blockMesh = (
-                  <mesh material={material} castShadow receiveShadow>
-                    <extrudeGeometry args={[shape, extrudeSettings]} />
-                  </mesh>
+                  <>
+                    <mesh material={material} castShadow receiveShadow>
+                      <extrudeGeometry args={[shape, extrudeSettings]} />
+                    </mesh>
+                    {lumeFillMesh}
+                  </>
                 )
                 
                 if (doubleBlock) {
@@ -170,8 +209,10 @@ function Markers({ markers }) {
               {markerConfig.type === 'circle' && (() => {
                 const radius = markerConfig.circleRadius || 0.15
                 const depth = markerConfig.depth || 0.5
-                const cutout = markerConfig.circleCutout !== undefined ? markerConfig.circleCutout : 0
+                const cutout = markerConfig.cutout !== undefined ? markerConfig.cutout : 0
+                const lumeCutout = markerConfig.lumeCutout || false
                 const material = getMaterialInstance(markerConfig.material || 'polishedSilver')
+                const lumeMaterial = getMaterialInstance('lume')
                 const bevel = markerConfig.bevel || { enabled: true, thickness: 0.1, size: 0.1, segments: 3 }
                 
                 // Create circular shape with high fidelity
@@ -217,10 +258,42 @@ function Markers({ markers }) {
                   curveSegments: 64 // Smooth extrusion curves
                 }
                 
+                // Create lume fill geometry if enabled
+                const lumeFillMesh = lumeCutout && cutout > 0 ? (() => {
+                  const innerRadius = radius * cutout
+                  const lumeShape = new THREE.Shape()
+                  
+                  // Create filled circle for lume
+                  for (let i = 0; i <= segments; i++) {
+                    const angle = (i / segments) * Math.PI * 2
+                    const x = Math.cos(angle) * innerRadius
+                    const y = Math.sin(angle) * innerRadius
+                    if (i === 0) {
+                      lumeShape.moveTo(x, y)
+                    } else {
+                      lumeShape.lineTo(x, y)
+                    }
+                  }
+                  
+                  const lumeExtrudeSettings = {
+                    depth: depth * 0.95,
+                    bevelEnabled: false
+                  }
+                  
+                  return (
+                    <mesh material={lumeMaterial} castShadow receiveShadow>
+                      <extrudeGeometry args={[lumeShape, lumeExtrudeSettings]} />
+                    </mesh>
+                  )
+                })() : null
+                
                 return (
-                  <mesh material={material} castShadow receiveShadow>
-                    <extrudeGeometry args={[shape, extrudeSettings]} />
-                  </mesh>
+                  <>
+                    <mesh material={material} castShadow receiveShadow>
+                      <extrudeGeometry args={[shape, extrudeSettings]} />
+                    </mesh>
+                    {lumeFillMesh}
+                  </>
                 )
               })()}
             </group>

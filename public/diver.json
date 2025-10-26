@@ -44,37 +44,9 @@
         10,
         11
       ],
-      "name": "Circle Frame"
-    },
-    {
-      "type": "circle",
-      "rotate": false,
-      "fontSize": 2.5,
-      "color": "#000000",
-      "material": "lume",
-      "spread": 15.5,
-      "topWidth": 1,
-      "bottomWidth": 1,
-      "length": 3,
-      "depth": 0.4,
-      "blocksCutout": 0,
-      "doubleBlock": false,
-      "separation": 1.5,
-      "circleRadius": 1.5,
-      "circleDepth": 0.5,
-      "circleCutout": 0,
-      "visibleHours": [
-        1,
-        2,
-        4,
-        5,
-        7,
-        8,
-        10,
-        11
-      ],
-      "name": "Circle Lume",
-      "hidden": false
+      "name": "Circle",
+      "cutout": 0.95,
+      "lumeCutout": true
     },
     {
       "type": "blocks",
@@ -135,33 +107,9 @@
       ],
       "radialAlignment": true,
       "hidden": false,
-      "name": "Rectangle Frame"
-    },
-    {
-      "type": "blocks",
-      "rotate": true,
-      "fontSize": 2.5,
-      "color": "#000000",
-      "material": "lume",
-      "spread": 15,
-      "topWidth": 1,
-      "bottomWidth": 1,
-      "length": 4.1,
-      "depth": 0.4,
-      "blocksCutout": 0,
-      "doubleBlock": false,
-      "separation": 1.5,
-      "circleRadius": 1.5,
-      "circleDepth": 0.5,
-      "circleCutout": 0,
-      "visibleHours": [
-        3,
-        6,
-        9
-      ],
-      "hidden": false,
-      "radialAlignment": true,
-      "name": "Rectangle Lume"
+      "name": "Rectangle",
+      "cutout": 0.95,
+      "lumeCutout": true
     },
     {
       "type": "blocks",
@@ -182,28 +130,9 @@
         12
       ],
       "hidden": false,
-      "name": "Triangle Frame"
-    },
-    {
-      "type": "blocks",
-      "rotate": true,
-      "fontSize": 2.5,
-      "material": "lume",
-      "depth": 0.4,
-      "spread": 14.2,
-      "topWidth": 3.8,
-      "bottomWidth": 0,
-      "length": 5.5,
-      "blocksCutout": 0,
-      "doubleBlock": false,
-      "separation": 1.5,
-      "circleRadius": 1.5,
-      "circleCutout": 0,
-      "visibleHours": [
-        12
-      ],
-      "hidden": false,
-      "name": "Triangle Lume"
+      "name": "Triangle",
+      "cutout": 0.95,
+      "lumeCutout": true
     }
   ],
   "minuteMarkers": [

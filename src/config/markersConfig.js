@@ -17,6 +17,12 @@ export const markersConfig = {
         { value: 'circle', label: 'Circle' }
       ]
     },
+    material: {
+      type: 'select',
+      label: 'Material',
+      default: 'polishedSilver',
+      options: getMaterialOptions()
+    },
     radialAlignment: {
       type: 'checkbox',
       label: 'Radial Alignment',
@@ -33,12 +39,6 @@ export const markersConfig = {
       max: 5,
       step: 0.1,
       condition: (item) => item.type === 'numeral'
-    },
-    material: {
-      type: 'select',
-      label: 'Material',
-      default: 'polishedSilver',
-      options: getMaterialOptions()
     },
     depth: {
       type: 'range',
@@ -83,14 +83,21 @@ export const markersConfig = {
       step: 0.1,
       condition: (item) => item.type === 'blocks'
     },
-    blocksCutout: {
+    cutout: {
       type: 'range',
       label: 'Cutout',
       default: 0,
       min: 0,
-      max: 0.95,
-      step: 0.05,
-      condition: (item) => item.type === 'blocks'
+      max: 0.98,
+      step: 0.01,
+      condition: (item) => item.type === 'blocks' || item.type === 'circle'
+    },
+    lumeCutout: {
+      type: 'checkbox',
+      label: 'Lume',
+      default: false,
+      condition: (item) => (item.type === 'blocks' || item.type === 'circle') && item.cutout > 0,
+      description: 'Fill cutout region with lume material'
     },
     doubleBlock: {
       type: 'checkbox',
@@ -113,15 +120,6 @@ export const markersConfig = {
       default: 1.5,
       min: 0.1,
       max: 3,
-      step: 0.01,
-      condition: (item) => item.type === 'circle'
-    },
-    circleCutout: {
-      type: 'range',
-      label: 'Cutout',
-      default: 0,
-      min: 0,
-      max: 0.98,
       step: 0.01,
       condition: (item) => item.type === 'circle'
     },

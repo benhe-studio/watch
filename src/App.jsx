@@ -285,7 +285,7 @@ function App() {
           >
             <BugAntIcon className="icon" />
           </button>
-          
+          */}
           <button
             onClick={saveConfig}
             className="overlay-button config-action-button"
@@ -294,7 +294,7 @@ function App() {
             <ArrowDownTrayIcon className="icon" />
             <span className="button-label">Save Config</span>
           </button>
-          */}
+          
           <div className="preset-menu-container" style={{ position: 'relative' }}>
             <button
               onClick={togglePresetMenu}

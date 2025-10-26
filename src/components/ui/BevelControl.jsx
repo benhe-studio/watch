@@ -31,7 +31,7 @@ function BevelControl({ value, onChange, config }) {
             onChange={(e) => handleChange('enabled', e.target.checked)}
           />
         </label>
-        <div className="bevel-control-description">
+        <div className="control-description">
           Enable this to add a chamfer or a roundover to the edges of the element
         </div>
       </div>

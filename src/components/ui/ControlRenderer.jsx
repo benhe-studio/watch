@@ -89,6 +89,9 @@ export function renderControl(
               onChange={(e) => onChange(e.target.checked)}
             />
           </label>
+          {controlConfig.description && (
+            <div className="control-description">{controlConfig.description}</div>
+          )}
         </div>
       )
 
