@@ -397,7 +397,7 @@
       "radius": 1,
       "spread": 0,
       "circleShape": "flat",
-      "zOffset": 0,
+      "zOffset": 0.1,
       "hidden": false,
       "name": "Second Pivot"
     }
