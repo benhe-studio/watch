@@ -14,7 +14,9 @@ import {
   ArrowDownTrayIcon,
   FolderOpenIcon,
   TrashIcon,
-  CubeIcon
+  CubeIcon,
+  PlayIcon,
+  PauseIcon
 } from '@heroicons/react/24/outline'
 import './App.css'
 
@@ -34,6 +36,9 @@ function App() {
   const [debugView, setDebugView] = useState(false)
   const [showPresetMenu, setShowPresetMenu] = useState(false)
   const sceneRef = useRef(null)
+  
+  // Time control state
+  const [isTimeStopped, setIsTimeStopped] = useState(false)
 
   // Available presets
   const presets = ['diver', 'dress', 'chrono']
@@ -236,13 +241,26 @@ function App() {
           {/* Axis helper to show X (red), Y (green), Z (blue) - only visible in debug mode */}
           {debugView && <primitive object={new THREE.AxesHelper(30)} />}
           
-          <WatchFace config={config} environmentLight={environmentLight} />
+          <WatchFace
+            config={config}
+            environmentLight={environmentLight}
+            isTimeStopped={isTimeStopped}
+          />
           <OrbitControls enablePan={false} />
           {debugView && <Stats />}
         </Canvas>
         
         {/* Overlay buttons in top right corner */}
         <div className="canvas-overlay-buttons">
+          {/* Time Control Button */}
+          <button
+            onClick={() => setIsTimeStopped(!isTimeStopped)}
+            className={`overlay-button time-control-button ${isTimeStopped ? 'stopped' : 'running'}`}
+            title={isTimeStopped ? "Start time" : "Stop time at 10:09:00"}
+          >
+            {isTimeStopped ? <PlayIcon className="icon" /> : <PauseIcon className="icon" />}
+            <span className="button-label">{isTimeStopped ? 'Start' : 'Stop'}</span>
+          </button>
           <button
             onClick={() => setEnvironmentLight(!environmentLight)}
             className={`overlay-button ${environmentLight ? 'light-on' : 'light-off'}`}
@@ -260,7 +278,6 @@ function App() {
           >
             <BugAntIcon className="icon" />
           </button>
-          */}
           <button
             onClick={saveConfig}
             className="overlay-button config-action-button"
@@ -270,6 +287,15 @@ function App() {
             <span className="button-label">Save Config</span>
           </button>
           
+          <button
+            onClick={exportGLB}
+            className="overlay-button config-action-button export-button"
+            title="Export GLB"
+          >
+            <CubeIcon className="icon" />
+            <span className="button-label">Export GLB</span>
+          </button>
+          */}
           <div className="preset-menu-container" style={{ position: 'relative' }}>
             <button
               onClick={togglePresetMenu}
@@ -318,15 +344,6 @@ function App() {
             )}
           </div>
 
-          
-          <button
-            onClick={exportGLB}
-            className="overlay-button config-action-button export-button"
-            title="Export GLB"
-          >
-            <CubeIcon className="icon" />
-            <span className="button-label">Export GLB</span>
-          </button>
           <button
             onClick={clearConfig}
             className="overlay-button config-action-button clear-button"

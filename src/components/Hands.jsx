@@ -341,8 +341,10 @@ const handMovementConfig = {
 }
 
 // Single hand component
-function Hand({ type, movement, width, material, length: customLength, offset, points, cutout, cutoutPoints, zOffset, radius, spread, lumeCutout }) {
+function Hand({ type, movement, width, material, length: customLength, offset, points, cutout, cutoutPoints, zOffset, radius, spread, lumeCutout, isTimeStopped }) {
   const handRef = useRef()
+  const timeOffsetRef = useRef(null)
+  const wasStoppedRef = useRef(isTimeStopped)
   const movementConfig = handMovementConfig[movement] || handMovementConfig.seconds
   const length = customLength || movementConfig.defaultLength
   
@@ -368,7 +370,24 @@ function Hand({ type, movement, width, material, length: customLength, offset, p
   
   useFrame(({ clock }) => {
     if (handRef.current) {
-      const time = clock.getElapsedTime()
+      // Detect transition from stopped to running
+      if (wasStoppedRef.current && !isTimeStopped) {
+        // Reset time offset when starting
+        timeOffsetRef.current = clock.getElapsedTime()
+      }
+      wasStoppedRef.current = isTimeStopped
+      
+      let time
+      if (isTimeStopped) {
+        // When stopped, pass 0 so angleCalculation uses only the start time (10:09:00)
+        time = 0
+      } else {
+        // Use elapsed time relative to when we started
+        if (timeOffsetRef.current === null) {
+          timeOffsetRef.current = clock.getElapsedTime()
+        }
+        time = clock.getElapsedTime() - timeOffsetRef.current
+      }
       handRef.current.rotation.z = movementConfig.angleCalculation(time)
     }
   })
@@ -589,7 +608,7 @@ function Hand({ type, movement, width, material, length: customLength, offset, p
   )
 }
 
-function Hands({ hands = [] }) {
+function Hands({ hands = [], isTimeStopped }) {
   return (
     <group>
       {/* Render each hand from the configuration */}
@@ -615,6 +634,7 @@ function Hands({ hands = [] }) {
           radius={handConfig.radius}
           spread={handConfig.spread}
           lumeCutout={handConfig.lumeCutout}
+          isTimeStopped={isTimeStopped}
         />
         )
       })}

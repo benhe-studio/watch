@@ -116,6 +116,23 @@ body {
   color: #dc3545;
 }
 
+/* Time control button styles */
+.overlay-button.time-control-button {
+  background: rgba(60, 60, 60, 0.8);
+}
+
+.overlay-button.time-control-button.stopped .icon {
+  color: #28a745;
+}
+
+.overlay-button.time-control-button.running .icon {
+  color: #ffc107;
+}
+
+.overlay-button.time-control-button:hover {
+  background: rgba(80, 80, 80, 0.9);
+}
+
 /* Portrait mode layout adjustments */
 @media (orientation: portrait) {
   .app-container {

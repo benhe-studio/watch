@@ -7,7 +7,7 @@ import Hands from './Hands'
 import ComplicationWindows from './ComplicationWindows'
 import Primitives from './Primitives'
 
-function WatchFace({ config }) {
+function WatchFace({ config, isTimeStopped }) {
   return (
     <group name="watch-face-group">
       {/* Watch face base */}
@@ -32,7 +32,7 @@ function WatchFace({ config }) {
       {config.primitives && <Primitives primitives={config.primitives} />}
 
       {/* Watch hands */}
-      {config.hands && <Hands hands={config.hands} />}
+      {config.hands && <Hands hands={config.hands} isTimeStopped={isTimeStopped} />}
     </group>
   )
 }
