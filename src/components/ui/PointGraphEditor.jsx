@@ -180,7 +180,7 @@ function PointGraphEditor({
 
     // Draw shape outline for cutout points
     if (cutoutPoints && cutoutPoints.length > 0) {
-      ctx.strokeStyle = '#ff4a4a'
+      ctx.strokeStyle = '#b366ff'
       ctx.lineWidth = 2
       ctx.beginPath()
       
@@ -200,9 +200,10 @@ function PointGraphEditor({
       const canvasPoint = pointToCanvas(point)
       const isHovered = hoveredType === 'points' && index === hoveredIndex
       const isDragging = draggingType === 'points' && index === draggingIndex
+      const isSelected = selectedType === 'points' && index === selectedIndex
       
       // Draw point
-      ctx.fillStyle = isHovered ? '#ffaa00' : isDragging ? '#ff6600' : '#4a9eff'
+      ctx.fillStyle = isSelected ? '#ffdd00' : isHovered ? '#ffaa00' : isDragging ? '#ff6600' : '#4a9eff'
       ctx.beginPath()
       ctx.arc(canvasPoint.x, canvasPoint.y, pointRadius, 0, Math.PI * 2)
       ctx.fill()
@@ -224,15 +225,16 @@ function PointGraphEditor({
       ctx.fillText(`(${point[0].toFixed(1)}, ${point[1].toFixed(1)})`, canvasPoint.x, canvasPoint.y + 20)
     })
 
-    // Draw cutout points (red)
+    // Draw cutout points (purple)
     if (cutoutPoints && cutoutPoints.length > 0) {
       cutoutPoints.forEach((point, index) => {
         const canvasPoint = pointToCanvas(point)
         const isHovered = hoveredType === 'cutout' && index === hoveredIndex
         const isDragging = draggingType === 'cutout' && index === draggingIndex
+        const isSelected = selectedType === 'cutout' && index === selectedIndex
         
         // Draw point
-        ctx.fillStyle = isHovered ? '#ffaa00' : isDragging ? '#ff6600' : '#ff4a4a'
+        ctx.fillStyle = isSelected ? '#ffdd00' : isHovered ? '#d499ff' : isDragging ? '#9933ff' : '#b366ff'
         ctx.beginPath()
         ctx.arc(canvasPoint.x, canvasPoint.y, pointRadius, 0, Math.PI * 2)
         ctx.fill()
@@ -254,7 +256,7 @@ function PointGraphEditor({
         ctx.fillText(`(${point[0].toFixed(1)}, ${point[1].toFixed(1)})`, canvasPoint.x, canvasPoint.y + 20)
       })
     }
-  }, [points, cutoutPoints, canvasSize, hoveredIndex, hoveredType, draggingIndex, draggingType, xMin, xMax, yMin, yMax, xLabel, yLabel])
+  }, [points, cutoutPoints, canvasSize, hoveredIndex, hoveredType, draggingIndex, draggingType, selectedIndex, selectedType, xMin, xMax, yMin, yMax, xLabel, yLabel])
 
   // Mouse event handlers
   const handleMouseDown = (e) => {
@@ -375,15 +377,6 @@ function PointGraphEditor({
     <div className="point-graph-editor">
       {description && <p className="graph-description">{description}</p>}
       
-      <canvas
-        ref={canvasRef}
-        className="point-graph-canvas"
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseLeave}
-      />
-      
       <div className="graph-controls">
         <button onClick={addPoint} className="graph-button">
           + Add Point
@@ -393,40 +386,23 @@ function PointGraphEditor({
             + Add Cutout Point
           </button>
         )}
-        <span className="point-count">
-          {points.length} point{points.length !== 1 ? 's' : ''} (blue)
-          {cutoutPoints && cutoutPoints.length > 0 && `, ${cutoutPoints.length} cutout (red)`}
-        </span>
       </div>
+      
+      <canvas
+        ref={canvasRef}
+        className="point-graph-canvas"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
+      />
       
       {selectedPoint && (
         <div className="point-editor">
-          <h4>
-            {selectedType === 'points' ? 'Point' : 'Cutout Point'} {selectedIndex + 1}
-          </h4>
-          <div className="point-editor-controls">
-            <div className="point-editor-input">
-              <label>X:</label>
-              <input
-                type="number"
-                value={selectedPoint[0].toFixed(2)}
-                step={0.01}
-                min={xMin}
-                max={xMax}
-                onChange={(e) => updateSelectedPoint(parseFloat(e.target.value), selectedPoint[1])}
-              />
-            </div>
-            <div className="point-editor-input">
-              <label>Y:</label>
-              <input
-                type="number"
-                value={selectedPoint[1].toFixed(2)}
-                step={0.01}
-                min={yMin}
-                max={yMax}
-                onChange={(e) => updateSelectedPoint(selectedPoint[0], parseFloat(e.target.value))}
-              />
-            </div>
+          <div className="point-editor-header">
+            <h4>
+              {selectedType === 'points' ? 'Point' : 'Cutout Point'} {selectedIndex + 1}
+            </h4>
             <button
               onClick={removeSelectedPoint}
               className="graph-button graph-button-delete"
@@ -434,6 +410,36 @@ function PointGraphEditor({
             >
               Delete Point
             </button>
+          </div>
+          <div className="point-editor-controls">
+            <div className="control-group">
+              <div className="range-label-row">
+                <label>{xLabel}:</label>
+                <span className="range-value">{selectedPoint[0].toFixed(2)}</span>
+              </div>
+              <input
+                type="range"
+                min={xMin}
+                max={xMax}
+                step={0.01}
+                value={selectedPoint[0]}
+                onChange={(e) => updateSelectedPoint(parseFloat(e.target.value), selectedPoint[1])}
+              />
+            </div>
+            <div className="control-group">
+              <div className="range-label-row">
+                <label>{yLabel}:</label>
+                <span className="range-value">{selectedPoint[1].toFixed(2)}</span>
+              </div>
+              <input
+                type="range"
+                min={yMin}
+                max={yMax}
+                step={0.01}
+                value={selectedPoint[1]}
+                onChange={(e) => updateSelectedPoint(selectedPoint[0], parseFloat(e.target.value))}
+              />
+            </div>
           </div>
         </div>
       )}

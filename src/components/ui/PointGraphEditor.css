@@ -39,21 +39,22 @@
 .graph-button {
   padding: 6px 12px;
   background: #2a2a2a;
-  border: 1px solid #444;
+  border: 2px solid #4a9eff;
   border-radius: 4px;
-  color: #fff;
+  color: #4a9eff;
   font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .graph-button:hover:not(:disabled) {
-  background: #3a3a3a;
-  border-color: #555;
+  background: rgba(74, 158, 255, 0.1);
+  border-color: #6bb0ff;
 }
 
 .graph-button:active:not(:disabled) {
-  background: #1a1a1a;
+  background: rgba(74, 158, 255, 0.2);
 }
 
 .graph-button:disabled {
@@ -62,23 +63,23 @@
 }
 
 .graph-button-cutout {
-  background: #3a1a1a;
-  border-color: #664444;
+  border-color: #b366ff;
+  color: #b366ff;
 }
 
 .graph-button-cutout:hover:not(:disabled) {
-  background: #4a2a2a;
-  border-color: #775555;
+  background: rgba(179, 102, 255, 0.1);
+  border-color: #c488ff;
 }
 
 .graph-button-delete {
-  background: #4a1a1a;
-  border-color: #664444;
+  border-color: #ff4444;
+  color: #ff4444;
 }
 
 .graph-button-delete:hover:not(:disabled) {
-  background: #5a2a2a;
-  border-color: #775555;
+  background: rgba(255, 68, 68, 0.1);
+  border-color: #ff6666;
 }
 
 .point-count {
@@ -95,8 +96,16 @@
   border: 1px solid #2a2a2a;
 }
 
+.point-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
 .point-editor h4 {
-  margin: 0 0 10px 0;
+  margin: 0;
   color: #ccc;
   font-size: 14px;
   font-weight: 600;
@@ -104,37 +113,16 @@
 
 .point-editor-controls {
   display: flex;
-  gap: 10px;
-  align-items: flex-end;
-  flex-wrap: wrap;
-}
-
-.point-editor-input {
-  display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0;
 }
 
-.point-editor-input label {
-  font-size: 12px;
-  color: #999;
-  font-weight: 500;
+.point-editor-controls .control-group {
+  margin-bottom: 16px;
 }
 
-.point-editor-input input {
-  width: 80px;
-  padding: 6px 8px;
-  background: #0a0a0a;
-  border: 1px solid #444;
-  border-radius: 4px;
-  color: #fff;
-  font-size: 13px;
-  font-family: monospace;
-}
-
-.point-editor-input input:focus {
-  outline: none;
-  border-color: #4a9eff;
+.point-editor-controls .control-group:last-child {
+  margin-bottom: 0;
 }
 
 .graph-instructions {
