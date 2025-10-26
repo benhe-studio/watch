@@ -29,7 +29,7 @@ body {
   width: 48px;
   height: 48px;
   padding: 0;
-  background: rgba(60, 60, 60, 0.8);
+  background: rgba(40, 40, 40, 0.8);
   color: white;
   border: none;
   border-radius: 24px;
@@ -65,7 +65,7 @@ body {
 .overlay-button:hover {
   width: auto;
   padding-left: 12px;
-  background: rgba(80, 80, 80, 0.9);
+  background: rgba(60, 60, 60, 0.9);
 }
 
 .overlay-button:hover .icon {
@@ -79,7 +79,7 @@ body {
 }
 
 .overlay-button:active {
-  background: rgba(50, 50, 50, 0.9);
+  background: rgba(30, 30, 30, 0.9);
 }
 
 .overlay-button.light-on .icon {
@@ -96,14 +96,6 @@ body {
   margin: 5px 0;
 }
 
-.overlay-button.config-action-button {
-  background: rgba(60, 60, 60, 0.8);
-}
-
-.overlay-button.config-action-button:hover {
-  background: rgba(80, 80, 80, 0.9);
-}
-
 .overlay-button.config-action-button .icon {
   color: #4a90e2;
 }
@@ -116,21 +108,12 @@ body {
   color: #dc3545;
 }
 
-/* Time control button styles */
-.overlay-button.time-control-button {
-  background: rgba(60, 60, 60, 0.8);
-}
-
 .overlay-button.time-control-button.stopped .icon {
   color: #28a745;
 }
 
 .overlay-button.time-control-button.running .icon {
   color: #ffc107;
-}
-
-.overlay-button.time-control-button:hover {
-  background: rgba(80, 80, 80, 0.9);
 }
 
 /* Portrait mode layout adjustments */
