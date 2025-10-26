@@ -22,7 +22,7 @@ const HAND_EXTRUDE_SETTINGS = {
 
 // Geometry generator functions - return THREE.BufferGeometry
 const geometryGenerators = {
-  parametricFlat: ({ points, cutout, cutoutPoints }) => {
+  parametricFlat: ({ points, cutout, cutoutPoints, lumeCutout }) => {
     // Helper function to ensure points start and end at x=0
     const ensurePointsAtCenterLine = (pointsList) => {
       if (!pointsList || pointsList.length === 0) return pointsList
@@ -125,10 +125,11 @@ const geometryGenerators = {
     // Center the geometry on the z-axis (depth axis)
     geometry.translate(0, 0, -HAND_DEPTH / 2)
     
-    return geometry
+    // Return both the main geometry and lume geometry if needed
+    return { geometry, lumeCutout, cutoutPoints: hasCutout ? processedCutoutPoints : null }
   },
   
-  parametricFaceted: ({ points, cutout, cutoutPoints }) => {
+  parametricFaceted: ({ points, cutout, cutoutPoints, lumeCutout }) => {
     // Helper function to ensure points start and end at x=0
     const ensurePointsAtCenterLine = (pointsList) => {
       if (!pointsList || pointsList.length === 0) return pointsList
@@ -280,7 +281,8 @@ const geometryGenerators = {
     // Merge both geometries using THREE.js utility
     const mergedGeometry = mergeGeometries([rightGeometry, leftGeometry])
     
-    return mergedGeometry
+    // Return both the main geometry and lume geometry if needed
+    return { geometry: mergedGeometry, lumeCutout, cutoutPoints: hasCutout ? processedCutoutPoints : null, shapePoints: processedShapePoints }
   }
 }
 
@@ -339,7 +341,7 @@ const handMovementConfig = {
 }
 
 // Single hand component
-function Hand({ type, movement, width, material, length: customLength, offset, points, cutout, cutoutPoints, zOffset, radius, spread }) {
+function Hand({ type, movement, width, material, length: customLength, offset, points, cutout, cutoutPoints, zOffset, radius, spread, lumeCutout }) {
   const handRef = useRef()
   const movementConfig = handMovementConfig[movement] || handMovementConfig.seconds
   const length = customLength || movementConfig.defaultLength
@@ -350,10 +352,13 @@ function Hand({ type, movement, width, material, length: customLength, offset, p
   // Default to 0 if offset is undefined or null
   const pivotOffset = length * (offset ?? 0)
   
-  const geometry = useMemo(() => {
+  const geometryData = useMemo(() => {
     const generator = geometryGenerators[type] || geometryGenerators.parametricFlat
-    return generator({ points, cutout, cutoutPoints, radius, spread })
-  }, [type, points, cutout, cutoutPoints, radius, spread])
+    return generator({ points, cutout, cutoutPoints, radius, spread, lumeCutout })
+  }, [type, points, cutout, cutoutPoints, radius, spread, lumeCutout])
+  
+  // Extract geometry from the returned data
+  const geometry = geometryData?.geometry || geometryData
   
   // Calculate final Z position with optional offset
   const finalZOffset = movementConfig.zOffset + (zOffset || 0)
@@ -376,6 +381,85 @@ function Hand({ type, movement, width, material, length: customLength, offset, p
   if (isParametricFlat || isParametricFaceted) {
     // For parametric hands, Y=0 in the points represents the pivot point
     // No offset calculation needed - the geometry is positioned directly at origin
+    
+    // Create lume fill mesh if enabled and cutout exists
+    const lumeMaterial = useMemo(() => getMaterialInstance('lume'), [])
+    const lumeFillMesh = lumeCutout && geometryData?.cutoutPoints && geometryData.cutoutPoints.length >= 2 ? (() => {
+      if (isParametricFlat) {
+        // For parametric flat, create a filled shape from cutout points
+        const lumeShape = new THREE.Shape()
+        const cutoutPts = geometryData.cutoutPoints
+        
+        // Start at the first point
+        lumeShape.moveTo(cutoutPts[0][0], cutoutPts[0][1])
+        
+        // Draw the right side (positive x)
+        for (let i = 1; i < cutoutPts.length; i++) {
+          lumeShape.lineTo(cutoutPts[i][0], cutoutPts[i][1])
+        }
+        
+        // Mirror back down the left side (negative x)
+        for (let i = cutoutPts.length - 1; i >= 0; i--) {
+          lumeShape.lineTo(-cutoutPts[i][0], cutoutPts[i][1])
+        }
+        
+        const lumeExtrudeSettings = {
+          depth: HAND_DEPTH * 0.95,
+          bevelEnabled: false
+        }
+        
+        const lumeGeometry = new THREE.ExtrudeGeometry(lumeShape, lumeExtrudeSettings)
+        lumeGeometry.translate(0, 0, -HAND_DEPTH * 0.95 / 2)
+        
+        return (
+          <mesh
+            position={[0, 0, finalZOffset]}
+            geometry={lumeGeometry}
+            material={lumeMaterial}
+            castShadow
+            receiveShadow
+          />
+        )
+      } else if (isParametricFaceted) {
+        // For parametric faceted, create a single flat piece from cutout points
+        const lumeShape = new THREE.Shape()
+        const cutoutPts = geometryData.cutoutPoints
+        
+        // Start at the first point
+        lumeShape.moveTo(cutoutPts[0][0], cutoutPts[0][1])
+        
+        // Draw the right side (positive x)
+        for (let i = 1; i < cutoutPts.length; i++) {
+          lumeShape.lineTo(cutoutPts[i][0], cutoutPts[i][1])
+        }
+        
+        // Mirror back down the left side (negative x)
+        for (let i = cutoutPts.length - 1; i >= 0; i--) {
+          lumeShape.lineTo(-cutoutPts[i][0], cutoutPts[i][1])
+        }
+        
+        const lumeDepth = 0.1
+        const lumeExtrudeSettings = {
+          depth: lumeDepth,
+          bevelEnabled: false
+        }
+        
+        const lumeGeometry = new THREE.ExtrudeGeometry(lumeShape, lumeExtrudeSettings)
+        // Position lume lower on z-axis so it sits at the bottom of the faceted hand
+        lumeGeometry.translate(0, 0, -lumeDepth)
+        
+        return (
+          <mesh
+            position={[0, 0, finalZOffset]}
+            geometry={lumeGeometry}
+            material={lumeMaterial}
+            castShadow
+            receiveShadow
+          />
+        )
+      }
+    })() : null
+    
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
         <mesh
@@ -386,6 +470,7 @@ function Hand({ type, movement, width, material, length: customLength, offset, p
           castShadow
           receiveShadow
         />
+        {lumeFillMesh}
       </group>
     )
   }
@@ -434,6 +519,43 @@ function Hand({ type, movement, width, material, length: customLength, offset, p
     // Center the geometry on the z-axis (depth axis)
     circleGeometry.translate(0, 0, -HAND_DEPTH / 2)
     
+    // Create lume fill mesh if enabled and cutout exists
+    const lumeMaterial = useMemo(() => getMaterialInstance('lume'), [])
+    const lumeFillMesh = lumeCutout && cutoutValue > 0 ? (() => {
+      const innerRadius = outerRadius * cutoutValue
+      const lumeShape = new THREE.Shape()
+      
+      // Create filled circle for lume
+      for (let i = 0; i <= segments; i++) {
+        const angle = (i / segments) * Math.PI * 2
+        const x = Math.cos(angle) * innerRadius
+        const y = Math.sin(angle) * innerRadius
+        if (i === 0) {
+          lumeShape.moveTo(x, y)
+        } else {
+          lumeShape.lineTo(x, y)
+        }
+      }
+      
+      const lumeExtrudeSettings = {
+        depth: HAND_DEPTH * 0.95,
+        bevelEnabled: false
+      }
+      
+      const lumeGeometry = new THREE.ExtrudeGeometry(lumeShape, lumeExtrudeSettings)
+      lumeGeometry.translate(0, 0, -HAND_DEPTH * 0.95 / 2)
+      
+      return (
+        <mesh
+          position={[0, spread || 0, finalZOffset]}
+          geometry={lumeGeometry}
+          material={lumeMaterial}
+          castShadow
+          receiveShadow
+        />
+      )
+    })() : null
+    
     return (
       <group ref={handRef} rotation={[0, 0, 0]}>
         <mesh
@@ -443,6 +565,7 @@ function Hand({ type, movement, width, material, length: customLength, offset, p
           castShadow
           receiveShadow
         />
+        {lumeFillMesh}
       </group>
     )
   }
@@ -491,6 +614,7 @@ function Hands({ hands = [] }) {
           zOffset={handConfig.zOffset}
           radius={handConfig.radius}
           spread={handConfig.spread}
+          lumeCutout={handConfig.lumeCutout}
         />
         )
       })}

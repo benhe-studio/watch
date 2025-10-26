@@ -58,6 +58,12 @@ export const handsConfig = {
       step: 0.05,
       condition: (item) => item.type === 'circle'
     },
+    lumeCutout: {
+      type: 'checkbox',
+      label: 'Lume Cutout',
+      default: false,
+      description: 'Fill cutout areas with luminescent material'
+    },
     cutoutPoints: {
       type: 'pointArray',
       label: 'Cutout Points',
