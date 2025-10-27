@@ -82,16 +82,6 @@ function ControlPanel({ config, updateConfig, schema }) {
     // Add all preset hands to the configuration
     const newArray = [...config[section], ...presetHands]
     updateConfig(section, null, newArray)
-    
-    // Expand all newly added items
-    const startIndex = config[section].length
-    const newExpandedItems = { ...expandedItems }
-    presetHands.forEach((_, index) => {
-      const actualIndex = startIndex + index
-      const key = `${section}-${actualIndex}`
-      newExpandedItems[key] = true
-    })
-    setExpandedItems(newExpandedItems)
   }
 
   return (

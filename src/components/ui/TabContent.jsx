@@ -169,7 +169,7 @@ function TabContent({
                 onClick={() => setPresetDropdownOpen(!presetDropdownOpen)}
               >
                 <RectangleStackIcon className="icon" />
-                Load Preset Styles
+                Load Preset
               </button>
               
               {presetDropdownOpen && (
