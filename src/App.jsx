@@ -38,8 +38,8 @@ function App() {
   const [showPresetMenu, setShowPresetMenu] = useState(false)
   const sceneRef = useRef(null)
   
-  // Time control state
-  const [isTimeStopped, setIsTimeStopped] = useState(false)
+  // Time control state - paused by default
+  const [isTimeStopped, setIsTimeStopped] = useState(true)
 
   // Available presets
   const presets = ['diver', 'dress', 'chrono']
