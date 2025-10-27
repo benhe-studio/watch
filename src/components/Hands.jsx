@@ -341,7 +341,7 @@ const handMovementConfig = {
 }
 
 // Single hand component
-function Hand({ type, movement, width, material, length: customLength, offset, points, cutout, cutoutPoints, zOffset, radius, spread, lumeCutout, isTimeStopped }) {
+function Hand({ type, movement, width, material, length: customLength, offset, points, cutout, cutoutPoints, zOffset, radius, spread, lumeCutout, isTimeStopped, hidden }) {
   const handRef = useRef()
   const timeOffsetRef = useRef(null)
   const wasStoppedRef = useRef(isTimeStopped)
@@ -480,7 +480,7 @@ function Hand({ type, movement, width, material, length: customLength, offset, p
     })() : null
     
     return (
-      <group ref={handRef} rotation={[0, 0, 0]}>
+      <group ref={handRef} rotation={[0, 0, 0]} visible={!hidden}>
         <mesh
           position={[0, 0, finalZOffset]}
           rotation={[0, 0, 0]}
@@ -576,7 +576,7 @@ function Hand({ type, movement, width, material, length: customLength, offset, p
     })() : null
     
     return (
-      <group ref={handRef} rotation={[0, 0, 0]}>
+      <group ref={handRef} rotation={[0, 0, 0]} visible={!hidden}>
         <mesh
           position={[0, spread || 0, finalZOffset]}
           geometry={circleGeometry}
@@ -591,7 +591,7 @@ function Hand({ type, movement, width, material, length: customLength, offset, p
   
   // Fallback for any other profiles
   return (
-    <group ref={handRef} rotation={[0, 0, 0]}>
+    <group ref={handRef} rotation={[0, 0, 0]} visible={!hidden}>
       <mesh
         position={[0, length / 2 - pivotOffset, typeConfig.zOffset]}
         geometry={geometry}
@@ -613,11 +613,6 @@ function Hands({ hands = [], isTimeStopped }) {
     <group>
       {/* Render each hand from the configuration */}
       {hands.map((handConfig, index) => {
-        // Skip rendering if hand is hidden
-        if (handConfig.hidden) {
-          return null
-        }
-        
         return (
           <Hand
           key={`${handConfig.type}-${handConfig.movement}-${index}`}
@@ -635,6 +630,7 @@ function Hands({ hands = [], isTimeStopped }) {
           spread={handConfig.spread}
           lumeCutout={handConfig.lumeCutout}
           isTimeStopped={isTimeStopped}
+          hidden={handConfig.hidden}
         />
         )
       })}

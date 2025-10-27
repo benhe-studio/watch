@@ -2,7 +2,7 @@ import { getMaterialOptions } from './helpers/materials'
 import { createBevelControl } from './helpers/bevelConfig'
 
 export const markersConfig = {
-  label: 'Markers',
+  label: 'Hour Markers',
   expanded: true,
   isArray: true,
   itemLabel: 'Marker',
