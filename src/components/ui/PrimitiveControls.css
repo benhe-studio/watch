@@ -71,12 +71,13 @@
   cursor: pointer;
   transition: all 0.2s;
   margin-top: -6px; /* Center the thumb on the track */
-  box-shadow: -100vw 0 0 100vw var(--accent-primary); /* Fill left side */
+  box-shadow: -100vmax 0 0 100vmax var(--accent-primary); /* Fill left side */
+  clip-path: polygon(-100vmax -100vmax, 0 -100vmax, 0 100vmax, -100vmax 100vmax);
 }
 
 .control-group input[type="range"]::-webkit-slider-thumb:hover {
   background: var(--accent-hover);
-  box-shadow: -100vw 0 0 100vw var(--accent-hover);
+  box-shadow: -100vmax 0 0 100vmax var(--accent-hover);
   transform: scale(1.1);
 }
 
