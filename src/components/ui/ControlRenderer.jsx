@@ -218,11 +218,8 @@ export function renderControl(
     case 'image':
       return (
         <div key={controlKey} className="control-group">
-          <label>{controlConfig.label}</label>
-          {controlConfig.description && (
-            <div className="control-description">{controlConfig.description}</div>
-          )}
-          <div className="image-upload-container">
+          <div className="image-label-row">
+            <label>{controlConfig.label}</label>
             <input
               type="file"
               accept="image/*"
@@ -236,35 +233,33 @@ export function renderControl(
                   reader.readAsDataURL(file)
                 }
               }}
-              style={{ display: 'block', marginBottom: '8px' }}
+              className="image-file-input"
             />
-            {value && (
-              <div className="image-preview">
-                <img
-                  src={value}
-                  alt="Texture preview"
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '150px',
-                    objectFit: 'contain',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px'
-                  }}
-                />
-                <button
-                  onClick={() => onChange(null)}
-                  className="clear-image-button"
-                  style={{
-                    marginTop: '8px',
-                    padding: '4px 8px',
-                    fontSize: '12px'
-                  }}
-                >
-                  Clear Image
-                </button>
-              </div>
-            )}
           </div>
+          {controlConfig.description && (
+            <div className="control-description">{controlConfig.description}</div>
+          )}
+          {value && (
+            <div className="image-preview">
+              <img
+                src={value}
+                alt="Texture preview"
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '150px',
+                  objectFit: 'contain',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px'
+                }}
+              />
+              <button
+                onClick={() => onChange(null)}
+                className="clear-image-button"
+              >
+                Clear Image
+              </button>
+            </div>
+          )}
         </div>
       )
 
