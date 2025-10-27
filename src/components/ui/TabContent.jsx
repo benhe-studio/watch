@@ -197,7 +197,7 @@ function TabContent({
                     }}
                     title={item.hidden ? "Show item" : "Hide item"}
                   >
-                    {item.hidden ? <EyeIcon className="icon" /> : <EyeSlashIcon className="icon" />}
+                    {item.hidden ? <EyeSlashIcon className="icon" /> : <EyeIcon className="icon" />}
                   </button>
                   <button
                     className="remove-item-button"
