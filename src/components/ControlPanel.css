@@ -52,7 +52,6 @@
 .tab-button {
   padding: 12px 20px;
   border: none;
-  border-bottom: 3px solid transparent;
   background: transparent;
   color: var(--text-tertiary);
   font-size: 18px;
@@ -61,6 +60,20 @@
   transition: all 0.2s;
   white-space: nowrap;
   flex-shrink: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab-button::after {
+  content: '';
+  width: 80%;
+  height: 3px;
+  border-radius: 2px;
+  background: transparent;
+  transition: background 0.2s;
 }
 
 .tab-button:hover {
@@ -70,8 +83,11 @@
 
 .tab-button.active {
   color: var(--accent-primary);
-  border-color: var(--accent-primary);
   background: rgba(74, 144, 226, 0.15);
+}
+
+.tab-button.active::after {
+  background: var(--accent-primary);
 }
 
 
