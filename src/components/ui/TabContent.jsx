@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from 'react'
 import './TabContent.css'
 import './PrimitiveControls.css'
 import { renderControl as renderControlHelper } from './ControlRenderer'
-import { EyeIcon, EyeSlashIcon, XMarkIcon, ChevronRightIcon, ChevronDownIcon, PencilIcon } from '@heroicons/react/24/outline'
+import { EyeIcon, EyeSlashIcon, XMarkIcon, ChevronRightIcon, ChevronDownIcon, PencilIcon, RectangleStackIcon } from '@heroicons/react/24/outline'
 
 function TabContent({
   sectionKey,
@@ -16,12 +16,26 @@ function TabContent({
   createItemWithType,
   removeItem,
   updateArrayItem,
-  toggleItemVisibility
+  toggleItemVisibility,
+  loadPresetStyles
 }) {
   const dropdownRef = useRef(null)
   const [editingName, setEditingName] = useState(null)
   const [editNameValue, setEditNameValue] = useState('')
   const nameInputRef = useRef(null)
+  const [presetDropdownOpen, setPresetDropdownOpen] = useState(false)
+  const [presets, setPresets] = useState([])
+  const presetDropdownRef = useRef(null)
+
+  // Load presets on mount (only for hands section)
+  useEffect(() => {
+    if (sectionKey === 'hands') {
+      fetch('/hand-presets.json')
+        .then(response => response.json())
+        .then(data => setPresets(data.presets || []))
+        .catch(error => console.error('Error loading hand presets:', error))
+    }
+  }, [sectionKey])
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -29,15 +43,18 @@ function TabContent({
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setTypeSelectionDropdown(null)
       }
+      if (presetDropdownRef.current && !presetDropdownRef.current.contains(event.target)) {
+        setPresetDropdownOpen(false)
+      }
     }
 
-    if (typeSelectionDropdown === sectionKey) {
+    if (typeSelectionDropdown === sectionKey || presetDropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside)
       return () => {
         document.removeEventListener('mousedown', handleClickOutside)
       }
     }
-  }, [typeSelectionDropdown, sectionKey, setTypeSelectionDropdown])
+  }, [typeSelectionDropdown, sectionKey, setTypeSelectionDropdown, presetDropdownOpen])
 
   // Focus name input when editing starts
   useEffect(() => {
@@ -88,6 +105,13 @@ function TabContent({
     }
   }
 
+  const handleLoadPreset = (preset) => {
+    if (loadPresetStyles) {
+      loadPresetStyles(sectionKey, preset.hands)
+      setPresetDropdownOpen(false)
+    }
+  }
+
   const renderControl = (controlKey, controlConfig, itemData = null, itemIndex = null) => {
     const value = itemData ? itemData[controlKey] : config[sectionKey][controlKey]
     const onChange = itemData
@@ -114,25 +138,55 @@ function TabContent({
     
     return (
       <div className="tab-content">
-        <div className={`add-item-container ${isDropdownOpen ? 'dropdown-active' : ''}`} ref={isDropdownOpen ? dropdownRef : null}>
-          <button
-            className="add-item-button"
-            onClick={toggleTypeSelection}
-          >
-            + Add {section.itemLabel || 'Item'}
-          </button>
+        <div className="add-item-buttons-row">
+          <div className={`add-item-container ${isDropdownOpen ? 'dropdown-active' : ''}`} ref={isDropdownOpen ? dropdownRef : null}>
+            <button
+              className="add-item-button"
+              onClick={toggleTypeSelection}
+            >
+              + Add {section.itemLabel || 'Item'}
+            </button>
+            
+            {hasTypeSelection && isDropdownOpen && (
+              <div className="type-dropdown">
+                {typeControl.options.map(option => (
+                  <button
+                    key={option.value}
+                    className="type-dropdown-item"
+                    onClick={() => createItemWithType(sectionKey, option.value)}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           
-          {hasTypeSelection && isDropdownOpen && (
-            <div className="type-dropdown">
-              {typeControl.options.map(option => (
-                <button
-                  key={option.value}
-                  className="type-dropdown-item"
-                  onClick={() => createItemWithType(sectionKey, option.value)}
-                >
-                  {option.label}
-                </button>
-              ))}
+          {sectionKey === 'hands' && presets.length > 0 && (
+            <div className={`add-item-container preset-container ${presetDropdownOpen ? 'dropdown-active' : ''}`} ref={presetDropdownOpen ? presetDropdownRef : null}>
+              <button
+                className="add-item-button preset-button"
+                onClick={() => setPresetDropdownOpen(!presetDropdownOpen)}
+              >
+                <RectangleStackIcon className="icon" />
+                Load Preset Styles
+              </button>
+              
+              {presetDropdownOpen && (
+                <div className="type-dropdown preset-dropdown">
+                  {presets.map((preset, index) => (
+                    <button
+                      key={index}
+                      className="type-dropdown-item preset-item"
+                      onClick={() => handleLoadPreset(preset)}
+                      title={preset.description}
+                    >
+                      <div className="preset-name">{preset.name}</div>
+                      <div className="preset-description">{preset.description}</div>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>

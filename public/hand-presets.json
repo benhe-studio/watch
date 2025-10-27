@@ -1,0 +1,76 @@
+{
+  "presets": [
+    {
+      "name": "Dauphine",
+      "description": "Traditional tapered hands with elegant proportions",
+      "hands": [
+        {
+          "type": "parametricFaceted",
+          "movement": "hours",
+          "material": "polishedSilver",
+          "points": [[0, -2], [1.2, 0], [0, 12]],
+          "cutoutPoints": [],
+          "lumeCutout": false,
+          "zOffset": 0,
+          "name": "Dauphine Hour"
+        },
+        {
+          "type": "parametricFaceted",
+          "movement": "minutes",
+          "material": "polishedSilver",
+          "points": [[0, -2], [1.2, 0], [0, 18]],
+          "cutoutPoints": [],
+          "lumeCutout": false,
+          "zOffset": 0,
+          "name": "Dauphine Minute"
+        },
+        {
+          "type": "parametricFlat",
+          "movement": "seconds",
+          "material": "polishedNavyBlue",
+          "points": [[0.2, -4], [0.12, 0], [0.01, 18]],
+          "cutoutPoints": [],
+          "lumeCutout": false,
+          "zOffset": 0,
+          "name": "Dauphine Second"
+        }
+      ]
+    },
+    {
+      "name": "Baton Hands",
+      "description": "Simple rectangular baton-style hands",
+      "hands": [
+        {
+          "type": "parametricFaceted",
+          "movement": "hours",
+          "material": "polishedSilver",
+          "points": [[0.6, -2.5], [0.4, 12]],
+          "cutoutPoints": [[0.2, 4], [0.18, 10]],
+          "lumeCutout": true,
+          "zOffset": 0,
+          "name": "Baton Hour"
+        },
+        {
+          "type": "parametricFaceted",
+          "movement": "minutes",
+          "material": "polishedSilver",
+          "points": [[0.6, -2.5], [0.4, 18]],
+          "cutoutPoints": [[0.2, 4], [0.18, 16]],
+          "lumeCutout": true,
+          "zOffset": 0,
+          "name": "Baton Minute"
+        },
+        {
+          "type": "parametricFaceted",
+          "movement": "seconds",
+          "material": "polishedNavyBlue",
+          "points": [[0.2, -4], [0.04, 18]],
+          "cutoutPoints": [],
+          "lumeCutout": false,
+          "zOffset": 0,
+          "name": "Baton Second"
+        }
+      ]
+    }
+  ]
+}

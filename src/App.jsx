@@ -16,7 +16,8 @@ import {
   TrashIcon,
   CubeIcon,
   PlayIcon,
-  PauseIcon
+  PauseIcon,
+  RectangleStackIcon
 } from '@heroicons/react/24/outline'
 import './App.css'
 
@@ -302,10 +303,10 @@ function App() {
           <div className="preset-menu-container" style={{ position: 'relative' }}>
             <button
               onClick={togglePresetMenu}
-              className="overlay-button config-action-button"
+              className="overlay-button config-action-button preset-load-button"
               title="Load Preset"
             >
-              <FolderOpenIcon className="icon" />
+              <RectangleStackIcon className="icon" />
               <span className="button-label">Load Preset</span>
             </button>
             {showPresetMenu && (

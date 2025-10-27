@@ -284,3 +284,78 @@
 .type-dropdown-item:active {
   background: var(--accent-active);
 }
+
+/* Preset Styles Button and Dropdown */
+.add-item-buttons-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.add-item-buttons-row .add-item-container {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.add-item-buttons-row .add-item-button {
+  margin-bottom: 0;
+}
+
+.preset-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #9333ea;
+}
+
+.preset-button:hover {
+  border-color: #9333ea;
+}
+
+.preset-button .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.preset-dropdown {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.preset-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.preset-dropdown::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+.preset-dropdown::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+}
+
+.preset-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 14px 15px;
+}
+
+.preset-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.preset-description {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.8;
+  line-height: 1.3;
+}
+
+.preset-item:hover .preset-description {
+  opacity: 1;
+}

@@ -116,6 +116,10 @@ body {
   color: #ffc107;
 }
 
+.overlay-button.config-action-button.preset-load-button .icon {
+  color: #9333ea;
+}
+
 /* Portrait mode layout adjustments */
 @media (orientation: portrait) {
   .app-container {
