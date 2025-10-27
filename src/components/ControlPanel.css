@@ -29,7 +29,7 @@
 .tabs-header {
   display: flex;
   gap: 4px;
-  margin-bottom: 20px;
+  margin-bottom: 4px;
   border-bottom: 2px solid var(--border-primary);
   overflow-x: auto;
   flex-shrink: 0;
