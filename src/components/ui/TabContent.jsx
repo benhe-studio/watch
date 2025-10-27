@@ -159,6 +159,9 @@ function TabContent({
           return (
             <div key={index} className="array-item">
               <div className="array-item-header" onClick={() => !isEditingThisName && toggleItem(sectionKey, index)}>
+                <span className="toggle-icon">
+                  {isExpanded ? <ChevronDownIcon className="icon" /> : <ChevronRightIcon className="icon" />}
+                </span>
                 {isEditingThisName ? (
                   <input
                     ref={nameInputRef}
@@ -208,9 +211,6 @@ function TabContent({
                   >
                     <XMarkIcon className="icon" />
                   </button>
-                  <span className="toggle-icon">
-                    {isExpanded ? <ChevronDownIcon className="icon" /> : <ChevronRightIcon className="icon" />}
-                  </span>
                 </div>
               </div>
               {isExpanded && (

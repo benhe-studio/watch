@@ -61,16 +61,18 @@
   cursor: pointer;
   background: var(--bg-secondary);
   transition: background 0.2s;
+  gap: 10px;
 }
 
 .array-item-header:hover {
   background: var(--bg-hover);
 }
 
-.array-item-header span {
+.array-item-header > span:not(.toggle-icon) {
   font-size: 14px;
   font-weight: 500;
   color: var(--text-secondary);
+  flex: 1;
 }
 
 .array-item-actions {
@@ -209,11 +211,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  margin-right: 4px;
 }
 
 .toggle-icon .icon {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 }
 
 /* Add Item Container with Dropdown */
