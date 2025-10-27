@@ -74,8 +74,11 @@ function App() {
     loadDefaultConfig()
   }, [])
 
-  // Update lume material emissive color based on environmentLight
+  // Update lume material emissive color and theme based on environmentLight
   useEffect(() => {
+    // Set theme attribute on document root
+    document.documentElement.setAttribute('data-theme', environmentLight ? 'light' : 'dark')
+    
     if (environmentLight) {
       // Revert to original teal color when light is on
       updateMaterialProperties('lume', {

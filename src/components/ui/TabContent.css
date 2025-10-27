@@ -10,16 +10,16 @@
 }
 
 .tab-content::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  background: var(--scrollbar-track);
 }
 
 .tab-content::-webkit-scrollbar-thumb {
-  background: #444;
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 
 .tab-content::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--scrollbar-thumb-hover);
 }
 
 /* Primitive control styles moved to PrimitiveControls.css */
@@ -28,10 +28,10 @@
   width: 100%;
   padding: 12px;
   margin-bottom: 15px;
-  border: 2px dashed #444;
+  border: 2px dashed var(--border-primary);
   border-radius: 4px;
-  background: #2a2a2a;
-  color: #4a9eff;
+  background: var(--bg-primary);
+  color: var(--accent-primary);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -39,15 +39,15 @@
 }
 
 .add-item-button:hover {
-  background: #333;
-  border-color: #4a9eff;
+  background: var(--bg-secondary);
+  border-color: var(--accent-primary);
 }
 
 .array-item {
   margin-bottom: 12px;
-  border: 1px solid #444;
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
-  background: #2a2a2a;
+  background: var(--bg-primary);
   overflow: hidden;
 }
 
@@ -57,18 +57,18 @@
   align-items: center;
   padding: 12px 15px;
   cursor: pointer;
-  background: #333;
+  background: var(--bg-secondary);
   transition: background 0.2s;
 }
 
 .array-item-header:hover {
-  background: #3a3a3a;
+  background: var(--bg-hover);
 }
 
 .array-item-header span {
   font-size: 14px;
   font-weight: 500;
-  color: #ccc;
+  color: var(--text-secondary);
 }
 
 .array-item-actions {
@@ -80,10 +80,10 @@
 .name-edit-input {
   flex: 1;
   padding: 6px 10px;
-  border: 2px solid #4a9eff;
+  border: 2px solid var(--accent-primary);
   border-radius: 4px;
-  background: #222;
-  color: #fff;
+  background: var(--bg-active);
+  color: var(--text-primary);
   font-size: 14px;
   font-weight: 500;
   font-family: inherit;
@@ -91,15 +91,15 @@
 }
 
 .name-edit-input:focus {
-  border-color: #6bb3ff;
+  border-color: var(--accent-hover);
 }
 
 .edit-name-button {
   padding: 6px;
-  border: 1px solid #4a9eff;
+  border: 1px solid var(--accent-primary);
   border-radius: 3px;
   background: transparent;
-  color: #4a9eff;
+  color: var(--accent-primary);
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -113,7 +113,7 @@
 }
 
 .edit-name-button:hover {
-  background: #4a9eff;
+  background: var(--accent-primary);
   color: #ffffff;
 }
 
@@ -165,7 +165,7 @@
 
 .array-item-content {
   padding: 15px;
-  border-top: 1px solid #444;
+  border-top: 1px solid var(--border-primary);
 }
 
 .hour-selector {
@@ -176,10 +176,10 @@
 
 .hour-selector button {
   padding: 10px;
-  border: 2px solid #444;
+  border: 2px solid var(--border-primary);
   border-radius: 4px;
-  background: #2a2a2a;
-  color: #ccc;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -187,13 +187,13 @@
 }
 
 .hour-selector button:hover {
-  background: #3a3a3a;
-  border-color: #555;
+  background: var(--bg-hover);
+  border-color: var(--border-secondary);
 }
 
 .hour-selector button.active {
-  background: #4a9eff;
-  border-color: #4a9eff;
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
   color: #ffffff;
   font-weight: 600;
 }
@@ -203,7 +203,7 @@
 }
 
 .toggle-icon {
-  color: #888;
+  color: var(--text-tertiary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -217,7 +217,6 @@
 /* Add Item Container with Dropdown */
 .add-item-container {
   position: relative;
-  margin-bottom: 15px;
   z-index: 10;
   overflow: visible;
 }
@@ -233,8 +232,8 @@
   left: 0;
   right: 0;
   margin-top: 4px;
-  background: #333;
-  border: 2px solid #4a9eff;
+  background: var(--bg-secondary);
+  border: 2px solid var(--accent-primary);
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -257,9 +256,9 @@
   width: 100%;
   padding: 12px 15px;
   border: none;
-  border-bottom: 1px solid #444;
-  background: #333;
-  color: #ffffff;
+  border-bottom: 1px solid var(--border-primary);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -272,10 +271,10 @@
 }
 
 .type-dropdown-item:hover {
-  background: #4a9eff;
+  background: var(--accent-primary);
   color: #ffffff;
 }
 
 .type-dropdown-item:active {
-  background: #357abd;
+  background: var(--accent-active);
 }

@@ -14,7 +14,7 @@
 .bevel-control-body {
   margin-left: 16px;
   padding-left: 16px;
-  border-left: 2px solid rgba(255, 255, 255, 0.2);
+  border-left: 2px solid var(--border-primary);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -25,14 +25,4 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-}
-
-.bevel-control-item label {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 400;
-}
-
-.bevel-control-item input[type="range"] {
-  width: 100%;
 }

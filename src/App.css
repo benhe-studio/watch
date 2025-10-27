@@ -29,8 +29,8 @@ body {
   width: 48px;
   height: 48px;
   padding: 0;
-  background: rgba(40, 40, 40, 0.8);
-  color: white;
+  background: var(--overlay-bg);
+  color: var(--text-primary);
   border: none;
   border-radius: 24px;
   cursor: pointer;
@@ -38,7 +38,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   overflow: hidden;
   white-space: nowrap;
@@ -65,7 +65,7 @@ body {
 .overlay-button:hover {
   width: auto;
   padding-left: 12px;
-  background: rgba(60, 60, 60, 0.9);
+  background: var(--overlay-hover);
 }
 
 .overlay-button:hover .icon {
@@ -79,7 +79,7 @@ body {
 }
 
 .overlay-button:active {
-  background: rgba(30, 30, 30, 0.9);
+  background: var(--overlay-active);
 }
 
 .overlay-button.light-on .icon {

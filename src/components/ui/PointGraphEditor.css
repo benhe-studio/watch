@@ -3,25 +3,25 @@
   flex-direction: column;
   gap: 12px;
   padding: 12px;
-  background: #0a0a0a;
+  background: var(--bg-tertiary);
   border-radius: 8px;
-  border: 1px solid #333;
+  border: 1px solid var(--border-primary);
 }
 
 .graph-description {
   margin: 0;
   font-size: 13px;
-  color: #aaa;
+  color: var(--text-tertiary);
   line-height: 1.4;
 }
 
 .point-graph-canvas {
   width: 100%;
   height: 600px;
-  border: 2px solid #333;
+  border: 2px solid var(--border-primary);
   border-radius: 4px;
   cursor: crosshair;
-  background: #1a1a1a;
+  background: var(--bg-primary);
 }
 
 .point-graph-canvas:active {
@@ -37,10 +37,10 @@
 
 .graph-button {
   padding: 6px 12px;
-  background: #2a2a2a;
-  border: 2px solid #4a9eff;
+  background: var(--bg-primary);
+  border: 2px solid var(--accent-primary);
   border-radius: 4px;
-  color: #4a9eff;
+  color: var(--accent-primary);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -49,7 +49,7 @@
 
 .graph-button:hover:not(:disabled) {
   background: rgba(74, 158, 255, 0.1);
-  border-color: #6bb0ff;
+  border-color: var(--accent-hover);
 }
 
 .graph-button:active:not(:disabled) {
@@ -84,15 +84,15 @@
 .point-count {
   margin-left: auto;
   font-size: 13px;
-  color: #888;
+  color: var(--text-tertiary);
   font-weight: 500;
 }
 
 .point-editor {
   padding: 12px;
-  background: #151515;
+  background: var(--bg-tertiary);
   border-radius: 4px;
-  border: 1px solid #2a2a2a;
+  border: 1px solid var(--border-primary);
 }
 
 .point-editor-header {
@@ -105,7 +105,7 @@
 
 .point-editor h4 {
   margin: 0;
-  color: #ccc;
+  color: var(--text-secondary);
   font-size: 14px;
   font-weight: 600;
 }
@@ -126,15 +126,15 @@
 
 .graph-instructions {
   padding: 10px;
-  background: #151515;
+  background: var(--bg-tertiary);
   border-radius: 4px;
-  border: 1px solid #2a2a2a;
+  border: 1px solid var(--border-primary);
 }
 
 .graph-instructions strong {
   display: block;
   margin-bottom: 6px;
-  color: #ccc;
+  color: var(--text-secondary);
   font-size: 13px;
 }
 
@@ -146,7 +146,7 @@
 
 .graph-instructions li {
   font-size: 12px;
-  color: #999;
+  color: var(--text-tertiary);
   line-height: 1.6;
   margin-bottom: 2px;
 }
