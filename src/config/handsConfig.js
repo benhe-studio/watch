@@ -99,6 +99,13 @@ export const handsConfig = {
       default: false,
       description: 'Fill cutout region with luminescent material'
     },
+    hub: {
+      type: 'checkbox',
+      label: 'Hub',
+      default: false,
+      condition: (item) => item.type === 'parametricFlat',
+      description: 'Render a circle hub at the center of the hand'
+    },
     zOffset: {
       type: 'range',
       label: 'Z Offset',

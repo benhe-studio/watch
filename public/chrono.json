@@ -169,6 +169,7 @@
       "radius": 1,
       "spread": 0,
       "zOffset": 0,
+      "hub": true,
       "name": "Hour Hand",
       "lumeCutout": true
     },
@@ -211,6 +212,7 @@
       "radius": 1,
       "spread": 0,
       "zOffset": 0,
+      "hub": true,
       "name": "Minute Hand",
       "lumeCutout": true
     },
@@ -243,139 +245,9 @@
       "cutoutPoints": [],
       "radius": 1,
       "spread": 0,
+      "hub": true,
       "zOffset": 0,
       "name": "Second Hand"
-    },
-    {
-      "type": "circle",
-      "movement": "seconds",
-      "material": "matteBlackPlastic",
-      "points": [
-        [
-          0,
-          -4
-        ],
-        [
-          1.2,
-          0
-        ],
-        [
-          0,
-          14
-        ]
-      ],
-      "bevel": {
-        "enabled": true,
-        "thickness": 0.05,
-        "size": 0.05,
-        "segments": 3
-      },
-      "circleShape": "flat",
-      "cutout": 0,
-      "cutoutPoints": [],
-      "radius": 0.64,
-      "spread": 0,
-      "zOffset": 0.1,
-      "name": "Second Pivot"
-    },
-    {
-      "type": "circle",
-      "movement": "hours",
-      "material": "matteBlackPlastic",
-      "points": [
-        [
-          0,
-          -4
-        ],
-        [
-          1.2,
-          0
-        ],
-        [
-          0,
-          14
-        ]
-      ],
-      "bevel": {
-        "enabled": true,
-        "thickness": 0.05,
-        "size": 0.05,
-        "segments": 3
-      },
-      "circleShape": "flat",
-      "cutout": 0,
-      "cutoutPoints": [],
-      "radius": 1,
-      "spread": 0,
-      "zOffset": 0,
-      "hidden": false,
-      "name": "Hour Pivot"
-    },
-    {
-      "type": "circle",
-      "movement": "minutes",
-      "material": "matteBlackPlastic",
-      "points": [
-        [
-          0,
-          -4
-        ],
-        [
-          1.2,
-          0
-        ],
-        [
-          0,
-          14
-        ]
-      ],
-      "bevel": {
-        "enabled": true,
-        "thickness": 0.05,
-        "size": 0.05,
-        "segments": 3
-      },
-      "circleShape": "flat",
-      "cutout": 0,
-      "cutoutPoints": [],
-      "radius": 0.8,
-      "spread": 0,
-      "zOffset": 0,
-      "hidden": false,
-      "name": "Minute Pivot"
-    },
-    {
-      "type": "circle",
-      "movement": "seconds",
-      "material": "matteBlackPlastic",
-      "points": [
-        [
-          0,
-          -4
-        ],
-        [
-          1.2,
-          0
-        ],
-        [
-          0,
-          14
-        ]
-      ],
-      "bevel": {
-        "enabled": true,
-        "thickness": 0.05,
-        "size": 0.05,
-        "segments": 3
-      },
-      "circleShape": "dome",
-      "cutout": 0,
-      "cutoutPoints": [],
-      "radius": 0.3,
-      "spread": 0,
-      "zOffset": 0,
-      "hidden": false,
-      "name": "Pinion Cap"
     }
   ],
   "minuteMarkers": [

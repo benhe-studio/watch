@@ -221,6 +221,7 @@
       "spread": 0,
       "circleShape": "flat",
       "zOffset": 0,
+      "hub": true,
       "name": "Hours",
       "lumeCutout": true
     },
@@ -265,6 +266,7 @@
       "spread": 0,
       "circleShape": "flat",
       "zOffset": 0,
+      "hub": true,
       "hidden": false,
       "name": "Minutes",
       "lumeCutout": true
@@ -289,6 +291,7 @@
       "spread": 0,
       "circleShape": "flat",
       "zOffset": 0,
+      "hub": true,
       "hidden": false,
       "name": "Second Stem"
     },
@@ -373,33 +376,6 @@
       "zOffset": 0,
       "hidden": false,
       "name": "Second Tail"
-    },
-    {
-      "type": "circle",
-      "movement": "seconds",
-      "material": "polishedSilver",
-      "points": [
-        [
-          0,
-          -4
-        ],
-        [
-          1.2,
-          0
-        ],
-        [
-          0,
-          14
-        ]
-      ],
-      "cutout": 0,
-      "cutoutPoints": [],
-      "radius": 1,
-      "spread": 0,
-      "circleShape": "flat",
-      "zOffset": 0.1,
-      "hidden": false,
-      "name": "Second Pivot"
     }
   ]
 }
