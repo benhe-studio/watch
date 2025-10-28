@@ -37,7 +37,7 @@
       ]
     },
     {
-      "name": "Baton Hands",
+      "name": "Baton",
       "description": "Simple rectangular baton-style hands",
       "hands": [
         {
@@ -69,6 +69,45 @@
           "lumeCutout": false,
           "zOffset": 0,
           "name": "Baton Second"
+        }
+      ]
+    },
+    {
+      "name": "Syringe",
+      "description": "Hollow syringe-style hands with luminescent fill",
+      "hands": [
+        {
+          "type": "parametricFlat",
+          "movement": "hours",
+          "material": "polishedSilver",
+          "points": [[0.3, 0], [0.3, 2], [0.7, 2.5], [0.7, 9], [0.16, 9.5], [0.08, 12]],
+          "cutoutPoints": [[0, 2.05], [0.44, 2.6], [0.44, 8.9], [0, 9.32]],
+          "lumeCutout": true,
+          "hub": true,
+          "zOffset": 0,
+          "name": "Syringe Hour"
+        },
+        {
+          "type": "parametricFlat",
+          "movement": "minutes",
+          "material": "polishedSilver",
+          "points": [[0.3, 0], [0.3, 2], [0.7, 2.5], [0.7, 15], [0.16, 15.5], [0.08, 18]],
+          "cutoutPoints": [[0, 2.05], [0.44, 2.6], [0.44, 14.9], [0, 15.32]],
+          "lumeCutout": true,
+          "hub": true,
+          "zOffset": 0,
+          "name": "Syringe Minute"
+        },
+        {
+          "type": "parametricFlat",
+          "movement": "seconds",
+          "material": "polishedNavyBlue",
+          "points": [[0.2, -4], [0.08, 0], [0.04, 18]],
+          "cutoutPoints": [],
+          "lumeCutout": false,
+          "hub": true,
+          "zOffset": 0,
+          "name": "Syringe Second"
         }
       ]
     }
