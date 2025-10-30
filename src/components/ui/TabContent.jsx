@@ -3,6 +3,7 @@ import './TabContent.css'
 import './PrimitiveControls.css'
 import { renderControl as renderControlHelper } from './ControlRenderer'
 import { EyeIcon, EyeSlashIcon, XMarkIcon, ChevronRightIcon, ChevronDownIcon, PencilIcon, RectangleStackIcon } from '@heroicons/react/24/outline'
+import handPresetsData from '../../../public/hand-presets.json'
 
 function TabContent({
   sectionKey,
@@ -24,18 +25,8 @@ function TabContent({
   const [editNameValue, setEditNameValue] = useState('')
   const nameInputRef = useRef(null)
   const [presetDropdownOpen, setPresetDropdownOpen] = useState(false)
-  const [presets, setPresets] = useState([])
+  const presets = sectionKey === 'hands' ? (handPresetsData.presets || []) : []
   const presetDropdownRef = useRef(null)
-
-  // Load presets on mount (only for hands section)
-  useEffect(() => {
-    if (sectionKey === 'hands') {
-      fetch('/hand-presets.json')
-        .then(response => response.json())
-        .then(data => setPresets(data.presets || []))
-        .catch(error => console.error('Error loading hand presets:', error))
-    }
-  }, [sectionKey])
 
   // Close dropdown when clicking outside
   useEffect(() => {
