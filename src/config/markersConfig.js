@@ -40,7 +40,7 @@ export const markersConfig = {
       type: 'range',
       label: 'Spread',
       default: 17,
-      min: 10,
+      min: 8,
       max: 25,
       step: 0.1
     },

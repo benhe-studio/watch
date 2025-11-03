@@ -42,7 +42,7 @@ export const decorationsConfig = {
       label: 'Thickness',
       default: 1,
       min: 0.01,
-      max: 2,
+      max: 4,
       step: 0.01
     },
     depth: {
